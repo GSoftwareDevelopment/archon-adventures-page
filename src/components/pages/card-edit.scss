@@ -1,0 +1,13 @@
+@import "./edit-general";
+
+.card-control {
+	@include generalEdit-controls;
+}
+
+.card-edit {
+	@include generalEdit;
+
+	@include generalEdit-header;
+
+	@include generalEdit-form;
+}

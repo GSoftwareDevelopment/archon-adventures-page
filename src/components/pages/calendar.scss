@@ -1,0 +1,40 @@
+.calendar-link {
+	display: block;
+	padding: 5px;
+	background: none;
+}
+
+div.calendar {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+	div.calendar-entry {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+
+		.date-content {
+			min-width: 125px;
+			text-align: center;
+			margin: 0px;
+			margin-right: 20px;
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 10px;
+			padding: 5px;
+			font-size: 1.5em;
+		}
+
+		> .entry-content {
+			.entry-title {
+				font-size: 1.5em;
+			}
+
+			.entry-description {
+				margin-top: 10px;
+				padding: 10px;
+				border-left: #888 solid 2px;
+			}
+		}
+	}
+}

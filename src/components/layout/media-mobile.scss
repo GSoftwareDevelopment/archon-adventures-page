@@ -1,0 +1,48 @@
+@media screen and (max-width: 900px) {
+	#main-menu {
+		overflow: hidden;
+
+		&.collapsed {
+			height: 40px;
+			transition: 0.25s;
+		}
+	}
+
+	ul.menu-pane {
+		flex-direction: column;
+
+		li {
+			.link {
+				margin: 5px 0;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	// #header {
+	// 	display: block;
+	// 	position: relative;
+	// }
+
+	#main-wrapper {
+		// margin-top: 0px;
+		margin-bottom: 50px;
+		display: block;
+		padding: 10px 10px;
+	}
+
+	#footer {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		align-items: center;
+
+		position: relative;
+		height: unset;
+		text-align: center;
+
+		padding: 0;
+	}
+}

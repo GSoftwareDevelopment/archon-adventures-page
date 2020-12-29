@@ -1,0 +1,13 @@
+@import "./edit-general";
+
+.calendar-control {
+	@include generalEdit-controls;
+}
+
+.calendar-edit {
+	@include generalEdit;
+
+	@include generalEdit-header;
+
+	@include generalEdit-form;
+}
