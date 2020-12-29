@@ -1,19 +1,26 @@
 @media screen and (max-width: 900px) {
-	#main-menu {
-		overflow: hidden;
+	#header {
+		#main-menu {
+			overflow: hidden;
 
-		&.collapsed {
-			height: 40px;
-			transition: 0.25s;
-		}
-	}
+			&.collapsed {
+				height: 40px;
+				transition: 0.25s;
+			}
 
-	ul.menu-pane {
-		flex-direction: column;
+			ul.menu-pane {
+				flex-direction: column;
 
-		li {
-			.link {
-				margin: 5px 0;
+				li {
+					.toggler {
+						display: block;
+						cursor: pointer;
+						background: none;
+					}
+					.link {
+						margin: 5px 0;
+					}
+				}
 			}
 		}
 	}
@@ -29,16 +36,13 @@
 		// margin-top: 0px;
 		margin-bottom: 50px;
 		display: block;
-		padding: 10px 10px;
+
+		#main-content {
+			padding: 0 10px;
+		}
 	}
 
 	#footer {
-		display: flex;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		justify-content: flex-start;
-		align-items: center;
-
 		position: relative;
 		height: unset;
 		text-align: center;

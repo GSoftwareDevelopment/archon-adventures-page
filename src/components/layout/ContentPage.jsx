@@ -10,20 +10,32 @@ export default class ContentPage extends Component {
 	parsePage(refTo, pageElements) {
 		if (pageElements) {
 			return pageElements.map(({ type, ...params }, index) => {
+				let content = null;
 				switch (type) {
 					case "card":
 						if (params.name) {
-							return <Card key={index} name={params.name} lang="en" />;
+							content = (
+								<div id="main-content">
+									<Card key={index} name={params.name} lang="en" />
+								</div>
+							);
 						} else {
 							console.log("Card parameters are not defined!");
 							return null;
 						}
+						break;
 					case "calendar":
-						return <Calendar key={index} lang="en" />;
+						content = (
+							<div id="main-content">
+								<Calendar key={index} lang="en" />
+							</div>
+						);
+						break;
 					default:
 						console.log(`Can't recognize page element '${type}' :|`);
 						return null;
 				}
+				return content;
 			});
 		} else {
 			console.log(`Page '${refTo}' is empty`);

@@ -34,9 +34,12 @@ a {
 	text-decoration: none;
 	color: #ffffff;
 	transition: 0.25s;
-}
-a:hover {
-	background-color: rgba(255, 255, 255, 0.5);
+	white-space: nowrap;
+	padding: 3px;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.3);
+	}
 }
 
 //
@@ -72,6 +75,45 @@ a:hover {
 	background-color: $panel-background;
 	z-index: 10;
 	box-shadow: 0px 15px 15px black;
+
+	#main-menu {
+		display: block;
+		background-color: #000;
+		// border-bottom: #ffffff solid 2px;
+	}
+
+	ul.menu-pane {
+		display: flex;
+		flex-direction: row;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+
+		li {
+			justify-self: center;
+			align-self: center;
+			padding: 0 15px;
+			margin: 0;
+			font-size: 1.5em;
+
+			.toggler {
+				display: none;
+			}
+
+			.link {
+				display: block;
+				text-align: center;
+				background: none;
+
+				&:hover {
+					background: none;
+				}
+			}
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.5);
+			}
+		}
+	}
 }
 
 #main-wrapper {
@@ -79,13 +121,13 @@ a:hover {
 	// margin-bottom: 120px;
 	// margin-top: 50vh;
 	margin-bottom: 50vh;
-	display: block;
-	padding: 10px 0px;
-	padding-left: 100px;
-	padding-right: 300px;
 }
 
 #main-content {
+	display: block;
+	padding-left: 100px;
+	padding-right: 300px;
+
 	> h1 {
 		color: orange !important;
 		font-size: 2em;
@@ -113,52 +155,25 @@ a:hover {
 	z-index: 9;
 	box-shadow: 0px -15px 15px black;
 
-	h1,
-	h4 {
-		margin: 0px;
-	}
+	.footer-column {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin: 10px;
 
-	.icon {
-		display: block;
-		// height: 100px;
-	}
-}
-
-#main-menu {
-	display: block;
-	background-color: #000;
-	// border-bottom: #ffffff solid 2px;
-}
-
-ul.menu-pane {
-	display: flex;
-	flex-direction: row;
-	padding: 0;
-	margin: 0;
-	list-style: none;
-
-	li {
-		align-self: center;
-		padding: 0 15px;
-		margin: 0;
-		font-size: 1.5em;
-
-		.toggler {
-			text-align: center;
-			cursor: pointer;
-			background: none;
+		div {
+			margin: 10px;
 		}
 
 		.link {
-			display: block;
-			text-align: center;
-			background: none;
-			&:hover {
-				background: none;
-			}
+			font-size: 1.3em;
 		}
-		&:hover {
-			background-color: rgba(255, 255, 255, 0.5);
+
+		h1,
+		h4 {
+			font-size: 1.5em;
+			margin: 0px;
 		}
 	}
 }
@@ -206,15 +221,20 @@ ul.menu-pane {
 		p {
 			padding: 0;
 			margin: 0;
-			margin-bottom: 5px;
+			margin-bottom: 10px;
 		}
 
 		span {
 			margin: 0 10px;
+			padding: 5px;
 			cursor: pointer;
 
 			&.current {
-				border-bottom: #f33 solid 1px;
+				border-bottom: #f33 solid 2px;
+			}
+
+			&:hover {
+				background: rgba(255, 255, 255, 0.25);
 			}
 		}
 	}

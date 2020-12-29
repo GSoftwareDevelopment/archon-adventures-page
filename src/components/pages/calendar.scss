@@ -13,6 +13,7 @@ div.calendar {
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
+		white-space: normal;
 
 		.date-content {
 			min-width: 125px;

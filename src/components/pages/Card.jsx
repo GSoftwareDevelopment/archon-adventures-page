@@ -115,43 +115,38 @@ export default class Card extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<div id="main-content">
-					<ContentLoader busy={this.state.isReading}>
-						<div className="card-control">
-							<CardEditControl onEdit={this.showEdit} />
-						</div>
-						{this.state.langChange && (
-							<div id="lang-warning">
-								<IconInfoSquare size="32" />
-								<div>
-									<p>
-										This article is not available in the language of your
-										choice.
-									</p>
-									<p>
-										Language versions available:
-										<br />
-										{this.getAvailableLangs()}
-									</p>
-								</div>
+				<ContentLoader busy={this.state.isReading}>
+					<div className="card-control">
+						<CardEditControl onEdit={this.showEdit} />
+					</div>
+					{this.state.langChange && (
+						<div id="lang-warning">
+							<IconInfoSquare size="32" />
+							<div>
+								<p>
+									This article is not available in the language of your choice.
+								</p>
+								<p>
+									Language versions available:
+									<br />
+									{this.getAvailableLangs()}
+								</p>
 							</div>
-						)}
-						<ReactMarkdown
-							plugins={[
-								[gfm, { tableCellPadding: true, tablePipeAlign: true }],
-							]}
-							className="markdown"
-							children={this.getContentByLang()}
+						</div>
+					)}
+					<ReactMarkdown
+						plugins={[[gfm, { tableCellPadding: true, tablePipeAlign: true }]]}
+						className="markdown"
+						children={this.getContentByLang()}
+					/>
+					{this.state.isEdit && (
+						<CardEdit
+							card={this.state.card}
+							onUpdate={this.updateContent}
+							onClose={this.hideEdit}
 						/>
-						{this.state.isEdit && (
-							<CardEdit
-								card={this.state.card}
-								onUpdate={this.updateContent}
-								onClose={this.hideEdit}
-							/>
-						)}
-					</ContentLoader>
-				</div>
+					)}
+				</ContentLoader>
 			</React.Fragment>
 		);
 	}
