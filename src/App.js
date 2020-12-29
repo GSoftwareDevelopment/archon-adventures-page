@@ -46,8 +46,8 @@ class App extends Component {
 
 	render() {
 		switch (this.state.dbStatus) {
-			case "anonymous":
 			case "authorized":
+			case "anonymous":
 				return (
 					<Router>
 						<CustomScrollbar style={{ width: "100vw", height: "100vh" }}>
