@@ -162,12 +162,19 @@ a {
 		align-items: center;
 		margin: 10px;
 
+		&.left-align {
+			align-items: flex-start;
+		}
 		div {
 			margin: 10px;
 		}
 
 		.link {
 			font-size: 1.3em;
+
+			&.small {
+				font-size: 1em;
+			}
 		}
 
 		h1,

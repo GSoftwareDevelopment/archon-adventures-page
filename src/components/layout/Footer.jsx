@@ -35,11 +35,23 @@ export default class Footer extends Component {
 						<img src={logoAOL} alt="AOL Logo" width="211px" height="64px" />
 					</a>
 				</div>
-				<div className="footer-column">
+				<div className="footer-column left-align">
 					<h4>Contact:</h4>
-					<a className="link" href="mailto:archon.adventures@a-bolt.pl">
-						archon.adventures@a-bolt.pl
-					</a>
+					<div>
+						<span>e-mail:</span>
+						<a className="link small" href="mailto:p.banas.pl@gmail.com">
+							Paweł Banaś
+						</a>
+					</div>
+					<div>
+						<span>GitHub:</span>
+						<a
+							className="link small"
+							href="https://github.com/GSoftwareDevelopment/archon-adventures-page"
+						>
+							GSoftwareDevelopment
+						</a>
+					</div>
 				</div>
 			</div>
 		);
