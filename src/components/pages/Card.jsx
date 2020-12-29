@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { db } from "../../libs/db";
 import { Collections } from "../../setup";
+import "./card.scss";
 
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";

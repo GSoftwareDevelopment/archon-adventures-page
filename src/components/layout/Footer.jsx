@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import logoAOL from "../../assets/AOL Logo.gif";
+import * as Icon from "react-bootstrap-icons";
 
 export default class Footer extends Component {
 	render() {
@@ -37,21 +38,21 @@ export default class Footer extends Component {
 				</div>
 				<div className="footer-column left-align">
 					<h4>Contact:</h4>
-					<div>
-						<span>e-mail:</span>
-						<a className="link small" href="mailto:p.banas.pl@gmail.com">
-							Paweł Banaś
-						</a>
-					</div>
-					<div>
-						<span>GitHub:</span>
-						<a
-							className="link small"
-							href="https://github.com/GSoftwareDevelopment/archon-adventures-page"
-						>
+					<a className="link small" href="mailto:p.banas.pl@gmail.com">
+						<div>
+							<Icon.At size="24px" style={{ marginRight: "10px" }} />
+							p.banas.pl@gmail.com
+						</div>
+					</a>
+					<a
+						className="link small"
+						href="https://github.com/GSoftwareDevelopment/archon-adventures-page"
+					>
+						<div>
+							<Icon.Github size="24px" style={{ marginRight: "10px" }} />
 							GSoftwareDevelopment
-						</a>
-					</div>
+						</div>
+					</a>
 				</div>
 			</div>
 		);

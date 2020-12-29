@@ -1,0 +1,49 @@
+//
+
+#header {
+	display: block;
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	background-color: $header-background-color;
+	z-index: 10;
+	box-shadow: -15px 15px 15px black, 0px 15px 15px black, 15px 15px 15px black;
+
+	#main-menu {
+		display: block;
+	}
+
+	ul.menu-pane {
+		display: flex;
+		flex-direction: row;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+
+		li {
+			justify-self: center;
+			align-self: center;
+			padding: 0 15px;
+			margin: 0;
+			font-size: 1.5em;
+
+			.toggler {
+				display: none;
+			}
+
+			.link {
+				display: block;
+				text-align: center;
+				background: none;
+
+				&:hover {
+					background: none;
+				}
+			}
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.5);
+			}
+		}
+	}
+}

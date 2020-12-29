@@ -106,10 +106,12 @@ export class Userinfo extends Component {
 		if (currentUser && currentUser.loggedInProviderType === "local-userpass") {
 			return (
 				<div className="auth-status">
-					<button onClick={this.logout}>
-						<Icon.BoxArrowLeft size="20px" />
-					</button>
-					<span>{currentUser.profile.data.email}</span>
+					<div className="user">
+						<div>{currentUser.profile.data.email}</div>
+						<button onClick={this.logout}>
+							<Icon.BoxArrowLeft size="20px" />
+						</button>
+					</div>
 				</div>
 			);
 		} else {

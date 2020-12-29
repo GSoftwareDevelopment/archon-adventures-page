@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { client, authorizeDB } from "./libs/db";
 
-import CustomScrollbar from "./components/layout/CustomScrollbar";
 import Login, { Userinfo } from "./components/layout/Login";
 import Header from "./components/layout/Header";
 import ContentPage from "./components/layout/ContentPage";
@@ -50,22 +49,20 @@ class App extends Component {
 			case "anonymous":
 				return (
 					<Router>
-						<CustomScrollbar style={{ width: "100vw", height: "100vh" }}>
-							<Header />
-							<ContentPage />
-							<Switch>
-								<Route path="/auth">
-									<Login
-										onAuthorized={() => {
-											this.onChange("authorized");
-										}}
-									/>
-								</Route>
-								{/* <Route component={Page404} /> */}
-							</Switch>
-							<Footer />
-							<Userinfo onChange={this.onChange} />
-						</CustomScrollbar>
+						<Header />
+						<ContentPage />
+						<Switch>
+							<Route path="/auth">
+								<Login
+									onAuthorized={() => {
+										this.onChange("authorized");
+									}}
+								/>
+							</Route>
+							{/* <Route component={Page404} /> */}
+						</Switch>
+						<Footer />
+						<Userinfo onChange={this.onChange} />
 					</Router>
 				);
 			case "pending":

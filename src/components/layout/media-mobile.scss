@@ -27,11 +27,6 @@
 }
 
 @media screen and (max-width: 768px) {
-	// #header {
-	// 	display: block;
-	// 	position: relative;
-	// }
-
 	#main-wrapper {
 		// margin-top: 0px;
 		margin-bottom: 50px;
@@ -40,13 +35,5 @@
 		#main-content {
 			padding: 0 10px;
 		}
-	}
-
-	#footer {
-		position: relative;
-		height: unset;
-		text-align: center;
-
-		padding: 0;
 	}
 }

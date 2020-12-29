@@ -8,10 +8,10 @@ export default class CustomScrollbar extends Component {
 				autoHide={true}
 				style={this.props.style || { width: "100%", height: "100%" }}
 				renderThumbHorizontal={(props) => (
-					<div {...props} className="thumb-horizontal" />
+					<div {...props} className="scrollbars-thumb" />
 				)}
 				renderThumbVertical={(props) => (
-					<div {...props} className="thumb-vertical" />
+					<div {...props} className="scrollbars-thumb" />
 				)}
 			>
 				{this.props.children}
