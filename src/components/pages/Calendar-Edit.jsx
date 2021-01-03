@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { client, db } from "../../libs/db";
+import { observer } from "mobx-react";
+import UsersStore, { state } from "../../store/users";
+
+import { db } from "../../libs/db";
 import { Paths, Collections } from "../../setup";
 
 import "./calendar-edit.scss";
@@ -169,6 +172,7 @@ export class CalendarEdit extends Component {
 	//
 
 	render() {
+		if (UsersStore.getState() !== state.authorized) return null;
 		if (!this.state.entry) return null;
 		const newEntry = this.state.entry && !this.state.entry._id;
 		if (!this.state.isSelector) {
@@ -263,10 +267,8 @@ export class CalendarEdit extends Component {
 	}
 }
 
-export const CalendarEditControl = (props) => {
-	const currentUser = client.auth.currentUser;
-	if (!currentUser || currentUser.loggedInProviderType !== "local-userpass")
-		return null;
+export const CalendarEditControl = observer((props) => {
+	if (UsersStore.getState() !== state.authorized) return null;
 	if (props.forAll) {
 		return (
 			<div className="calendar-control">
@@ -294,4 +296,4 @@ export const CalendarEditControl = (props) => {
 			</div>
 		);
 	}
-};
+});

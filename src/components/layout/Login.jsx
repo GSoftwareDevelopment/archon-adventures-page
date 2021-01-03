@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { client, authorizeDB } from "../../libs/db";
+import UsersStore from "../../store/users";
+import { observer } from "mobx-react";
 import "./auth.scss";
 
-import * as Icon from "react-bootstrap-icons";
+import { Link } from "react-router-dom";
 
-export default class Login extends Component {
+class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -18,23 +18,20 @@ export default class Login extends Component {
 
 	submit = async (e) => {
 		e.preventDefault();
-		this.setState({ status: "pending", message: "" });
+		this.setState({ message: "" });
+		const { username, password } = this.state;
 
 		try {
-			await authorizeDB(this.state);
-			this.setState({ status: "authorized" });
-			this.props.onAuthorized("authorized");
-			// return <Redirect to="/" />;
+			await UsersStore.login({ username, password });
 		} catch (error) {
-			console.error(error);
-			this.setState({ status: "error", message: error.message });
+			this.setState({ message: error.message });
 		}
 	};
 
 	render() {
-		const disable = this.status === "pending";
-
-		if (this.state.status !== "authorized") {
+		const disable = false; // this.status === "pending";
+		// const status=UserStore.getState();
+		if (UsersStore.getState() !== "authorized") {
 			return (
 				<form className="authorize-form">
 					<h2>Authenticate access</h2>
@@ -64,15 +61,16 @@ export default class Login extends Component {
 							}}
 						/>
 					</div>
-					<button type="submit" disabled={disable} onClick={this.submit}>
-						{this.state.status !== "pending" ? "Authorize" : "Authorizing..."}
+					<button type="submit" onClick={this.submit}>
+						Login
 					</button>
 				</form>
 			);
 		} else {
 			return (
 				<div className="authorize-form">
-					<h1>You are authorized now.</h1>
+					<h1>You are authorized as</h1>
+					<h2>{UsersStore.getCurrentUser().profile.data.email}</h2>
 					<Link to="/">
 						&lt;&lt;&lt; Back to main page and manage page content
 					</Link>
@@ -82,40 +80,4 @@ export default class Login extends Component {
 	}
 }
 
-export class Userinfo extends Component {
-	constructor() {
-		super();
-
-		this.state = { status: "" };
-	}
-
-	logout = async () => {
-		this.setState({ status: "pending" });
-		try {
-			await client.auth.logout();
-			this.setState({ status: "anonymous" });
-			this.props.onChange("anonymous");
-		} catch (error) {
-			console.log(error);
-			this.setState({ status: "error" });
-		}
-	};
-
-	render() {
-		const currentUser = client.auth.currentUser;
-		if (currentUser && currentUser.loggedInProviderType === "local-userpass") {
-			return (
-				<div className="auth-status">
-					<div className="user">
-						<div>{currentUser.profile.data.email}</div>
-						<button onClick={this.logout}>
-							<Icon.BoxArrowLeft size="20px" />
-						</button>
-					</div>
-				</div>
-			);
-		} else {
-			return null;
-		}
-	}
-}
+export default observer(Login);

@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { client, db } from "../../libs/db";
+import { observer } from "mobx-react";
+import UsersStore, { state } from "../../store/users";
+
+import { db } from "../../libs/db";
 
 import "./card-edit.scss";
 import Alert from "../layout/Alert";
@@ -22,15 +25,6 @@ export default class CardEdit extends Component {
 			errorType: "",
 			error: "",
 		};
-	}
-
-	async componentDidMount() {
-		try {
-			// await authorizeDB();
-			console.log("Card edit", client.auth.currentUser);
-		} catch (error) {
-			console.error(error);
-		}
 	}
 
 	saveCard = async (e) => {
@@ -102,6 +96,7 @@ export default class CardEdit extends Component {
 	};
 
 	render() {
+		if (UsersStore.getState() !== state.authorized) return null;
 		return (
 			<Window
 				className="card-edit"
@@ -166,10 +161,9 @@ export default class CardEdit extends Component {
 	}
 }
 
-export const CardEditControl = (props) => {
-	const currentUser = client.auth.currentUser;
-	if (!currentUser || currentUser.loggedInProviderType !== "local-userpass")
-		return null;
+export const CardEditControl = observer((props) => {
+	if (UsersStore.getState() !== state.authorized) return null;
+
 	return (
 		<div className="card-control">
 			<button
@@ -182,4 +176,4 @@ export const CardEditControl = (props) => {
 			</button>
 		</div>
 	);
-};
+});
