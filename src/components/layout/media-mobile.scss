@@ -13,12 +13,12 @@
 				flex-direction: column;
 
 				li {
-					.toggler {
-						display: block;
+					&.toggler {
+						display: flex;
 						cursor: pointer;
 						background: none;
 					}
-					.link {
+					&.link {
 						margin: 5px 0;
 					}
 				}
