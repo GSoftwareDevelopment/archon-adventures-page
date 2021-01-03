@@ -10,7 +10,7 @@ import { APP_ID, DB_NAME } from "../setup";
 const client = Stitch.hasAppClient(APP_ID)
 	? Stitch.getAppClient(APP_ID)
 	: Stitch.initializeDefaultAppClient(APP_ID);
-console.log(client);
+// console.log(client);
 
 // Get a MongoDB Service Client
 // This is used for logging in and communicating with Stitch
@@ -30,7 +30,12 @@ const authorizeDB = async (credentials) => {
 		);
 	else credentials = new AnonymousCredential();
 	const result = await client.auth.loginWithCredential(credentials);
-	console.log(result);
+	return result;
 };
 
-export { client, authorizeDB, db };
+const isCurrentUserAnonymous = () => {
+	const currentUser = client.auth.currentUser;
+	return !currentUser || currentUser.loggedInProviderType === "anon-user";
+};
+
+export { client, authorizeDB, db, isCurrentUserAnonymous };
