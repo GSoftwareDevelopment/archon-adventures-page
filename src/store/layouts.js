@@ -12,6 +12,9 @@ export const status = {
 class LayoutsStore {
 	status = "init";
 	schema = [];
+	langs = [];
+	defaultLang = "";
+	currentLang = "";
 
 	constructor() {
 		makeAutoObservable(this);
@@ -33,6 +36,26 @@ class LayoutsStore {
 		else return [];
 	}
 
+	getDefaultLang() {
+		return this.defaultLang;
+	}
+
+	getCurrentLang() {
+		return this.currentLang;
+	}
+
+	setCurrentLang(lang) {
+		this.status = status.PENDING;
+		runInAction(() => {
+			this.currentLang = lang;
+			this.status = status.DONE;
+		});
+	}
+
+	getAvailableLang() {
+		return this.langs;
+	}
+
 	async fetchGet(find) {
 		console.log("Fetching layout settings...");
 		this.status = status.PENDING;
@@ -42,6 +65,22 @@ class LayoutsStore {
 				if (layout) {
 					console.log(`Layout '${layout.name}' loaded.`);
 					this.schema = layout.scheme;
+					this.langs = layout.langs;
+					if (!this.langs || this.langs.length === 0) {
+						throw new Error("No languages defined!");
+					}
+					console.log(
+						"Defined languages: ",
+						this.langs.map((l) => l.symbol)
+					);
+
+					this.defaultLang = layout.defaultLang;
+					if (!this.defaultLang) {
+						console.warn("No default language has been specified.");
+						this.defaultLang = this.langs[0].symbol;
+						console.warn("Language used: ", this.defaultLang);
+					}
+					this.currentLang = this.defaultLang;
 					this.status = status.DONE;
 				} else {
 					console.log(`Can't find current layout :/`);

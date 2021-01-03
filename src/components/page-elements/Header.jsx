@@ -17,7 +17,7 @@ class Header extends Component {
 				{headerElements.map((element, index) => {
 					switch (element.type) {
 						case "router-menu":
-							return <MenuRouter key={index} items={element.items} lang="en" />;
+							return <MenuRouter key={index} items={element.items} />;
 						default:
 							console.log("Element not recognize!");
 							return null;

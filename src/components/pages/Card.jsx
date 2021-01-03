@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { db } from "../../libs/db";
 import { Collections } from "../../setup";
+import { observer } from "mobx-react";
+import LayoutsStore from "../../store/layouts";
+
 import "./card.scss";
 
 import MarkdownView from "react-showdown";
@@ -30,7 +33,7 @@ function Icon({ ...props }) {
 }
 //
 
-export default class Card extends Component {
+class Card extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -45,8 +48,6 @@ export default class Card extends Component {
 	}
 
 	async componentDidMount() {
-		const lang = this.state.currentLang;
-
 		let findCondition;
 		if (this.props.id) {
 			findCondition = { _id: this.props.id };
@@ -57,40 +58,13 @@ export default class Card extends Component {
 
 		try {
 			await this.fetchCardData(findCondition);
-
-			if (this.state.card) {
-				const langs = this.state.card.lang;
-				// 1: check for languages count
-				if (langs.length > 0) {
-					// 2: check for exist currentLang in card
-					// if not exist, take first from available
-					if (!langs.includes(lang)) {
-						this.setState({ langChange: true, currentLang: langs[0] });
-					}
-				}
-			} else {
-			}
 		} catch (error) {
 			console.error(error);
 		}
 	}
 
-	getAvailableLangs() {
+	getContentByLang(lang) {
 		if (this.state.card) {
-			return this.state.card.lang.map((lang) => (
-				<span
-					key={lang}
-					className={lang === this.state.currentLang ? "current" : ""}
-				>
-					{lang}
-				</span>
-			));
-		} else return null;
-	}
-
-	getContentByLang() {
-		if (this.state.card) {
-			const lang = this.state.currentLang;
 			return this.state.card.body[lang];
 		} else return "";
 	}
@@ -99,18 +73,18 @@ export default class Card extends Component {
 		this.setState({ isReading: true });
 
 		// query the remote DB and update the component state
-		const results = await db
+		const card = await db
 			.collection(Collections.CARDS)
 			.find(find, { limit: 1 })
-			.asArray();
+			.first();
 
-		if (results && results.length !== 0) {
+		if (card && card.length !== 0) {
 			this.setState({
-				card: results[0],
+				card: card,
 				isReading: false,
 			});
 		} else {
-			console.warn("Content not found. Search parameters: ", find);
+			console.warn("Content not found for search parameters: ", find);
 			this.setState({
 				card: null,
 				content: `Can't load content. Check console log for more details :(`,
@@ -132,48 +106,92 @@ export default class Card extends Component {
 	};
 
 	render() {
+		if (this.state.isReading)
+			return <ContentLoader busy={this.state.isReading} />;
+		if (!this.state.card) return null;
+
+		const cardLangs = this.state.card.lang;
+
+		const defaultLang = LayoutsStore.getDefaultLang();
+		let currentLang = LayoutsStore.getCurrentLang();
+		console.log("Card ", this.state.card);
+
+		let content = this.getContentByLang(currentLang);
+		let langChange = false;
+		if (!content) {
+			console.log(
+				"The content of this card is not defined in the selected language."
+			);
+
+			langChange = true;
+			if (currentLang !== defaultLang) {
+				currentLang = defaultLang;
+				content = this.getContentByLang(currentLang);
+			}
+			if (!content) {
+				cardLangs.forEach((lang) => {
+					content = this.getContentByLang(lang);
+					currentLang = lang;
+					if (content) return true;
+				});
+			}
+			if (!content) {
+				console.warn("No content found");
+				return <div>No content :(</div>;
+			}
+			console.warn("Language of content was changed to: ", currentLang);
+		}
 		return (
 			<React.Fragment>
-				<ContentLoader busy={this.state.isReading}>
-					{/* <div className="card-control">
-						<CardEditControl onEdit={this.showEdit} />
-		</div> */}
-					{this.state.langChange && (
-						<div id="lang-warning">
-							<IconInfoSquare size="32" />
-							<div>
-								<p>
-									This article is not available in the language of your choice.
-								</p>
-								<p>
-									Language versions available:
-									<br />
-									{this.getAvailableLangs()}
-								</p>
-							</div>
-						</div>
-					)}
-					<MarkdownView
-						className="markdown"
-						markdown={this.getContentByLang()}
-						options={showdown_options}
-						components={{ Icon }}
+				{langChange && (
+					<LangWarning cardLangs={cardLangs} currentLang={currentLang} />
+				)}
+				<MarkdownView
+					key={this.state.currentLang}
+					className="markdown"
+					markdown={content}
+					options={showdown_options}
+					components={{ Icon }}
+				/>
+				{this.state.isEdit && (
+					<CardEdit
+						card={this.state.card}
+						onUpdate={this.updateContent}
+						onClose={this.hideEdit}
 					/>
-					{/*<ReactMarkdown
-						plugins={[[gfm, { tableCellPadding: true, tablePipeAlign: true }]]}
-						className="markdown"
-						children={this.getContentByLang()}
-						linkTarget="_blank"
-					/>*/}
-					{this.state.isEdit && (
-						<CardEdit
-							card={this.state.card}
-							onUpdate={this.updateContent}
-							onClose={this.hideEdit}
-						/>
-					)}
-				</ContentLoader>
+				)}
 			</React.Fragment>
 		);
 	}
 }
+
+function LangWarning(props) {
+	if (!props.cardLangs || !props.cardLangs.length === 0) return null;
+	const availableLangs = LayoutsStore.getAvailableLang();
+
+	return (
+		<div id="lang-warning">
+			<IconInfoSquare size="32" />
+			<div>
+				<p>This article is not available in the language of your choice.</p>
+				<p>
+					Language versions available:
+					<br />
+					{props.cardLangs.map((symbol) => {
+						const lang = availableLangs.find((lang) => lang.symbol === symbol);
+
+						return (
+							<span
+								key={lang.symbol}
+								className={lang.symbol === props.currentLang ? "current" : ""}
+							>
+								{lang.name}
+							</span>
+						);
+					})}
+				</p>
+			</div>
+		</div>
+	);
+}
+export default observer(Card);

@@ -17,6 +17,9 @@ class App extends Component {
 	}
 
 	render() {
+		const currentLang = LayoutsStore.getCurrentLang();
+		console.log(currentLang);
+
 		switch (UsersStore.getStatus()) {
 			case userStatus.DONE:
 				switch (LayoutsStore.getStatus()) {
@@ -24,7 +27,7 @@ class App extends Component {
 						return (
 							<Router>
 								<Route key="authorize" exact path="/auth" component={Login} />
-								<PageLayout />
+								<PageLayout lang={currentLang} />
 							</Router>
 						);
 					case status.INIT:
