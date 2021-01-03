@@ -3,13 +3,31 @@ import { db } from "../../libs/db";
 import { Collections } from "../../setup";
 import "./card.scss";
 
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
+import MarkdownView from "react-showdown";
 import ContentLoader from "../layout/ContentLoader";
-import CardEdit, { CardEditControl } from "./Card-Edit";
+import CardEdit /*, { CardEditControl } */ from "./Card-Edit";
 import { pathDestructure } from "../../libs/utils";
 import { InfoSquare as IconInfoSquare } from "react-bootstrap-icons";
+import * as BSIcon from "react-bootstrap-icons";
 
+// showdown options
+const showdown_options = {
+	tables: true,
+	emoji: true,
+	parseImgDimensions: true,
+	literalMidWordUnderscores: true,
+	strikethrough: true,
+	simpleLineBreaks: true,
+	openLinksInNewWindow: true,
+};
+
+//
+
+function Icon({ ...props }) {
+	const BootstrapIcon = BSIcon[props.name];
+	if (BootstrapIcon) return <BootstrapIcon {...props} />;
+	else return null;
+}
 //
 
 export default class Card extends Component {
@@ -117,9 +135,9 @@ export default class Card extends Component {
 		return (
 			<React.Fragment>
 				<ContentLoader busy={this.state.isReading}>
-					<div className="card-control">
+					{/* <div className="card-control">
 						<CardEditControl onEdit={this.showEdit} />
-					</div>
+		</div> */}
 					{this.state.langChange && (
 						<div id="lang-warning">
 							<IconInfoSquare size="32" />
@@ -135,11 +153,18 @@ export default class Card extends Component {
 							</div>
 						</div>
 					)}
-					<ReactMarkdown
+					<MarkdownView
+						className="markdown"
+						markdown={this.getContentByLang()}
+						options={showdown_options}
+						components={{ Icon }}
+					/>
+					{/*<ReactMarkdown
 						plugins={[[gfm, { tableCellPadding: true, tablePipeAlign: true }]]}
 						className="markdown"
 						children={this.getContentByLang()}
-					/>
+						linkTarget="_blank"
+					/>*/}
 					{this.state.isEdit && (
 						<CardEdit
 							card={this.state.card}

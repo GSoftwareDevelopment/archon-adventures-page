@@ -7,7 +7,7 @@ import { Path, Paths, Collections } from "../../setup";
 import { db } from "../../libs/db";
 import Card from "./Card";
 
-import { CalendarEdit, CalendarEditControl } from "./Calendar-Edit";
+// import { CalendarEdit, CalendarEditControl } from "./Calendar-Edit";
 import ContentLoader from "../layout/ContentLoader";
 
 class Calendar extends Component {
@@ -95,15 +95,6 @@ class Calendar extends Component {
 								onCreate={this.showCreate}
 								onEdit={this.showEdit}
 							/>
-							{this.state.editedCard && (
-								<CalendarEdit
-									lang={this.props.lang}
-									key={this.state.editedCard._id}
-									entry={this.state.editedCard}
-									onUpdate={this.updateEntry}
-									onClose={this.hideEdit}
-								/>
-							)}
 						</ContentLoader>
 					</Route>
 				</Switch>
@@ -115,7 +106,7 @@ class Calendar extends Component {
 const CalendarCardsList = (props) => {
 	return (
 		<React.Fragment>
-			<CalendarEditControl forAll={true} onCreate={props.onCreate} />
+			{/* <CalendarEditControl forAll={true} onCreate={props.onCreate} /> */}
 			{props.cardList.map((entry, index) => (
 				<Link
 					key={index + Math.random().toString()}
@@ -126,7 +117,7 @@ const CalendarCardsList = (props) => {
 					}}
 				>
 					<CalendarEntry key={index} entry={entry}>
-						<CalendarEditControl onEdit={() => props.onEdit(entry)} />
+						{/* <CalendarEditControl onEdit={() => props.onEdit(entry)} /> */}
 					</CalendarEntry>
 				</Link>
 			))}
@@ -195,11 +186,7 @@ const CalendarCard = (props) => {
 	return (
 		<React.Fragment>
 			<CalendarEntry fetchByName={cardName} />
-			<Card
-				name={`${Paths.Calendar}${Path.DELIMITER}${cardName}`}
-				lang="en"
-				editable={props.editable}
-			/>
+			<Card name={`${Paths.Calendar}${Path.DELIMITER}${cardName}`} lang="en" />
 			<Link className="link" to={props.matchUrl}>
 				&lt;&lt;&lt;
 			</Link>
