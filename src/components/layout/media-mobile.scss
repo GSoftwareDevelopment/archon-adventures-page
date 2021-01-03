@@ -1,10 +1,11 @@
 @media screen and (max-width: 900px) {
-	#header {
+	header {
 		#main-menu {
 			overflow: hidden;
+			height: unset;
 
 			&.collapsed {
-				height: 40px;
+				height: 35px;
 				transition: 0.25s;
 			}
 
@@ -24,12 +25,9 @@
 			}
 		}
 	}
-}
 
-@media screen and (max-width: 768px) {
-	#main-wrapper {
+	#content-wrapper {
 		// margin-top: 0px;
-		margin-bottom: 50px;
 		display: block;
 
 		#main-content {

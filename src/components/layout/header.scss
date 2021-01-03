@@ -1,17 +1,19 @@
 //
 
-#header {
+header {
 	display: block;
-	position: fixed;
+	position: sticky;
 	left: 0px;
 	right: 0px;
 	top: 0px;
-	background-color: $header-background-color;
 	z-index: 10;
-	box-shadow: -15px 15px 15px black, 0px 15px 15px black, 15px 15px 15px black;
+
+	background-color: $header-background-color;
+	// box-shadow: -15px 15px 15px black, 0px 15px 15px black, 15px 15px 15px black;
 
 	#main-menu {
 		display: block;
+		height: 35px;
 	}
 
 	ul.menu-pane {

@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Page404() {
 	return (
-		<div>
+		<div id="status-404">
 			<h1>Page not found</h1>
 		</div>
 	);

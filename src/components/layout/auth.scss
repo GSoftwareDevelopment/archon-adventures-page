@@ -31,44 +31,71 @@
 	}
 }
 
-.auth-status {
-	position: fixed;
-	right: 0;
-	bottom: 0;
-	overflow: hidden;
+//
 
+#auth-wrapper {
+	position: relative;
+	width: 100%;
+	height: 40px;
+}
+
+.auth-status {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
-
+	overflow: hidden;
 	z-index: 150;
-	width: 280px;
-	transition: 0.3s;
-	cursor: default;
 
-	background-color: rgb(155, 88, 0);
-	padding: 5px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 280px;
+	height: 40px;
+
+	cursor: default;
+	// background-color: rgb(155, 88, 0);
+	transition: 0.3s;
+
+	.collapsed-part {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		align-items: center;
+	}
 
 	.user {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: space-around;
 		align-items: center;
 		min-width: 270px;
-
+		height: inherit;
 		padding: 5px;
-		background-color: #000;
 
-		button {
-			background: transparent;
-			margin: 0 5px;
-			color: #fff;
-			border: none;
+		.icon {
+			width: 20px;
+			height: 20px;
+			margin-right: 5px;
+		}
 
-			cursor: pointer;
+		span {
+			width: 210px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 	}
+
+	button {
+		background: transparent;
+		margin-left: 5p;
+		color: #fff;
+		border: none;
+
+		cursor: pointer;
+	}
+
 	&:hover,
 	expanded {
 		width: 100%;
