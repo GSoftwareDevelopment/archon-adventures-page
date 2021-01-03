@@ -1,76 +1,55 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { client, authorizeDB } from "./libs/db";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { observer } from "mobx-react";
 
-import Login, { Userinfo } from "./components/layout/Login";
-import Header from "./components/layout/Header";
-import ContentPage from "./components/layout/ContentPage";
-import Footer from "./components/layout/Footer";
-// import Page404 from "./components/layout/Page404";
+import UsersStore, { status as userStatus } from "./store/users";
+import LayoutsStore, { status } from "./store/layouts";
+
+import { EmojiDizzy, EmojiFrown } from "react-bootstrap-icons";
+
+import Login from "./components/layout/Login";
+import PageLayout from "./components/layout/PageLayout";
 
 class App extends Component {
-	constructor() {
-		super();
-		this.state = { dbStatus: "pending" };
-	}
-
 	async componentDidMount() {
-		await this.connect();
+		await UsersStore.init();
+		await LayoutsStore.fetchGet({ current: true });
 	}
-	async connect() {
-		try {
-			if (!client.auth.currentUser) await authorizeDB();
-
-			this.setState({ dbStatus: "anonymous" });
-		} catch (error) {
-			console.error(error);
-			this.setState({ dbStatus: "error" });
-		}
-	}
-
-	onChange = (status) => {
-		switch (status) {
-			case "anonymous":
-				this.setState({ dbStatus: "anonymous" });
-				this.connect();
-				break;
-			case "authorized":
-				this.setState({ dbStatus: "authorized" });
-				break;
-			default:
-				this.setState({ dbStatus: "error" });
-				break;
-		}
-	};
 
 	render() {
-		switch (this.state.dbStatus) {
-			case "authorized":
-			case "anonymous":
-				return (
-					<Router>
-						<Header />
-						<ContentPage />
-						<Switch>
-							<Route path="/auth">
-								<Login
-									onAuthorized={() => {
-										this.onChange("authorized");
-									}}
-								/>
-							</Route>
-							{/* <Route component={Page404} /> */}
-						</Switch>
-						<Footer />
-						<Userinfo onChange={this.onChange} />
-					</Router>
-				);
-			case "pending":
-				return <div className="content-loader">Loading...</div>;
+		switch (UsersStore.getStatus()) {
+			case userStatus.DONE:
+				switch (LayoutsStore.getStatus()) {
+					case status.DONE:
+						return (
+							<Router>
+								<Route key="authorize" exact path="/auth" component={Login} />
+								<PageLayout />
+							</Router>
+						);
+					case status.INIT:
+					case status.PENDING:
+						return <div className="content-loader">Loading...</div>;
+					default:
+						return (
+							<div className="content-loader">
+								<EmojiFrown size="64px" />
+								<p>Layout error</p>
+							</div>
+						);
+				}
+			case userStatus.INIT:
+			case userStatus.PENDING:
+				return <div className="content-loader">Initializing...</div>;
 			default:
-				return <div>Boot error</div>;
+				return (
+					<div className="content-loader">
+						<EmojiDizzy size="64px" />
+						<p>Boot error</p>
+					</div>
+				);
 		}
 	}
 }
 
-export default App;
+export default observer(App);
