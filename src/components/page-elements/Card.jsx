@@ -3,15 +3,16 @@ import { db } from "../../libs/db";
 import { Collections } from "../../setup";
 import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
+import { pathDestructure } from "../../libs/utils";
 
-import "./card.scss";
+import "../layout/card.scss";
 
 import MarkdownView from "react-showdown";
 import ContentLoader from "../layout/ContentLoader";
-import CardEdit /*, { CardEditControl } */ from "./Card-Edit";
-import { pathDestructure } from "../../libs/utils";
 import { InfoSquare as IconInfoSquare } from "react-bootstrap-icons";
 import * as BSIcon from "react-bootstrap-icons";
+
+import CardEdit /*, { CardEditControl } */ from "../pages/Card-Edit";
 
 // showdown options
 const showdown_options = {
@@ -22,6 +23,7 @@ const showdown_options = {
 	strikethrough: true,
 	simpleLineBreaks: true,
 	openLinksInNewWindow: true,
+	metadata: true,
 };
 
 //
@@ -30,6 +32,12 @@ function Icon({ ...props }) {
 	const BootstrapIcon = BSIcon[props.name];
 	if (BootstrapIcon) return <BootstrapIcon {...props} />;
 	else return null;
+}
+
+function Align({ children, ...props }) {
+	return (
+		<span style={{ display: "block", textAlign: props.to }}>{children}</span>
+	);
 }
 //
 
@@ -114,13 +122,13 @@ class Card extends Component {
 
 		const defaultLang = LayoutsStore.getDefaultLang();
 		let currentLang = LayoutsStore.getCurrentLang();
-		console.log("Card ", this.state.card);
 
 		let content = this.getContentByLang(currentLang);
 		let langChange = false;
 		if (!content) {
+			console.log("Card ", this.state.card.name);
 			console.log(
-				"The content of this card is not defined in the selected language."
+				"- The content of this card is not defined in the selected language."
 			);
 
 			langChange = true;
@@ -136,10 +144,10 @@ class Card extends Component {
 				});
 			}
 			if (!content) {
-				console.warn("No content found");
+				console.warn("! No content found");
 				return <div>No content :(</div>;
 			}
-			console.warn("Language of content was changed to: ", currentLang);
+			console.log("- Language of content was changed to: ", currentLang);
 		}
 		return (
 			<React.Fragment>
@@ -151,7 +159,7 @@ class Card extends Component {
 					className="markdown"
 					markdown={content}
 					options={showdown_options}
-					components={{ Icon }}
+					components={{ Icon, Align }}
 				/>
 				{this.state.isEdit && (
 					<CardEdit

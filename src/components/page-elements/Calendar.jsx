@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { useParams, withRouter } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
-import "./calendar.scss";
+import "../layout/calendar.scss";
 
 import { Path, Paths, Collections } from "../../setup";
 import { db } from "../../libs/db";
