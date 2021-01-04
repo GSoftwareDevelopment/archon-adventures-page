@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
 
 import { Route } from "react-router-dom";
-import Card from "../pages/Card";
-import Calendar from "../pages/Calendar";
+import Card from "./Card";
+import Calendar from "./Calendar";
 
 class RouterContent extends Component {
 	parsePage(refTo, pageElements, lang) {
@@ -39,9 +39,6 @@ class RouterContent extends Component {
 	}
 
 	render() {
-		// const menuItems = RoutesStore.getRoutes();
-		// if (RoutesStore.getStatus() !== status.DONE) return null;
-
 		const currentLang = LayoutsStore.getCurrentLang();
 		const { path, exact, elements } = this.props;
 

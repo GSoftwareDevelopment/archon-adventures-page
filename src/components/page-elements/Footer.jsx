@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 // import LayoutsStore, { status } from "../../store/layouts";
 
-import Card from "../pages/Card";
+import Card from "./Card";
 
 class Footer extends Component {
 	render() {
