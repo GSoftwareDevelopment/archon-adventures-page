@@ -1,4 +1,4 @@
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) {
 	header {
 		#main-menu {
 			overflow: hidden;
@@ -25,11 +25,7 @@
 			}
 		}
 	}
-
 	#content-wrapper {
-		// margin-top: 0px;
-		display: block;
-
 		#main-content {
 			padding: 0 10px;
 		}

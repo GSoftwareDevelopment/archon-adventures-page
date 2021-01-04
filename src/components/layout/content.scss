@@ -2,7 +2,8 @@
 
 #content-wrapper {
 	display: block;
-	padding-bottom: 200px;
+	// padding-bottom: 200px;
+	flex: 1 1;
 }
 
 //
@@ -22,7 +23,7 @@
 //
 
 #main-content {
-	position: relative;
+	// position: relative;
 
 	padding-left: 100px;
 	padding-right: 300px;

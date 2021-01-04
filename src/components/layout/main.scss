@@ -1,3 +1,7 @@
+:root {
+	--media-query-breakpoint: 1000px;
+}
+
 $header-background-color: #000;
 $footer-background-color: #000;
 $footer-height: 160px;
@@ -33,7 +37,9 @@ body {
 
 #root {
 	min-height: 100%;
-	position: relative;
+	// position: relative;
+	display: flex;
+	flex-direction: column;
 }
 
 h1,
@@ -78,4 +84,4 @@ a {
 
 @import "./footer.scss";
 
-@import "media-mobile";
+@import "./media-mobile";
