@@ -39,3 +39,38 @@ div.calendar {
 		}
 	}
 }
+
+// media-query section
+
+@media screen and (max-width: 460px) {
+	div.calendar {
+		justify-content: flex-start;
+
+		div.calendar-entry {
+			flex-direction: column;
+			justify-content: flex-start;
+			white-space: normal;
+
+			.date-content {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				gap: 10px;
+
+				margin: 0px;
+			}
+
+			> .entry-content {
+				.entry-title {
+					font-size: 1.5em;
+				}
+
+				.entry-description {
+					margin-top: 10px;
+					padding: 10px;
+					border-left: #888 solid 2px;
+				}
+			}
+		}
+	}
+}
