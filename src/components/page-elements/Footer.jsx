@@ -1,25 +1,51 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
-// import LayoutsStore, { status } from "../../store/layouts";
+import * as Messages from "../layout/Messages";
 
 import Card from "./Card";
 
 class Footer extends Component {
+	parseElement(element, index) {
+		const { type, ...params } = element;
+
+		if (this.currentLevel > 3) {
+			Messages.toConsole("debug.footer.render.levelDepthExceeded");
+			return null;
+		}
+
+		switch (type) {
+			case "row":
+				const rowElements = params.elements;
+				this.currentLevel++;
+				return (
+					<div key={"footer-row-" + index} className="footer-row">
+						{rowElements.map((element, index) => {
+							return this.parseElement(element, index);
+						})}
+					</div>
+				);
+
+			case "card":
+				return (
+					<Card key={"footer-card-" + index} name={params.name} lang="en" />
+				);
+
+			default:
+				Messages.toConsole("debug.footer.render.badElementType", index);
+				return null;
+		}
+	}
+
 	render() {
 		// if (LayoutsStore.getStatus() !== status.DONE) return null;
 		// const footerElements = LayoutsStore.getSchemeElements("footer");
 
 		const footerElements = this.props.elements;
+		this.currentLevel = 0;
 		return (
 			<footer>
 				{footerElements.map((element, index) => {
-					switch (element.type) {
-						case "card":
-							return <Card key={index} name={element.name} lang="en" />;
-						default:
-							console.log("Element not recognize!");
-							return null;
-					}
+					return this.parseElement(element, index);
 				})}
 			</footer>
 		);
