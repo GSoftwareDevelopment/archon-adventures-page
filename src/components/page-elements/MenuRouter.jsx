@@ -4,6 +4,7 @@ import LayoutsStore from "../../store/layouts";
 
 import { Link } from "react-router-dom";
 import Flag from "react-flags";
+import { languageCheck } from "../../libs/utils";
 
 class MenuRouter extends Component {
 	constructor(props) {
@@ -36,7 +37,9 @@ class MenuRouter extends Component {
 				path: part.path,
 			}));
 
+		// const
 		const defaultLang = LayoutsStore.getDefaultLang();
+		const availableLangs = LayoutsStore.getAvailableLang();
 		let currentLang = LayoutsStore.getCurrentLang(); // this.state.currentLang;
 
 		return (
@@ -54,47 +57,55 @@ class MenuRouter extends Component {
 						/>
 					</li>
 					{menuItems.map((item, index) => {
+						let newMenuElement = null;
+
 						const route = routes.find((entry) => entry.name === item.name);
-						let title;
-						if (!item.title[currentLang]) {
-							if (currentLang !== defaultLang) {
-								currentLang = defaultLang;
-								title = item.title[defaultLang];
+
+						const usedLang = languageCheck(
+							currentLang,
+							defaultLang,
+							availableLangs.map((l) => l.symbol),
+							(lang) => {
+								return item.title[lang];
 							}
-							if (!title) {
-								currentLang = "";
-								title = item.title[0];
-							}
-						} else {
-							title = item.title[currentLang];
+						);
+						if (!usedLang) {
+							console.error(
+								`Language entry is not defined in menu element #${index} :/`
+							);
+							return null;
 						}
 						if (route) {
 							let path = route.path;
-							return (
-								<MenuLink
-									key={item.name}
-									path={path}
-									title={item.title[currentLang]}
-									onClick={this.collapse}
-								/>
+							newMenuElement = (
+								<li key={item.name} className="link">
+									<MenuLink
+										path={path}
+										title={item.title[usedLang]}
+										onClick={this.collapse}
+									/>
+								</li>
 							);
 						} else {
 							switch (item.name) {
 								case "#lang_selector":
-									return (
-										<MenuLangSelector
-											key={item.name}
-											title={item.title[currentLang]}
-											lang={currentLang}
-										/>
+									newMenuElement = (
+										<li key={item.name} className="lang-selector">
+											<MenuLangSelector
+												title={item.title[usedLang]}
+												lang={usedLang}
+											/>
+										</li>
 									);
+									break;
 								default:
 									console.log(
 										`Name '${item.name}' property of menu router item is not recognize.`
 									);
-									return null;
+									newMenuElement = null;
 							}
 						}
+						return newMenuElement;
 					})}
 				</ul>
 			</div>
@@ -104,11 +115,9 @@ class MenuRouter extends Component {
 
 function MenuLink(props) {
 	return (
-		<li className="link">
-			<Link to={props.path} onClick={props.onClick}>
-				{props.title}
-			</Link>
-		</li>
+		<Link to={props.path} onClick={props.onClick}>
+			{props.title}
+		</Link>
 	);
 }
 
@@ -122,29 +131,27 @@ class MenuLangSelector extends Component {
 		const langList = LayoutsStore.getAvailableLang();
 
 		return (
-			<li className="lang-selector">
-				<ul>
-					{langList.map((langDef) => {
-						let langSymbol = langDef.symbol;
-						return (
-							<li
-								key={langSymbol}
-								title={langDef.name}
-								onClick={() => {
-									this.changeLanguage(langSymbol);
-								}}
-							>
-								<Flag
-									name={langSymbol === "en" ? "GB" : langSymbol}
-									format="svg"
-									alt={langDef.name}
-									basePath="/imgs/flags"
-								/>
-							</li>
-						);
-					})}
-				</ul>
-			</li>
+			<ul>
+				{langList.map((langDef) => {
+					let langSymbol = langDef.symbol;
+					return (
+						<li
+							key={langSymbol}
+							title={langDef.name}
+							onClick={() => {
+								this.changeLanguage(langSymbol);
+							}}
+						>
+							<Flag
+								name={langSymbol === "en" ? "GB" : langSymbol}
+								format="svg"
+								alt={langDef.name}
+								basePath="/imgs/flags"
+							/>
+						</li>
+					);
+				})}
+			</ul>
 		);
 	}
 }

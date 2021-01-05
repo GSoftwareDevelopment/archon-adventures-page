@@ -1,5 +1,7 @@
 import { Path } from "../setup";
 
+//
+
 function unifyPath(path) {
 	if (path.charAt(0) === Path.DELIMITER) path = path.slice(1);
 	return path;
@@ -20,4 +22,38 @@ function combinePathName(path, name) {
 	return pathname;
 }
 
-export { unifyPath, pathDestructure, combinePathName };
+//
+
+function languageCheck(currentLang, defaultLang, availableLangs, callback) {
+	availableLangs = [...availableLangs];
+
+	const removeLang = (lang) => {
+		const i = availableLangs.indexOf(lang);
+		if (i >= 0) {
+			availableLangs.splice(i, 1);
+			return true;
+		}
+		return false;
+	};
+
+	if (currentLang !== defaultLang) {
+		if (removeLang(currentLang) && callback(currentLang)) {
+			return currentLang;
+		}
+	}
+
+	if (removeLang(defaultLang) && callback(defaultLang)) {
+		return defaultLang;
+	}
+
+	while (availableLangs.length > 0) {
+		const lang = availableLangs[0];
+		if (removeLang(lang) && callback(lang)) {
+			return lang;
+		}
+	}
+
+	return undefined;
+}
+
+export { unifyPath, pathDestructure, combinePathName, languageCheck };
