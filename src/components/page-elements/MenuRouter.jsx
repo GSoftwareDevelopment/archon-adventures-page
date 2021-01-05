@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
+import * as Messages from "../layout/Messages";
+import { languageCheck } from "../../libs/utils";
 
 import { Link } from "react-router-dom";
 import Flag from "react-flags";
-import { languageCheck } from "../../libs/utils";
 
 class MenuRouter extends Component {
 	constructor(props) {
@@ -22,6 +23,54 @@ class MenuRouter extends Component {
 		this.setState({ collapsed: true });
 	};
 
+	parseMenuItem(item, index) {
+		let newMenuElement = null,
+			className;
+
+		const route = this.routes.find((entry) => entry.name === item.name);
+
+		const usedLang = languageCheck(
+			this.currentLang,
+			this.defaultLang,
+			this.availableLangs.map((l) => l.symbol),
+			(lang) => {
+				return item.title[lang];
+			}
+		);
+		if (!usedLang) {
+			Messages.toConsole("debug.menuRouter.render.itemLangsNotDefined", index);
+			return null;
+		}
+		if (route) {
+			let path = route.path;
+			className = "link";
+			newMenuElement = (
+				<MenuLink
+					path={path}
+					title={item.title[usedLang]}
+					onClick={this.collapse}
+				/>
+			);
+		} else {
+			switch (item.name) {
+				case "#lang_selector":
+					className = "lang-selector";
+					newMenuElement = (
+						<MenuLangSelector title={item.title[usedLang]} lang={usedLang} />
+					);
+					break;
+				default:
+					Messages.toConsole("debug.menuRouter.render.badSymbol", item.name);
+					newMenuElement = null;
+			}
+		}
+		return (
+			<li key={item.name} className={className}>
+				{newMenuElement}
+			</li>
+		);
+	}
+
 	render() {
 		// if (RoutesStore.getStatus() !== status.DONE) return null;
 		// const menuItems = RoutesStore.getRoutes();
@@ -30,87 +79,42 @@ class MenuRouter extends Component {
 		if (!menuItems || typeof menuItems !== "object" || menuItems.length === 0)
 			return null;
 
-		const routes = LayoutsStore.getSchema()
+		this.routes = LayoutsStore.getSchema()
 			.filter((part) => part.contentType === "router-content")
 			.map((part) => ({
 				name: part.name,
 				path: part.path,
 			}));
 
-		// const
-		const defaultLang = LayoutsStore.getDefaultLang();
-		const availableLangs = LayoutsStore.getAvailableLang();
-		let currentLang = LayoutsStore.getCurrentLang(); // this.state.currentLang;
+		this.defaultLang = LayoutsStore.getDefaultLang();
+		this.availableLangs = LayoutsStore.getAvailableLang();
+		this.currentLang = LayoutsStore.getCurrentLang();
 
 		return (
 			<div id="main-menu" className={this.state.collapsed ? "collapsed" : ""}>
 				<ul className="menu-pane">
-					<li
-						key="menu-toggler"
-						className="toggler link"
-						onClick={this.toggleCollapse}
-					>
-						<img
-							src="/imgs/AtariLogo.png"
-							alt="Menu"
-							style={{ maxHeight: "32px" }}
-						/>
-					</li>
+					<MenuToggler onClick={this.toggleCollapse} />
 					{menuItems.map((item, index) => {
-						let newMenuElement = null;
-
-						const route = routes.find((entry) => entry.name === item.name);
-
-						const usedLang = languageCheck(
-							currentLang,
-							defaultLang,
-							availableLangs.map((l) => l.symbol),
-							(lang) => {
-								return item.title[lang];
-							}
-						);
-						if (!usedLang) {
-							console.error(
-								`Language entry is not defined in menu element #${index} :/`
-							);
-							return null;
-						}
-						if (route) {
-							let path = route.path;
-							newMenuElement = (
-								<li key={item.name} className="link">
-									<MenuLink
-										path={path}
-										title={item.title[usedLang]}
-										onClick={this.collapse}
-									/>
-								</li>
-							);
-						} else {
-							switch (item.name) {
-								case "#lang_selector":
-									newMenuElement = (
-										<li key={item.name} className="lang-selector">
-											<MenuLangSelector
-												title={item.title[usedLang]}
-												lang={usedLang}
-											/>
-										</li>
-									);
-									break;
-								default:
-									console.log(
-										`Name '${item.name}' property of menu router item is not recognize.`
-									);
-									newMenuElement = null;
-							}
-						}
-						return newMenuElement;
+						return this.parseMenuItem(item, index);
 					})}
 				</ul>
 			</div>
 		);
 	}
+}
+
+function MenuToggler(props) {
+	return (
+		<li
+			key="menu-toggler"
+			className="toggler link"
+			onClick={() => {
+				props.onClick();
+			}}
+		>
+			<img src="/imgs/AtariLogo.png" alt="Menu" style={{ maxHeight: "32px" }} />
+		</li>
+	);
 }
 
 function MenuLink(props) {
@@ -124,7 +128,10 @@ function MenuLink(props) {
 class MenuLangSelector extends Component {
 	changeLanguage(newLang) {
 		LayoutsStore.setCurrentLang(newLang);
-		console.log("Switch language to: ", newLang);
+		Messages.toConsole(
+			"debug.menuRouter.userAction.changeLangPreference",
+			newLang
+		);
 	}
 
 	render() {
