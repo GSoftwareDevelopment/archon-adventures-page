@@ -18,7 +18,6 @@ class App extends Component {
 
 	render() {
 		const currentLang = LayoutsStore.getCurrentLang();
-		console.log(currentLang);
 
 		switch (UsersStore.getStatus()) {
 			case userStatus.DONE:
