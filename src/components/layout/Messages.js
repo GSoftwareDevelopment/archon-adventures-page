@@ -17,6 +17,28 @@ export const texts = {
 			content: "Language for card has been set to: %s",
 		},
 	},
+
+	// MenuRouter render
+	"debug.menuRouter.render.itemLangsNotDefined": {
+		console: {
+			type: "error",
+			content: "! The menu item #%n does not have any languages defined",
+		},
+	},
+	"debug.menuRouter.render.badSymbol": {
+		console: {
+			type: "error",
+			content: "! Name '%s' property of menu router item is not recognize.",
+		},
+	},
+	"debug.menuRouter.userAction.changeLangPreference": {
+		console: {
+			type: "log",
+			content: "Change in language preference. Choice '%s' language",
+		},
+	},
+
+	// Card render
 	"debug.card.render.open": {
 		console: {
 			type: "groupCollapsed",
@@ -43,7 +65,7 @@ export const texts = {
 	},
 	"debug.card.render.optionsModified.badOption": {
 		console: {
-			type: "log",
+			type: "error",
 			content: "! Option '%s' is not recognized.",
 		},
 	},
@@ -60,6 +82,19 @@ export const texts = {
 		},
 	},
 
+	// Footer
+	"debug.footer.render.levelDepthExceeded": {
+		console: {
+			type: "error",
+			content: "Component max depth level exceeded",
+		},
+	},
+	"debug.footer.render.badElementType": {
+		console: {
+			type: "error",
+			content: "! Footer element #%n is not recognized",
+		},
+	},
 	// messages displayed in site layout
 
 	langWarning: {
