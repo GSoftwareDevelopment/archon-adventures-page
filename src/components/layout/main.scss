@@ -78,6 +78,33 @@ a {
 
 //
 
+.lang-selector {
+	// margin-left: auto;
+
+	ul {
+		display: flex;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+
+		li {
+			padding: 5px 5px;
+			border-radius: 50%;
+
+			img {
+				max-height: 24px;
+				border-radius: 50%;
+			}
+
+			&:hover {
+				cursor: pointer;
+				background-color: rgba(255, 255, 255, 0.5);
+			}
+		}
+	}
+}
+//
+
 @import "./header.scss";
 
 @import "./content.scss";
