@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import { observer } from "mobx-react";
 
 import UsersStore, { status as userStatus } from "./store/users";
 import LayoutsStore, { status } from "./store/layouts";
 
 import { EmojiDizzy, EmojiFrown } from "react-bootstrap-icons";
-
-import Login from "./components/layout/Login";
 import PageLayout from "./components/layout/PageLayout";
 
 class App extends Component {
@@ -17,18 +14,11 @@ class App extends Component {
 	}
 
 	render() {
-		const currentLang = LayoutsStore.getCurrentLang();
-
 		switch (UsersStore.getStatus()) {
 			case userStatus.DONE:
 				switch (LayoutsStore.getStatus()) {
 					case status.DONE:
-						return (
-							<Router>
-								<Route key="authorize" exact path="/auth" component={Login} />
-								<PageLayout lang={currentLang} />
-							</Router>
-						);
+						return <PageLayout />;
 					case status.INIT:
 					case status.PENDING:
 						return <div className="content-loader">Loading...</div>;
