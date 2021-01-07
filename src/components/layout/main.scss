@@ -37,7 +37,6 @@ body {
 
 #root {
 	min-height: 100%;
-	// position: relative;
 	display: flex;
 	flex-direction: column;
 }
@@ -49,21 +48,31 @@ h4,
 h5,
 h6 {
 	font-weight: 50;
+	padding: 0;
+	margin: 0;
 }
 
+p {
+	padding: 0;
+	margin-bottom: 0.05em;
+}
 a {
 	display: inline-block;
 	text-decoration: none;
 	color: #ffffff;
 	transition: 0.25s;
-	white-space: nowrap;
-	padding: 3px;
 
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.3);
 	}
 }
 
+ul,
+li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
 // custom scrollbar styling (react-custom-scrollbars component)
 
 .scrollbars-thumb {
@@ -78,37 +87,9 @@ a {
 
 //
 
-.lang-selector {
-	// margin-left: auto;
-
-	ul {
-		display: flex;
-		padding: 0;
-		margin: 0;
-		list-style: none;
-
-		li {
-			padding: 5px 5px;
-			border-radius: 50%;
-
-			img {
-				max-height: 24px;
-				border-radius: 50%;
-			}
-
-			&:hover {
-				cursor: pointer;
-				background-color: rgba(255, 255, 255, 0.5);
-			}
-		}
-	}
+.content-loader {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
-//
-
-@import "./header.scss";
-
-@import "./content.scss";
-
-@import "./footer.scss";
-
-@import "./media-mobile";
