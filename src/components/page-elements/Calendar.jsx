@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { useParams, withRouter } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
+import LayoutsStore from "../../store/layouts";
+import { languageCheck } from "../../libs/utils";
 import "../layout/calendar.scss";
 
 import { Path, Paths, Collections } from "../../setup";
@@ -33,7 +35,7 @@ class Calendar extends Component {
 		this.setState({ isReading: true });
 		const calendar = await db
 			.collection(Collections.CALENDAR)
-			.find({}, { limit: 100, sort: { date: -1 } })
+			.find({ path: this.props.attr.path }, { limit: 100, sort: { date: -1 } })
 			.asArray();
 
 		this.setState({ calendar, isReading: false });
@@ -43,57 +45,51 @@ class Calendar extends Component {
 		this.setState({ currentCard: card });
 	};
 
-	showCreate = () => {
-		this.setState({
-			editedCard: {
-				_id: "",
-				date: new Date(),
-				title: "",
-				description: "",
-				cardRefTo: "",
-			},
-		});
-	};
+	// showCreate = () => {
+	// 	this.setState({
+	// 		editedCard: {
+	// 			_id: "",
+	// 			date: new Date(),
+	// 			title: "",
+	// 			description: "",
+	// 			cardRefTo: "",
+	// 		},
+	// 	});
+	// };
 
-	showEdit = (card) => {
-		this.setState({ editedCard: card });
-	};
+	// showEdit = (card) => {
+	// 	this.setState({ editedCard: card });
+	// };
 
-	hideEdit = () => {
-		this.setState({ editedCard: null });
-	};
+	// hideEdit = () => {
+	// 	this.setState({ editedCard: null });
+	// };
 
-	updateEntry = (newEntry) => {
-		// debugger;
-		const calendar = this.state.calendar;
-		let entry = calendar.find((entry) => entry._id === newEntry._id);
-		let index = calendar.indexOf(entry);
-		this.setState((oldState) => {
-			let newState = { ...oldState };
-			newState.calendar[index] = newEntry;
-			return newState;
-		});
-	};
+	// updateEntry = (newEntry) => {
+	// 	// debugger;
+	// 	const calendar = this.state.calendar;
+	// 	let entry = calendar.find((entry) => entry._id === newEntry._id);
+	// 	let index = calendar.indexOf(entry);
+	// 	this.setState((oldState) => {
+	// 		let newState = { ...oldState };
+	// 		newState.calendar[index] = newEntry;
+	// 		return newState;
+	// 	});
+	// };
 
 	render() {
 		return (
 			<React.Fragment>
 				<Switch>
 					<Route path={`${this.props.match.path}/:cardName`}>
-						<CalendarCard
-							matchUrl={this.props.match.url}
-							lang={this.props.lang}
-						/>
+						<CalendarCard matchUrl={this.props.match.url} />
 					</Route>
 					<Route exact path={this.props.match.path}>
 						<ContentLoader busy={this.state.isReading}>
 							<CalendarCardsList
-								lang={this.props.lang}
 								cardList={this.state.calendar}
 								matchUrl={this.props.match.url}
 								onChoice={this.setCard}
-								onCreate={this.showCreate}
-								onEdit={this.showEdit}
 							/>
 						</ContentLoader>
 					</Route>
@@ -106,7 +102,6 @@ class Calendar extends Component {
 const CalendarCardsList = (props) => {
 	return (
 		<React.Fragment>
-			{/* <CalendarEditControl forAll={true} onCreate={props.onCreate} /> */}
 			{props.cardList.map((entry, index) => (
 				<Link
 					key={index + Math.random().toString()}
@@ -116,9 +111,7 @@ const CalendarCardsList = (props) => {
 						props.onChoice(entry);
 					}}
 				>
-					<CalendarEntry key={index} entry={entry}>
-						{/* <CalendarEditControl onEdit={() => props.onEdit(entry)} /> */}
-					</CalendarEntry>
+					<CalendarEntry key={index} entry={entry} />
 				</Link>
 			))}
 		</React.Fragment>
@@ -159,6 +152,28 @@ export class CalendarEntry extends Component {
 				day: "numeric",
 			})
 			.split(" ");
+
+		const entryLangs = [];
+		for (const lang in entry.body) {
+			entryLangs.push(lang);
+		}
+		// Messages.toConsole("debug.card.render.bodyLanguages", entryLangs);
+
+		const defaultLang = LayoutsStore.getDefaultLang();
+		const currentLang = LayoutsStore.getCurrentLang();
+
+		const usedLang = languageCheck(
+			currentLang,
+			defaultLang,
+			entryLangs,
+			(lang) => {
+				return entry.body[lang];
+			}
+		);
+
+		const title = entry.body[usedLang].title;
+		const description = entry.body[usedLang].description;
+
 		return (
 			<div className="calendar">
 				<div className="calendar-entry">
@@ -170,8 +185,8 @@ export class CalendarEntry extends Component {
 						</div>
 					</div>
 					<div className="entry-content">
-						<div className="entry-title">{entry.title}</div>
-						<div className="entry-description">{entry.description}</div>
+						<div className="entry-title">{title}</div>
+						<div className="entry-description">{description}</div>
 					</div>
 				</div>
 				{this.props.children}
@@ -186,7 +201,7 @@ const CalendarCard = (props) => {
 	return (
 		<React.Fragment>
 			<CalendarEntry fetchByName={cardName} />
-			<Card name={`${Paths.Calendar}${Path.DELIMITER}${cardName}`} lang="en" />
+			<Card name={`${Paths.Calendar}${Path.DELIMITER}${cardName}`} />
 			<Link className="link" to={props.matchUrl}>
 				&lt;&lt;&lt;
 			</Link>
