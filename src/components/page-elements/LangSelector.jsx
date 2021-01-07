@@ -1,9 +1,11 @@
+import "./scss/lang-selector.scss";
+
 import LayoutsStore from "../../store/layouts";
 
 import * as Messages from "../layout/Messages";
 import Flag from "react-flags";
 
-export default function MenuLangSelector(props) {
+export default function LangSelector(props) {
 	const changeLanguage = (newLang) => {
 		LayoutsStore.setCurrentLang(newLang);
 		Messages.toConsole(
@@ -39,6 +41,6 @@ export default function MenuLangSelector(props) {
 	);
 
 	if (props.attr._parentContentType === "router-menu")
-		return <li className="lang-selector">{child}</li>;
-	else return <div className="lang-selector">{child}</div>;
+		return <li id="lang-selector">{child}</li>;
+	else return <nav id="lang-selector">{child}</nav>;
 }

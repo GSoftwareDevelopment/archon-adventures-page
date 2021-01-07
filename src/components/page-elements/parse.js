@@ -1,3 +1,5 @@
+import "./scss/row.scss";
+
 import * as BlockElement from "./block";
 import * as ContentElement from "./content";
 
@@ -19,7 +21,7 @@ const layoutElements = {
 		</BlockElement.Footer>
 	),
 
-	"router-menu": (index, attr, elements) => {
+	"menu-router": (index, attr, elements) => {
 		if (!elements || typeof elements !== "object" || elements.length === 0)
 			return null;
 
@@ -38,11 +40,11 @@ const layoutElements = {
 
 	// menu context
 
-	"menu-item": (index, attr) => (
+	"menu-link": (index, attr) => (
 		<ContentElement.MenuLink key={index} attr={attr} />
 	),
 	"lang-selector": (index, attr) => (
-		<ContentElement.MenuLangSelector key={index} attr={attr} />
+		<ContentElement.LangSelector key={index} attr={attr} />
 	),
 
 	// page context
@@ -70,7 +72,6 @@ export function parseElements(parent, childs) {
 	const childrens = childs.map((element, index) => {
 		const { contentType, elements, ...attr } = element;
 		if (layoutElements[contentType]) {
-			// console.log(contentType, attr);
 			attr._parentContentType = parent;
 			return layoutElements[contentType](
 				`${contentType}.${index}`,

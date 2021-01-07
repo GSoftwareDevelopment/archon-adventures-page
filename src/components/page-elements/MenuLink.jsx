@@ -1,3 +1,5 @@
+import "./scss/menu-link.scss";
+
 import LayoutsStore from "../../store/layouts";
 import { languageCheck } from "../../libs/utils";
 
@@ -34,7 +36,7 @@ export default function MenuLink(props) {
 
 	if (props.attr._parentContentType === "router-menu")
 		return (
-			<li className="link">
+			<li className="menu-link">
 				<Link to={route.path} onClick={props.onClick}>
 					{props.attr.title[usedLang]}
 				</Link>
@@ -42,7 +44,7 @@ export default function MenuLink(props) {
 		);
 	else
 		return (
-			<Link to={route.path} onClick={props.onClick}>
+			<Link className="menu-link" to={route.path} onClick={props.onClick}>
 				{props.attr.title[usedLang]}
 			</Link>
 		);

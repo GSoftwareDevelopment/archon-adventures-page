@@ -1,3 +1,5 @@
+import "./scss/router-menu.scss";
+
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
@@ -40,8 +42,8 @@ class MenuRouter extends Component {
 		);
 
 		return (
-			<nav id="main-menu" className={this.state.collapsed ? "collapsed" : ""}>
-				<ul className="menu-pane">
+			<nav id="router-menu" className={this.state.collapsed ? "collapsed" : ""}>
+				<ul>
 					<MenuToggler key="menu-toggler" onClick={this.toggleCollapse} />
 					{updateChildrenWithProps}
 				</ul>

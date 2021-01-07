@@ -1,3 +1,5 @@
+import "./scss/header.scss";
+
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 

@@ -3,7 +3,7 @@ import { useParams, withRouter } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
 import LayoutsStore from "../../store/layouts";
 import { languageCheck } from "../../libs/utils";
-import "../layout/calendar.scss";
+import "./scss/calendar.scss";
 
 import { Path, Paths, Collections } from "../../setup";
 import { db } from "../../libs/db";

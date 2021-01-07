@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
 import { languageCheck, pathDestructure } from "../../libs/utils";
 
-import "../layout/card.scss";
+import "./scss/card.scss";
 import * as Messages from "../layout/Messages";
 
 import MarkdownView from "react-showdown";
