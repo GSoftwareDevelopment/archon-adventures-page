@@ -1,0 +1,60 @@
+nav#router-menu {
+	flex-grow: 8;
+	background-color: #000;
+	height: 30px;
+
+	> ul {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		width: 100%;
+
+		> li {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0 15px;
+			margin: 0;
+			font-size: 1.5em;
+
+			&.toggler {
+				display: none;
+			}
+
+			a,
+			a:hover {
+				background: none;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	nav#router-menu {
+		overflow: hidden;
+		height: unset;
+
+		&.collapsed {
+			height: 30px;
+			transition: 0.25s;
+		}
+
+		> ul {
+			flex-direction: column;
+
+			> li {
+				&.toggler {
+					display: flex;
+					cursor: pointer;
+					background: none;
+				}
+				&.menu-link {
+					margin: 5px 0;
+				}
+			}
+		}
+	}
+}
