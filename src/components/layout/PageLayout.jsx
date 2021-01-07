@@ -1,40 +1,20 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
-import Header from "../page-elements/Header";
-import RouterContent from "../page-elements/RouterContent";
-import Footer from "../page-elements/Footer";
+
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Login from "../layout/Login";
+import { parseElements } from "../page-elements/parse";
 
 class PageLayout extends Component {
-	state = {
-		routes: [],
-	};
-
 	render() {
-		const schema = LayoutsStore.getSchema();
-		return schema.map((part, index) => {
-			switch (part.contentType) {
-				case "header":
-					return <Header key={index} elements={part.elements} />;
-				case "router-content":
-					return (
-						<RouterContent
-							key={part.name}
-							path={part.path}
-							exact={part.exact}
-							elements={part.elements}
-						/>
-					);
-				case "content":
-					return null;
-				// return <ContentPage key={index} elements={this.state.routes} />;
-				case "footer":
-					return <Footer key={index} elements={part.elements} />;
-				default:
-					console.log("Schema part is not recognized :/");
-					return null;
-			}
-		});
+		const rootElements = LayoutsStore.getSchema();
+		return (
+			<Router>
+				<Route key="authorize" exact path="/auth" component={Login} />
+				{parseElements("Root", rootElements)}
+			</Router>
+		);
 	}
 }
 
