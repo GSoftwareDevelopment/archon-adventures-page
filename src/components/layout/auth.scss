@@ -3,7 +3,11 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-top: 50px;
+
+	h1,
+	h2 {
+		margin-bottom: 25px;
+	}
 
 	div {
 		margin-bottom: 10px;

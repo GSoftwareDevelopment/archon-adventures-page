@@ -228,4 +228,5 @@ function LangWarning(props) {
 		</div>
 	);
 }
+
 export default observer(Card);

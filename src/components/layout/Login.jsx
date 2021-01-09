@@ -34,7 +34,7 @@ class Login extends Component {
 		if (UsersStore.getState() !== "authorized") {
 			return (
 				<form className="authorize-form">
-					<h2>Authenticate access</h2>
+					<h1>Authenticate access</h1>
 					{Boolean(this.state.message) && <div>{this.state.message}</div>}
 					<div>
 						<label htmlFor="username">Username:</label>

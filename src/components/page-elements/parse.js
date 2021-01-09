@@ -56,6 +56,9 @@ const layoutElements = {
 	calendar: (index, attr) => (
 		<ContentElement.Calendar key={index} attr={attr} />
 	),
+
+	galery: (index, attr) => null,
+	comments: (index, attr) => null,
 };
 
 let currentLevel = -1;

@@ -1,4 +1,5 @@
 import "./scss/menu-link.scss";
+import { observer } from "mobx-react";
 
 import LayoutsStore from "../../store/layouts";
 import { languageCheck } from "../../libs/utils";
@@ -6,7 +7,7 @@ import { languageCheck } from "../../libs/utils";
 import * as Messages from "../layout/Messages";
 import { Link } from "react-router-dom";
 
-export default function MenuLink(props) {
+function MenuLink(props) {
 	const defaultLang = LayoutsStore.getDefaultLang();
 	const availableLangs = LayoutsStore.getAvailableLang();
 	const currentLang = LayoutsStore.getCurrentLang();
@@ -49,3 +50,5 @@ export default function MenuLink(props) {
 			</Link>
 		);
 }
+
+export default observer(MenuLink);

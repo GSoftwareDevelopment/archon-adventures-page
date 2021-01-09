@@ -15,9 +15,3 @@ export const Path = {
 	PARENT: "..",
 	DELIMITER: "\\",
 };
-
-// Internal paths
-export const Paths = {
-	Calendar: Path.DELIMITER + "calendar",
-	Footer: Path.DELIMITER + "footer",
-};

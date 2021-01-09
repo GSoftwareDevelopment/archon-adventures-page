@@ -1,6 +1,11 @@
 #content-wrapper {
-	margin-top: 60px;
-	margin-bottom: auto;
-}
+	// margin-top: 0px;
+	// margin-bottom: auto;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 2;
+	background-color: rgb(0, 51, 85);
 
-// @media screen and (max-width: 1000px) {
+	padding: 20px;
+	// border-radius: 20px;
+}

@@ -5,7 +5,7 @@ import LayoutsStore from "../../store/layouts";
 import { languageCheck } from "../../libs/utils";
 import "./scss/calendar.scss";
 
-import { Path, Paths, Collections } from "../../setup";
+import { Path, Collections } from "../../setup";
 import { db } from "../../libs/db";
 import Card from "./Card";
 
@@ -82,7 +82,10 @@ class Calendar extends Component {
 			<React.Fragment>
 				<Switch>
 					<Route path={`${this.props.match.path}/:cardName`}>
-						<CalendarCard matchUrl={this.props.match.url} />
+						<CalendarCard
+							attr={{ path: this.props.attr.path }}
+							matchUrl={this.props.match.url}
+						/>
 					</Route>
 					<Route exact path={this.props.match.path}>
 						<ContentLoader busy={this.state.isReading}>
@@ -201,7 +204,7 @@ const CalendarCard = (props) => {
 	return (
 		<React.Fragment>
 			<CalendarEntry fetchByName={cardName} />
-			<Card name={`${Paths.Calendar}${Path.DELIMITER}${cardName}`} />
+			<Card name={`${props.attr.path}${Path.DELIMITER}${cardName}`} />
 			<Link className="link" to={props.matchUrl}>
 				&lt;&lt;&lt;
 			</Link>
