@@ -49,9 +49,9 @@ Jest on w początkowej fazie rozwoju i zawiera:
     - [ ] - Galery `[----]`
     - [ ] - Comments `[----]`
   - [ ] - Style elementów `[----]`
-      Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/layout) zaszytymi w aplikacji.
+      Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/page-elements/scss/) "zaszytymi" w aplikacji.
 
-    Przewiduję możliwość definiowani własnych dla każdego elementu, z pomocą biblioteki [**Radium**](https://github.com/FormidableLabs/radium/tree/master/docs/guides#media-queries) i zaszyciu ich w bazie danych.
+    Przewiduję możliwość definiowania własnych styli dla każdego elementu, z pomocą biblioteki [**Radium**](https://github.com/FormidableLabs/radium/tree/master/docs/guides) i zaszyciu ich w bazie danych.
 
 Więcej na temat elementów można przeczytać [TU](/src/components/page-elements/elements.md)
 
