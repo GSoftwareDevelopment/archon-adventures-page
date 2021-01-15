@@ -1,0 +1,9 @@
+@import "./edit-general";
+
+.window {
+	@include generalEdit;
+
+	@include generalEdit-header;
+
+	@include generalEdit-form;
+}

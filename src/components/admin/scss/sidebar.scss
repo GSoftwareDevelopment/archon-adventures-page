@@ -1,0 +1,94 @@
+.auth-sidebar {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	z-index: 100;
+
+	font-weight: 100;
+	font-size: 16px;
+	font-family: Arial;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	max-height: 100vh;
+
+	// height: 40px;
+
+	cursor: default;
+	background-color: #400d;
+	box-shadow: -5px 0px 10px #000;
+
+	.sidebar-menu {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		padding: 0px;
+		height: 0px;
+
+		transition: 0.25s;
+		overflow: hidden;
+	}
+
+	.user {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 5px;
+		width: 280px;
+		box-shadow: 0 -10px 10px #000;
+		z-index: 1;
+
+		.icon {
+			width: 20px;
+			height: 20px;
+			margin-right: 5px;
+		}
+
+		span {
+			// padding: 5px;
+			text-align: left;
+			width: 155px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	button {
+		font: inherit;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		background: transparent;
+		// margin: 0 5px;
+		padding: 5px;
+		color: #fff;
+		border: none;
+
+		cursor: pointer;
+
+		span {
+			margin-left: 5px;
+		}
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.5);
+		}
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	// &:hover,
+	&.isFocused {
+		.sidebar-menu {
+			// padding: 5px;
+			// height: calc(100vh - 40px);
+			height: 100vh;
+		}
+	}
+}

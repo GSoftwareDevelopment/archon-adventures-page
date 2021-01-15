@@ -1,0 +1,39 @@
+.authorize-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	height: 230px;
+	background-color: #400;
+	padding: 20px;
+
+	h1,
+	h2 {
+		margin-bottom: 25px;
+	}
+
+	div {
+		margin-bottom: 10px;
+	}
+
+	label {
+		padding: 5px;
+	}
+
+	input {
+		padding: 5px;
+		background: transparent;
+		border: none;
+		border-bottom: #fff solid 1px;
+		outline: none;
+		color: #fff;
+	}
+
+	button {
+		margin-top: 15px;
+		padding: 10px;
+		background: #000;
+		border: #333 solid 1px;
+		color: #fff;
+	}
+}

@@ -1,0 +1,67 @@
+.tree-container {
+	user-select: none;
+
+	display: flex;
+	flex-direction: column;
+
+	margin-bottom: 10px;
+
+	.node-collection {
+		display: flex;
+		flex-direction: column;
+
+		margin-left: 1em;
+		padding-left: 7px;
+		line-height: 20px;
+		color: #369;
+		border-left: 1px solid rgb(100, 100, 100);
+
+		.node-item {
+			padding: 0;
+
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			// width: 100%;
+
+			color: #fff;
+
+			svg {
+				margin-right: 0;
+			}
+
+			span {
+				white-space: nowrap;
+				padding: 5px 0;
+
+				svg {
+					margin-right: 5px;
+				}
+			}
+
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.5);
+			}
+		}
+
+		> div.node-item:before {
+			position: relative;
+			top: -0.6em;
+			height: 1em;
+			width: 4px;
+			color: white;
+			border-bottom: 1px solid rgb(100, 100, 100);
+			content: "";
+			display: inline-block;
+			left: -8px;
+		}
+
+		&:last-child {
+			border-left: 1px solid rgba(0, 0, 0, 0);
+
+			> .node-item:before {
+				border-left: 1px solid rgb(100, 100, 100);
+			}
+		}
+	}
+}
