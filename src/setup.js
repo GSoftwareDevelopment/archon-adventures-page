@@ -5,9 +5,10 @@ export const DB_NAME = "ArchonSite";
 
 // Collections configuration
 export const Collections = {
+	LAYOUT: "layout",
 	CARDS: "card",
 	CALENDAR: "calendar",
-	LAYOUT: "layout",
+	GALLERIES: "galery",
 };
 
 // Internal path identyficators

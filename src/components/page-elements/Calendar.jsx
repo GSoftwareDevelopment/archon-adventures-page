@@ -35,7 +35,10 @@ class Calendar extends Component {
 		this.setState({ isReading: true });
 		const calendar = await db
 			.collection(Collections.CALENDAR)
-			.find({ path: this.props.attr.path }, { limit: 100, sort: { date: -1 } })
+			.find(
+				{ path: this.props.attr.path },
+				{ limit: 100, sort: { createdAt: -1 } }
+			)
 			.asArray();
 
 		this.setState({ calendar, isReading: false });
@@ -147,8 +150,8 @@ export class CalendarEntry extends Component {
 
 	render() {
 		const entry = this.state.entry;
-		if (!entry || !entry.date) return null;
-		const entryDate = entry.date
+		if (!entry || !entry.createdAt) return null;
+		const entryDate = entry.createdAt
 			.toLocaleDateString(undefined, {
 				year: "numeric",
 				month: "long",

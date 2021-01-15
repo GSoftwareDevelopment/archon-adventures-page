@@ -56,7 +56,7 @@ class LayoutsStore {
 		return this.langs;
 	}
 
-	async fetchGet(find) {
+	async fetchGetLayout(find) {
 		console.log("Fetching layout settings...");
 		this.status = status.PENDING;
 		try {
