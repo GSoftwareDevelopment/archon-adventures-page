@@ -11,12 +11,22 @@ Projekt jest adaptacją strony internetowej z implementacją następujących tec
 
 # Założenia projektu
 
-Chicałem stworzyć stronę internetową która nie potrzebowałaby **_dedykowanego backendu_**. W jak **_najmniejszym_** stopniu wykorzystywała przetwarzanie po stronie serwera.
+Chciałem stworzyć stronę internetową która nie potrzebowałaby **_dedykowanego backendu_**. W jak **_najmniejszym_** stopniu wykorzystywała przetwarzanie po stronie serwera.
 
 # Co zawiera projekt?
 
-Oprócz właściwej strony w projekcie jest też "zaszyty" interfejs CMSa do zarządzania stroną.
-Jest on w początkowej fazie rozwoju i zawiera:
+Projekt składa się z dwóch części:
+
+- aplikacji strony
+- interfejsu CMS
+
+## Aplikacja strony
+
+To nic innego, jak "parser" informacji zawartych w bazie danych na podstawie których, buduje szkielet routingu oraz wyświetla treści.
+
+## Interfejs CMS
+
+W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początkowej fazie rozwoju i zawiera:
 
 - Proces autoryzacji
   - [x] logowanie
@@ -27,7 +37,7 @@ Jest on w początkowej fazie rozwoju i zawiera:
   - [ ] tworzenie nowego szablonu
   - [x] modyfikacja
     - [x] widok okna właściwości szablonu
-    - [ ] zapis właściwości szabonu
+    - [ ] zapis właściwości szablonu
   - [ ] usuwanie
   - Operacje na elementach
     - [ ] tworzenie nowych elementów
