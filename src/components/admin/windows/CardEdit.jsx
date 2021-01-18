@@ -43,7 +43,7 @@ export default class CardEdit extends Component {
 
 	changeEditLang = (e) => {
 		const newEditLang = e.currentTarget.value;
-		this.setState({ editLang: newEditLang });
+		if (newEditLang !== "") this.setState({ editLang: newEditLang });
 	};
 
 	getContent = (lang) => {
@@ -62,7 +62,7 @@ export default class CardEdit extends Component {
 	render() {
 		const editLang = this.state.editLang;
 		const layoutLangsList = LayoutsStore.current.langs;
-		const cardLangsList = this.state.lang;
+		// const cardLangsList = this.state.lang;
 		return (
 			<Window
 				className="window"
@@ -90,8 +90,10 @@ export default class CardEdit extends Component {
 						) : (
 							<option key="no-lang">No language defined.</option>
 						)}
+						<option key="manage-langs" value="">
+							Manage languages...
+						</option>
 					</select>
-					<button onClick={this.createLang}>Add...</button>
 				</div>
 				<div
 					className="d-flex flex-column justify-content-start align-items-start"
