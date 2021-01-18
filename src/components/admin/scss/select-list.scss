@@ -1,0 +1,30 @@
+.select-list {
+	display: flex;
+	flex-direction: column;
+	border: #333 solid 1px;
+	padding: 5px;
+
+	.list-row {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		padding: 3px;
+		cursor: pointer;
+		transition: 0.25s;
+
+		* {
+			margin: 2px;
+		}
+
+		&.choiced {
+			background-color: rgba(255, 255, 255, 0.3);
+			color: #fff;
+			font-weight: bold;
+		}
+
+		&.selectable:hover {
+			background-color: rgba(255, 255, 255, 0.5);
+			color: #000;
+		}
+	}
+}
