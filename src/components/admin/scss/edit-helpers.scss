@@ -36,13 +36,13 @@
 	}
 
 	.align-items-start {
-		align-items: flex-start;
+		align-items: flex-start !important;
 	}
 	.align-items-center {
-		align-items: center;
+		align-items: center !important;
 	}
 	.align-items-end {
-		align-items: flex-end;
+		align-items: flex-end !important;
 	}
 
 	.justify-between {
@@ -82,6 +82,10 @@
 		padding: 5px;
 		padding-right: 30px;
 
+		&.info-noBtn {
+			padding-right: 5px;
+		}
+
 		background-color: rgba(0, 0, 255, 0.5);
 
 		&.error {
@@ -98,7 +102,7 @@
 		font-weight: bold;
 		text-shadow: none;
 
-		button {
+		button.close {
 			display: block;
 			position: absolute;
 			right: 5px;
