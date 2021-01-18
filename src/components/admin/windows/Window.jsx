@@ -106,3 +106,74 @@ export default class Window extends Component {
 		);
 	}
 }
+
+//
+
+export function Input({ className, type, name, label, ...props }) {
+	return label ? (
+		<div className={className}>
+			<label htmlFor={name}>{label}</label>
+			<input name={name} id={name} type={type} autoComplete="off" {...props} />
+		</div>
+	) : (
+		<input name={name} id={name} type={type} autoComplete="off" {...props} />
+	);
+}
+
+//
+
+export const ButtonsGroup = ({ className, onlyIcons, buttons }) => (
+	<div className={className}>
+		{buttons.map((btn, index) => (
+			<button
+				key={index}
+				onClick={(e) => {
+					e.preventDefault();
+					if (btn.onClick) btn.onClick(e);
+				}}
+				disabled={!btn.enabled}
+			>
+				{btn.icon}
+				{!Boolean(onlyIcons) && btn.title}
+			</button>
+		))}
+	</div>
+);
+
+//
+
+export const SelectList = ({
+	className,
+	list,
+	onItemRender,
+	onChoice,
+	...props
+}) => {
+	const totalItems = list.length;
+	return (
+		<div className={"select-list " + className}>
+			{list.map((listItem, index) => {
+				const { isChoiced, before, item, after } = onItemRender(listItem, {
+					index,
+					firstItem: index === 0,
+					lastItem: index === totalItems - 1,
+				});
+
+				return (
+					<React.Fragment key={index}>
+						{before}
+						<div
+							className={"list-row selectable" + (isChoiced ? " choiced" : "")}
+							onClick={() => {
+								onChoice(listItem);
+							}}
+						>
+							{item}
+						</div>
+						{after}
+					</React.Fragment>
+				);
+			})}
+		</div>
+	);
+};
