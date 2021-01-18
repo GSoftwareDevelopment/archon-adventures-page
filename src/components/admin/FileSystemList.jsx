@@ -131,7 +131,6 @@ class PathTree extends Component {
 						<NodeItem
 							key={index}
 							title={title}
-							haveChildrends={false}
 							onDoubleClick={() => {
 								if (this.props.onDoubleClick) this.props.onDoubleClick(item);
 							}}

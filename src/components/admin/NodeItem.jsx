@@ -14,6 +14,7 @@ export default class NodeItem extends Component {
 	}
 
 	render() {
+		const haveChildrens = Boolean(this.props.children);
 		return (
 			<div className="node-collection">
 				<div
@@ -22,7 +23,7 @@ export default class NodeItem extends Component {
 						if (this.props.onDoubleClick) this.props.onDoubleClick();
 					}}
 				>
-					{this.props.haveChildrens && (
+					{haveChildrens && (
 						<button
 							onClick={() => {
 								const nodeState = !this.state.isCollapsed;

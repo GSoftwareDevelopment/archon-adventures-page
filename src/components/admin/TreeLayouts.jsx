@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
+import WindowsStore from "./store/windows";
 import LayoutsStore, { status } from "./store/layouts";
 
 import NodeTree from "./NodeTree";
@@ -18,10 +19,19 @@ import {
 	Check2 as IconCurrent,
 } from "react-bootstrap-icons";
 
+import LayoutEdit from "./windows/LayoutEdit";
+
 class TreeLayouts extends Component {
 	async componentDidMount() {
 		console.log("> Pending data about 'Layout'...");
 		await LayoutsStore.fetchList();
+	}
+
+	handleLayoutEdit(layout) {
+		const { scheme, ...onlyLayoutAttr } = layout;
+		console.log(onlyLayoutAttr);
+		WindowsStore.addWindow(layout._id.toString(), LayoutEdit, onlyLayoutAttr);
+		this.props.onOpenWindow();
 	}
 
 	render() {
@@ -56,7 +66,13 @@ class TreeLayouts extends Component {
 						);
 
 					return (
-						<NodeItem key={id} title={nodeTitle} haveChildrens={true}>
+						<NodeItem
+							key={id}
+							title={nodeTitle}
+							onDoubleClick={() => {
+								this.handleLayoutEdit(layout);
+							}}
+						>
 							<ElementsList source={layout.scheme} />
 						</NodeItem>
 					);
@@ -114,7 +130,6 @@ class ElementsList extends Component {
 					key={index}
 					icon={icon}
 					title={title}
-					haveChildrens={haveChildrens}
 					onDoubleClick={() => {
 						this.editElement(element);
 					}}
