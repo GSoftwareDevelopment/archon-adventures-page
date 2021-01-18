@@ -25,7 +25,9 @@ Jest on w początkowej fazie rozwoju i zawiera:
 - Zarządzanie szablonami
 
   - [ ] tworzenie nowego szablonu
-  - [ ] modyfikacja
+  - [x] modyfikacja
+    - [x] widok okna właściwości szablonu
+    - [ ] zapis właściwości szabonu
   - [ ] usuwanie
   - Operacje na elementach
     - [ ] tworzenie nowych elementów
