@@ -20,6 +20,8 @@ import {
 } from "react-bootstrap-icons";
 
 import LayoutEdit from "./windows/LayoutEdit";
+import { unifyPath } from "../../libs/utils";
+import { Path } from "../../setup";
 
 class TreeLayouts extends Component {
 	async componentDidMount() {
@@ -53,15 +55,12 @@ class TreeLayouts extends Component {
 					const id = layout._id.toString();
 					const isDefault = layout.current;
 					let nodeTitle = <span>{layout.name}</span>;
-					if (isDefault)
-						nodeTitle = (
-							<span style={{ fontWeight: "bold" }}>{layout.name}</span>
-						);
+					if (isDefault) nodeTitle = layout.name + " (default)";
 					if (id === currentLayoutId)
 						nodeTitle = (
 							<React.Fragment>
-								<IconCurrent />
 								{nodeTitle}
+								{" (current)"}
 							</React.Fragment>
 						);
 
@@ -82,6 +81,33 @@ class TreeLayouts extends Component {
 	}
 }
 
+const treeItems = {
+	"menu-link": {
+		icon: <IconMenuLink />,
+		title: ({ id }) => id,
+	},
+	"lang-selector": {
+		icon: <IconLangSelector />,
+	},
+	card: {
+		icon: <IconCard />,
+		title: ({ name }) => "Card " + Path.DELIMITER + unifyPath(name),
+	},
+	calendar: {
+		icon: <IconCalendar />,
+	},
+	galery: {
+		icon: <IconGallery />,
+	},
+	comments: {
+		icon: <IconComment />,
+	},
+	"router-content": {
+		icon: <IconRouterContent />,
+		title: ({ id }) => id,
+	},
+};
+
 class ElementsList extends Component {
 	editElement(element) {
 		console.log(element);
@@ -89,40 +115,19 @@ class ElementsList extends Component {
 
 	render() {
 		if (!this.props.source) {
-			return <div>Node error</div>;
+			console.error("TreeLayouts component error. No source data.", this.props);
+			return null;
 		}
 
 		return this.props.source.map((element, index) => {
 			const haveChildrens = typeof element.elements !== "undefined";
-			let icon;
+			let icon = null;
 			let title = element.contentType;
 
-			switch (element.contentType) {
-				case "menu-link":
-					icon = <IconMenuLink />;
-					title = element.id; // + " " + title;
-					break;
-				case "lang-selector":
-					icon = <IconLangSelector />;
-					break;
-				case "card":
-					icon = <IconCard />;
-					break;
-				case "calendar":
-					icon = <IconCalendar />;
-					break;
-				case "galery":
-					icon = <IconGallery />;
-					break;
-				case "comments":
-					icon = <IconComment />;
-					break;
-				case "router-content":
-					icon = <IconRouterContent />;
-					title = element.id;
-					break;
-				default:
-					icon = null;
+			const ES = treeItems[element.contentType];
+			if (ES) {
+				if (ES.icon) icon = ES.icon;
+				if (ES.title) title = ES.title(element);
 			}
 
 			return (
