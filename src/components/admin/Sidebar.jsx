@@ -2,6 +2,7 @@ import "./scss/sidebar.scss";
 
 import React, { Component } from "react";
 import UsersStore, { state, status } from "../../store/users";
+import WindowsStore from "./store/windows";
 import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 
@@ -9,20 +10,7 @@ import * as Icon from "react-bootstrap-icons";
 import CustomScrollbar from "../layout/CustomScrollbar";
 import SidebarMenu from "./SidebarMenu";
 
-import TreeLayouts from "./TreeLayouts";
-import TreeCards from "./TreeCards";
-import TreeCalendars from "./TreeCalendars";
-import TreeGalleries from "./TreeGalleries";
-
-import WindowsStore from "./store/windows";
-
-const MenuRoot = [
-	{ icon: "LayoutWtf", name: "Layouts", Component: TreeLayouts },
-	{ icon: "Journals", name: "Cards", Component: TreeCards },
-	{ icon: "Calendar3", name: "Calendars", Component: TreeCalendars },
-	{ icon: "Images", name: "Galleries", Component: TreeGalleries },
-	{ icon: "ChatRightText", name: "Comments", Component: null },
-];
+import { MenuRoot } from "./menu";
 
 //
 
