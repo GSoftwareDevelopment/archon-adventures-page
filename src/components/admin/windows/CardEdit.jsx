@@ -104,7 +104,6 @@ export default class CardEdit extends Component {
 						id="card-body"
 						value={this.getContent(editLang)}
 						onChange={this.setContent}
-						style={{ height: "100%" }}
 					/>
 				</div>
 				<div className="justify-right">
