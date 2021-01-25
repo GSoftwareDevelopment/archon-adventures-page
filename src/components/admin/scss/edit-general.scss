@@ -7,12 +7,11 @@ $border-color-normal: #fff2;
 	display: flex;
 	flex-direction: column;
 
+	height: 100%;
 	width: 280px;
 
-	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-	font-size: 16px;
-
 	text-shadow: none;
+	// transition: 0.25s;
 
 	&.maximized {
 		position: fixed;
@@ -70,10 +69,9 @@ $border-color-normal: #fff2;
 
 @mixin generalEdit-header {
 	.header {
-		font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-		font-size: 16px;
+		// font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+		// font-size: 16px;
 		font-weight: bold;
-		text-shadow: none;
 
 		box-sizing: border-box;
 
@@ -141,9 +139,9 @@ $border-color-normal: #fff2;
 
 @mixin generalEdit-form {
 	form {
-		font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-		font-size: 14px;
-		text-shadow: none;
+		// font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+		// font-size: 14px;
+		// text-shadow: none;
 
 		margin-top: 0;
 		padding: 5px;
@@ -232,6 +230,10 @@ $border-color-normal: #fff2;
 			background-color: $bg-color-normal;
 			color: #fff;
 
+			&:disabled {
+				opacity: 0.5;
+			}
+
 			&:focus {
 				outline: none;
 			}
@@ -240,11 +242,6 @@ $border-color-normal: #fff2;
 		button {
 			margin: 5px 0;
 			padding: 5px 10px;
-			border: #333 solid 1px;
-			background-color: #222;
-			color: #fff;
-			cursor: pointer;
-			transition: 0.25s;
 			white-space: nowrap;
 
 			&.green {
@@ -255,19 +252,6 @@ $border-color-normal: #fff2;
 			&.red {
 				border: #300 solid 1px;
 				background-color: #200;
-			}
-
-			&:focus {
-				outline: none;
-			}
-
-			&:disabled {
-				opacity: 0.5;
-				cursor: no-drop;
-			}
-
-			&:hover {
-				background-color: #333;
 			}
 		}
 

@@ -1,8 +1,10 @@
+$tree-line-color: #444;
+
 .tree-container {
 	user-select: none;
 
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 
 	margin-bottom: 10px;
 
@@ -13,8 +15,8 @@
 		margin-left: 1em;
 		padding-left: 7px;
 		line-height: 20px;
-		color: #369;
-		border-left: 1px solid rgb(100, 100, 100);
+		// color: #369;
+		border-left: 1px solid $tree-line-color;
 
 		.node-item {
 			padding: 0;
@@ -25,6 +27,10 @@
 			// width: 100%;
 
 			color: #fff;
+
+			&.selected {
+				background-color: #fff2;
+			}
 
 			svg {
 				margin-right: 0;
@@ -50,7 +56,7 @@
 			height: 1em;
 			width: 4px;
 			color: white;
-			border-bottom: 1px solid rgb(100, 100, 100);
+			border-bottom: 1px solid $tree-line-color;
 			content: "";
 			display: inline-block;
 			left: -8px;
@@ -60,7 +66,7 @@
 			border-left: 1px solid rgba(0, 0, 0, 0);
 
 			> .node-item:before {
-				border-left: 1px solid rgb(100, 100, 100);
+				border-left: 1px solid $tree-line-color;
 			}
 		}
 	}

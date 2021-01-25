@@ -1,20 +1,22 @@
 .auth-sidebar {
+	svg {
+		// shape-rendering: optimizeSpeed;
+	}
+
 	position: fixed;
 	right: 0;
 	bottom: 0;
 	z-index: 100;
 
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 14px;
 	font-weight: 100;
-	font-size: 16px;
-	font-family: Arial;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 
 	max-height: 100vh;
-
-	// height: 40px;
 
 	cursor: default;
 	background-color: #400d;
@@ -63,19 +65,39 @@
 		flex-direction: row;
 		align-items: center;
 
-		background: transparent;
-		// margin: 0 5px;
+		background-color: #222;
+		border: #333 solid 1px;
 		padding: 5px;
+		// font-size: 20px;
 		color: #fff;
-		border: none;
+		transition: 0.25s;
 
 		cursor: pointer;
 
 		span {
 			margin-left: 5px;
 		}
+
+		&.no-bg {
+			background: transparent;
+		}
+
+		&.no-border {
+			border: none;
+		}
+
+		&.flat {
+			background: transparent;
+			border: none;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: no-drop;
+		}
+
 		&:hover {
-			background-color: rgba(255, 255, 255, 0.5);
+			background-color: #333;
 		}
 
 		&:focus {
@@ -89,6 +111,27 @@
 			// padding: 5px;
 			// height: calc(100vh - 40px);
 			height: 100vh;
+		}
+	}
+
+	.options-group-button {
+		display: flex;
+		flex-direction: row;
+		gap: 5px;
+
+		border-top: #333 solid 1px;
+		margin: 5px;
+		margin-bottom: 10px;
+		padding: 5px 0;
+		justify-content: flex-end;
+
+		&.group-vertical {
+			flex-direction: column;
+
+			button {
+				margin: 0 5px;
+				margin-bottom: 5px;
+			}
 		}
 	}
 }
