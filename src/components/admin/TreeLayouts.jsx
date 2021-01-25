@@ -16,7 +16,6 @@ import {
 	Calendar3 as IconCalendar,
 	JournalAlbum as IconGallery,
 	ChatRight as IconComment,
-	Check2 as IconCurrent,
 } from "react-bootstrap-icons";
 
 import LayoutEdit from "./windows/LayoutEdit";
@@ -31,7 +30,6 @@ class TreeLayouts extends Component {
 
 	handleLayoutEdit(layout) {
 		const { scheme, ...onlyLayoutAttr } = layout;
-		console.log(onlyLayoutAttr);
 		WindowsStore.addWindow(layout._id.toString(), LayoutEdit, onlyLayoutAttr);
 		this.props.onOpenWindow();
 	}
@@ -51,31 +49,33 @@ class TreeLayouts extends Component {
 
 		return (
 			<NodeTree id="layouts-tree" visible={this.props.visible}>
-				{layoutsList.map((layout) => {
-					const id = layout._id.toString();
-					const isDefault = layout.current;
-					let nodeTitle = <span>{layout.name}</span>;
-					if (isDefault) nodeTitle = layout.name + " (default)";
-					if (id === currentLayoutId)
-						nodeTitle = (
-							<React.Fragment>
-								{nodeTitle}
-								{" (current)"}
-							</React.Fragment>
-						);
+				<div style={{ flexGrow: "2" }}>
+					{layoutsList.map((layout) => {
+						const id = layout._id.toString();
+						const isDefault = layout.current;
+						let nodeTitle = <span>{layout.name}</span>;
+						if (isDefault) nodeTitle = layout.name + " (default)";
+						if (id === currentLayoutId)
+							nodeTitle = (
+								<React.Fragment>
+									{nodeTitle}
+									{" (current)"}
+								</React.Fragment>
+							);
 
-					return (
-						<NodeItem
-							key={id}
-							title={nodeTitle}
-							onDoubleClick={() => {
-								this.handleLayoutEdit(layout);
-							}}
-						>
-							<ElementsList source={layout.scheme} />
-						</NodeItem>
-					);
-				})}
+						return (
+							<NodeItem
+								key={id}
+								title={nodeTitle}
+								onDoubleClick={() => {
+									this.handleLayoutEdit(layout);
+								}}
+							>
+								<ElementsList source={layout.scheme} />
+							</NodeItem>
+						);
+					})}
+				</div>
 			</NodeTree>
 		);
 	}
@@ -83,27 +83,27 @@ class TreeLayouts extends Component {
 
 const treeItems = {
 	"menu-link": {
-		icon: <IconMenuLink />,
+		icon: <IconMenuLink size="24px" />,
 		title: ({ id }) => id,
 	},
 	"lang-selector": {
-		icon: <IconLangSelector />,
+		icon: <IconLangSelector size="24px" />,
 	},
 	card: {
-		icon: <IconCard />,
+		icon: <IconCard size="24px" />,
 		title: ({ name }) => "Card " + Path.DELIMITER + unifyPath(name),
 	},
 	calendar: {
-		icon: <IconCalendar />,
+		icon: <IconCalendar size="24px" />,
 	},
 	galery: {
-		icon: <IconGallery />,
+		icon: <IconGallery size="24px" />,
 	},
 	comments: {
-		icon: <IconComment />,
+		icon: <IconComment size="24px" />,
 	},
 	"router-content": {
-		icon: <IconRouterContent />,
+		icon: <IconRouterContent size="24px" />,
 		title: ({ id }) => id,
 	},
 };

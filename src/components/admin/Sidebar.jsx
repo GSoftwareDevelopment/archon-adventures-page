@@ -11,12 +11,14 @@ import CustomScrollbar from "../layout/CustomScrollbar";
 import SidebarMenu from "./SidebarMenu";
 
 import { MenuRoot } from "./menu";
+import { ButtonsGroup } from "./windows/Window";
 
 //
 
 class Sidebar extends Component {
 	state = {
 		isFocused: false,
+		options: [],
 	};
 
 	async logout() {
@@ -43,14 +45,37 @@ class Sidebar extends Component {
 								onOpenWindow={() => {
 									this.setState({ isFocused: false });
 								}}
+								setOptions={(opt) => {
+									this.setState({ options: opt });
+								}}
 							/>
 						</div>
 					</CustomScrollbar>
 				</div>
+				{this.state.isFocused &&
+					Boolean(this.state.options) &&
+					Boolean(this.state.options.length) && (
+						<ButtonsGroup
+							className="options-group-button"
+							onlyIcons={false}
+							buttons={this.state.options}
+						/>
+					)}
 				<WindowsList windowsStore={WindowsStore} />
 				<div className="user">
 					<button
-						className="toggler"
+						className="flat"
+						onClick={() => {
+							this.setState({ isFocused: false });
+							this.props.history.push("/auth");
+						}}
+						title="Account"
+					>
+						<Icon.Person size="20px" className="icon" />
+						<span>{userName}</span>
+					</button>
+					<button
+						className="flat toggler"
 						onClick={() => {
 							this.setState({ isFocused: !this.state.isFocused });
 						}}
@@ -59,24 +84,8 @@ class Sidebar extends Component {
 						{this.state.isFocused ? (
 							<Icon.ChevronCompactDown size="20px" />
 						) : (
-							<Icon.ChevronCompactUp size="20px" />
+							<Icon.ThreeDotsVertical size="20px" />
 						)}
-					</button>
-					<button
-						onClick={() => {
-							this.setState({ isFocused: !this.state.isFocused });
-						}}
-					>
-						<Icon.Person size="20px" className="icon" />
-						<span>{userName}</span>
-					</button>
-					<button
-						onClick={() => {
-							this.props.history.push("/auth");
-						}}
-						title="Account"
-					>
-						<Icon.Gear size="20px" />
 					</button>
 				</div>
 			</div>

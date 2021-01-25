@@ -26,17 +26,20 @@ export default class SidebarMenu extends Component {
 			return (
 				<React.Fragment key={index}>
 					<button
+						className="flat"
 						onClick={() => {
 							this.toggleNodeVisibility(id);
+							this.props.setOptions([]);
 						}}
 					>
-						<MenuIcon size="20px" />
+						<MenuIcon size="24px" />
 						<span>{item.name}</span>
 					</button>
 					{item.Component && (
 						<MenuComponent
 							visible={this.state[id]}
 							onOpenWindow={this.props.onOpenWindow}
+							setOptions={this.props.setOptions}
 						/>
 					)}
 				</React.Fragment>

@@ -22,13 +22,15 @@ export default class TreeCalendars extends Component {
 	render() {
 		return (
 			<NodeTree id="calendars-tree" visible={this.props.visible}>
-				<FileSystemList
-					collection={Collections.CALENDAR}
-					renderItem={this.calendarIten}
-					onDoubleClick={(item) => {
-						console.log(item);
-					}}
-				/>
+				<div style={{ flexGrow: "2" }}>
+					<FileSystemList
+						collection={Collections.CALENDAR}
+						renderItem={this.calendarIten}
+						onDoubleClick={(item) => {
+							console.log(item);
+						}}
+					/>
+				</div>
 			</NodeTree>
 		);
 	}

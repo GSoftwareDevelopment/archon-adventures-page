@@ -9,12 +9,14 @@ export default class TreeGalleries extends Component {
 	render() {
 		return (
 			<NodeTree id="galleries-tree" visible={this.props.visible}>
-				<FileSystemList
-					collection={Collections.GALLERIES}
-					onDoubleClick={(item) => {
-						console.log(item);
-					}}
-				/>
+				<div style={{ flexGrow: "2" }}>
+					<FileSystemList
+						collection={Collections.GALLERIES}
+						onDoubleClick={(item) => {
+							console.log(item);
+						}}
+					/>
+				</div>
 			</NodeTree>
 		);
 	}
