@@ -5,12 +5,6 @@ export const defaultLang = "en";
 export const texts = {
 	// console messages in debug mode
 
-	"debug.card.fetchError.ContentNotFound": {
-		console: {
-			type: "error",
-			content: "Content not found for search parameters: %o",
-		},
-	},
 	"debug.card.userLangChoice": {
 		console: {
 			type: "log",
@@ -97,16 +91,53 @@ export const texts = {
 	},
 	// messages displayed in site layout
 
+	contentDoesNotExist: {
+		console: {
+			type: "error",
+			content: "Content does not exist",
+		},
+		en: `
+# Content does not exist
+
+---
+
+There can be several reasons why this error will occur:
+
+- error in the url
+- the indicated content has been removed
+- or the content has changed location
+`,
+	},
+
+	fetchingError: {
+		console: {
+			type: "error",
+			content: `Can't load content.\n%o`,
+		},
+		en: `
+# Can't load content.
+
+---
+
+- Try to refresh the page,
+
+- If that doesn't help, check your internet connection.
+
+---
+If the above steps did not work, contact the site administrator.
+`,
+	},
 	langWarning: {
 		console: {
 			type: "log",
 			content: `Changing prefered language to '%s', becouse '%s' is not available.`,
 		},
 		en: `
-This part of site is not available in the language you preference.
-Language has been changed.
+# Content language has been changed
 
-Versions available:
+This part of site is not available in a preferred language.
+
+Available versions:
 `,
 		pl: `
 Dla tej części strony preferowany język nie jest dostępny.
