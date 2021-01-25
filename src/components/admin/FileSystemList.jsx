@@ -1,69 +1,47 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
+import FSStore from "./store/fs.js";
 
-import { db } from "../../libs/db";
 import { Path } from "../../setup";
 import { unifyPath } from "../../libs/utils";
 
 import Spinner from "react-spinners/DotLoader";
 import NodeItem from "./NodeItem";
 
-const status = {
-	INIT: "init",
-	PENDING: "pending",
-	ERROR: "error",
-	DONE: "DONE",
-};
-
-export default class FileSystemList extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			status: status.INIT,
-			files: [],
-		};
-	}
-
+class FileSystemList extends Component {
 	async componentDidMount() {
-		console.log("> Pending data about '" + this.props.collection + "'...");
-		this.setState({ status: status.PENDING });
-		try {
-			const files = await db
-				.collection(this.props.collection)
-				.find(
-					{},
-					{
-						projection: { name: 1, path: 1, createdAt: 1 },
-						sort: { path: 1, name: 1 },
-					}
-				)
-				.asArray();
-
-			this.setState({ files, status: status.DONE });
-		} catch (error) {
-			console.error(error);
-			this.setState({ status: status.ERROR });
-		}
+		await FSStore.updateCollectionFS(this.props.collection);
 	}
 
 	render() {
-		if (this.state.status === status.PENDING)
-			return (
-				<div style={{ display: "flex", justifyContent: "center" }}>
-					<Spinner size="24px" color={"#36D7B7"} loading={true} />
-				</div>
-			);
-		if (this.state.status !== status.DONE) return null;
+		// if (this.state.status === status.PENDING)
+		// 	return (
+		// 		<div style={{ display: "flex", justifyContent: "center" }}>
+		// 			<Spinner size="24px" color={"#36D7B7"} loading={true} />
+		// 		</div>
+		// 	);
+		// if (this.state.status !== status.DONE) return null;
+
+		if (!FSStore.isDone(this.props.collection)) {
+			return <div>Fetching...</div>;
+		}
+
+		const filesList = FSStore.getFS(this.props.collection);
 
 		return (
 			<PathTree
-				list={this.state.files}
+				list={filesList}
 				path={Path.DELIMITER}
 				renderTitle={this.props.renderTitle}
+				selected={this.props.selected}
+				onClick={this.props.onClick}
 				onDoubleClick={this.props.onDoubleClick}
 			/>
 		);
 	}
 }
+
+export default observer(FileSystemList);
 
 //
 
@@ -88,7 +66,6 @@ class PathTree extends Component {
 			.filter((v, i, s) => s.indexOf(v) === i) // filter unique entrys
 			.sort();
 
-		// debugger;
 		if (childs[0] === unifyPath(path)) childs.shift();
 
 		return childs.map((dir, index) => {
@@ -99,12 +76,30 @@ class PathTree extends Component {
 			_currentPath.push(dir);
 			const subPath = Path.DELIMITER + _currentPath.join(Path.DELIMITER);
 
+			let selected = { path: null, name: null };
+			if (this.props.selected) {
+				selected = {
+					path: this.props.selected.path,
+					name: this.props.selected.name,
+				};
+			}
+
 			return (
-				<NodeItem key={index} title={dir} haveChildrens={true}>
+				<NodeItem
+					key={index}
+					title={dir}
+					selected={selected.path === subPath && !selected.name}
+					onClick={() => {
+						if (this.props.onClick)
+							this.props.onClick({ path: subPath, name: null, item: dir });
+					}}
+				>
 					<PathTree
 						list={this.props.list}
 						path={subPath}
 						renderTitle={this.props.renderTitle}
+						selected={this.props.selected}
+						onClick={this.props.onClick}
 						onDoubleClick={this.props.onDoubleClick}
 					/>
 				</NodeItem>
@@ -116,6 +111,14 @@ class PathTree extends Component {
 		const list = this.props.list.filter(
 			(item) => item.path === this.props.path
 		);
+
+		let selected = { path: null, name: null };
+		if (this.props.selected) {
+			selected = {
+				path: this.props.selected.path,
+				name: this.props.selected.name,
+			};
+		}
 
 		return (
 			<React.Fragment>
@@ -131,6 +134,17 @@ class PathTree extends Component {
 						<NodeItem
 							key={index}
 							title={title}
+							onClick={() => {
+								if (this.props.onClick)
+									this.props.onClick({
+										path: item.path,
+										name: item.name,
+										item,
+									});
+							}}
+							selected={
+								selected.path === item.path && selected.name === item.name
+							}
 							onDoubleClick={() => {
 								if (this.props.onDoubleClick) this.props.onDoubleClick(item);
 							}}
