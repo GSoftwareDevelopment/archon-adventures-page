@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 
 import UsersStore, { status as userStatus } from "./store/users";
-// import LayoutsStore from "./store/layouts";
 
 import { EmojiDizzy } from "react-bootstrap-icons";
 import PageLayout from "./components/layout/PageLayout";
@@ -13,7 +12,6 @@ import Sidebar from "./components/admin/Sidebar";
 class App extends Component {
 	async componentDidMount() {
 		await UsersStore.init();
-		// await LayoutsStore.fetchGet({ current: true });
 	}
 
 	render() {
@@ -23,7 +21,11 @@ class App extends Component {
 					<Router>
 						<Sidebar />
 						<Switch>
-							<Route key="authorize" exact path="/auth" component={Login} />
+							<Route key="authorize" exact path="/auth">
+								<div className="fullscreen h-center v-center">
+									<Login />
+								</div>
+							</Route>
 
 							<PageLayout />
 						</Switch>
