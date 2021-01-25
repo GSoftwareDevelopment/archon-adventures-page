@@ -9,8 +9,20 @@ import { Path, Collections } from "../../setup";
 import { db } from "../../libs/db";
 import Card from "./Card";
 
-// import { CalendarEdit, CalendarEditControl } from "./Calendar-Edit";
 import ContentLoader from "../layout/ContentLoader";
+
+import * as Messages from "../layout/Messages";
+
+import MarkdownView from "react-showdown";
+import { JournalX as IconJournalX } from "react-bootstrap-icons";
+
+//
+
+const status = {
+	FETCHING: "fetching",
+	DONE: "done",
+	ERROR: "error",
+};
 
 class Calendar extends Component {
 	constructor(props) {
@@ -18,8 +30,7 @@ class Calendar extends Component {
 		this.state = {
 			calendar: [],
 			currentCard: null,
-			editedCard: null,
-			isReading: false,
+			status: status.FETCHING,
 		};
 	}
 
@@ -27,7 +38,10 @@ class Calendar extends Component {
 		try {
 			await this.fetchCalendarData();
 		} catch (error) {
-			console.log(error);
+			Messages.toConsole("fetchingError", error);
+			this.setState({
+				status: status.ERROR,
+			});
 		}
 	}
 
@@ -41,46 +55,25 @@ class Calendar extends Component {
 			)
 			.asArray();
 
-		this.setState({ calendar, isReading: false });
+		this.setState({ calendar, status: status.DONE });
 	}
 
 	setCard = (card) => {
 		this.setState({ currentCard: card });
 	};
 
-	// showCreate = () => {
-	// 	this.setState({
-	// 		editedCard: {
-	// 			_id: "",
-	// 			date: new Date(),
-	// 			title: "",
-	// 			description: "",
-	// 			cardRefTo: "",
-	// 		},
-	// 	});
-	// };
-
-	// showEdit = (card) => {
-	// 	this.setState({ editedCard: card });
-	// };
-
-	// hideEdit = () => {
-	// 	this.setState({ editedCard: null });
-	// };
-
-	// updateEntry = (newEntry) => {
-	// 	// debugger;
-	// 	const calendar = this.state.calendar;
-	// 	let entry = calendar.find((entry) => entry._id === newEntry._id);
-	// 	let index = calendar.indexOf(entry);
-	// 	this.setState((oldState) => {
-	// 		let newState = { ...oldState };
-	// 		newState.calendar[index] = newEntry;
-	// 		return newState;
-	// 	});
-	// };
-
 	render() {
+		if (this.state.status === status.FETCHING)
+			return <ContentLoader busy={true} />;
+
+		if (this.state.status === status.ERROR)
+			return (
+				<div className="warning">
+					<IconJournalX size="32" />
+					<MarkdownView markdown={Messages.getText("fetchingError", "en")} />
+				</div>
+			);
+
 		return (
 			<React.Fragment>
 				<Switch>
@@ -91,13 +84,11 @@ class Calendar extends Component {
 						/>
 					</Route>
 					<Route exact path={this.props.match.path}>
-						<ContentLoader busy={this.state.isReading}>
-							<CalendarCardsList
-								cardList={this.state.calendar}
-								matchUrl={this.props.match.url}
-								onChoice={this.setCard}
-							/>
-						</ContentLoader>
+						<CalendarCardsList
+							cardList={this.state.calendar}
+							matchUrl={this.props.match.url}
+							onChoice={this.setCard}
+						/>
 					</Route>
 				</Switch>
 			</React.Fragment>
@@ -128,6 +119,7 @@ export class CalendarEntry extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			status: status.FETCHING,
 			entry: props.entry,
 		};
 	}
@@ -139,12 +131,13 @@ export class CalendarEntry extends Component {
 			const entry = await db
 				.collection(Collections.CALENDAR)
 				.find({ cardRefTo: cardName }, { limit: 1 })
-				.asArray();
+				.first();
 			if (entry) {
-				this.setState({ entry: entry[0] });
+				this.setState({ entry, status: status.DONE });
 			}
 		} catch (error) {
 			console.error(error);
+			this.setState({ status: status.ERROR });
 		}
 	}
 
@@ -195,7 +188,6 @@ export class CalendarEntry extends Component {
 						<div className="entry-description">{description}</div>
 					</div>
 				</div>
-				{this.props.children}
 			</div>
 		);
 	}

@@ -16,9 +16,13 @@ import {
 	JournalX as IconJournalX,
 } from "react-bootstrap-icons";
 
-import CardEdit /*, { CardEditControl } */ from "../pages/Card-Edit";
-
 //
+
+const status = {
+	FETCHING: "fetching",
+	DONE: "done",
+	ERROR: "error",
+};
 
 class Card extends Component {
 	constructor(props) {
@@ -26,8 +30,7 @@ class Card extends Component {
 		this.state = {
 			card: null,
 			choicedLang: "",
-			isReading: false,
-			isEdit: false,
+			status: status.FETCHING,
 		};
 
 		this.fetchCardData = this.fetchCardData.bind(this);
@@ -45,7 +48,12 @@ class Card extends Component {
 		try {
 			await this.fetchCardData(findCondition);
 		} catch (error) {
-			console.error(error);
+			Messages.toConsole("fetchingError", error);
+			this.setState({
+				card: null,
+				status: status.ERROR,
+				errorMsg: "fetchingError",
+			});
 		}
 	}
 
@@ -67,14 +75,14 @@ class Card extends Component {
 		if (card && card.length !== 0) {
 			this.setState({
 				card: card,
-				isReading: false,
+				status: status.DONE,
 			});
 		} else {
-			Messages.toConsole("debug.card.fetchError.contentNotFound", find);
+			Messages.toConsole("contentDoesNotExist", find);
 			this.setState({
 				card: null,
-				content: `Can't load content. Check console log for more details :(`,
-				isReading: false,
+				status: status.ERROR,
+				errorMsg: "contentDoesNotExist",
 			});
 		}
 	}
@@ -83,21 +91,18 @@ class Card extends Component {
 		Messages.toConsole("debug.card.userLangChoice", lang);
 	};
 
-	updateContent = (cardData) => {
-		this.setState({ card: cardData });
-	};
-
-	showEdit = () => {
-		this.setState({ isEdit: true });
-	};
-
-	hideEdit = () => {
-		this.setState({ isEdit: false });
-	};
-
 	render() {
-		if (this.state.isReading)
-			return <ContentLoader busy={this.state.isReading} />;
+		if (this.state.status === status.FETCHING)
+			return <ContentLoader busy={true} />;
+		if (this.state.status === status.ERROR)
+			return (
+				<div className="warning">
+					<IconJournalX size="32" />
+					<MarkdownView
+						markdown={Messages.getText(this.state.errorMsg, "en")}
+					/>
+				</div>
+			);
 		if (!this.state.card) return null;
 
 		const card = this.state.card;
@@ -183,13 +188,6 @@ class Card extends Component {
 					options={showdown_options}
 					components={showdown_ext}
 				/>
-				{this.state.isEdit && (
-					<CardEdit
-						card={card}
-						onUpdate={this.updateContent}
-						onClose={this.hideEdit}
-					/>
-				)}
 			</React.Fragment>
 		);
 	}
