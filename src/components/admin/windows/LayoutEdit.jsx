@@ -82,7 +82,7 @@ export default class LayoutEdit extends Component {
 	}
 }
 
-class ManageLangs extends Component {
+export class ManageLangs extends Component {
 	state = {
 		visibleControls: "main-buttons", // main-buttons/add-lang/del-confirm
 		choiced: "",
