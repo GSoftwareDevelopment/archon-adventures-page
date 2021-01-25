@@ -122,21 +122,41 @@ export function Input({ className, type, name, label, ...props }) {
 
 //
 
-export const ButtonsGroup = ({ className, onlyIcons, buttons }) => (
-	<div className={className}>
-		{buttons.map((btn, index) => (
-			<button
-				key={index}
-				onClick={(e) => {
-					e.preventDefault();
-					if (btn.onClick) btn.onClick(e);
-				}}
-				disabled={!btn.enabled}
-			>
-				{btn.icon}
-				{!Boolean(onlyIcons) && btn.title}
-			</button>
-		))}
+export const ButtonsGroup = ({ className, style, onlyIcons, buttons }) => (
+	<div className={className} style={style}>
+		{buttons.map((btn, index) => {
+			if (typeof btn.visible === "boolean" && !btn.visible) return null;
+
+			if (btn.component) {
+				return (
+					<div
+						key={index}
+						className={btn.className}
+						style={btn.style}
+						disabled={typeof btn.enabled === "boolean" ? !btn.enabled : false}
+						title={btn.title}
+					>
+						{btn.component}
+					</div>
+				);
+			} else
+				return (
+					<button
+						key={index}
+						onClick={(e) => {
+							e.preventDefault();
+							if (btn.onClick) btn.onClick(e);
+						}}
+						disabled={typeof btn.enabled === "boolean" ? !btn.enabled : false}
+						className={btn.className}
+						style={btn.style}
+						title={Boolean(onlyIcons) ? btn.title : ""}
+					>
+						{btn.icon}
+						{!Boolean(onlyIcons) && btn.title}
+					</button>
+				);
+		})}
 	</div>
 );
 
