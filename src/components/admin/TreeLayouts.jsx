@@ -9,8 +9,8 @@ import NodeItem from "./NodeItem";
 import Spinner from "react-spinners/DotLoader";
 
 import {
-	BroadcastPin as IconRouterContent,
-	Broadcast as IconMenuLink,
+	Link45deg as IconRouterContent,
+	Link as IconMenuLink,
 	List as IconLangSelector,
 	JournalRichtext as IconCard,
 	Calendar3 as IconCalendar,
@@ -81,29 +81,30 @@ class TreeLayouts extends Component {
 	}
 }
 
+const SIZE_PROP = "20px";
 const treeItems = {
 	"menu-link": {
-		icon: <IconMenuLink size="24px" />,
+		icon: <IconMenuLink size={SIZE_PROP} />,
 		title: ({ id }) => id,
 	},
 	"lang-selector": {
-		icon: <IconLangSelector size="24px" />,
+		icon: <IconLangSelector size={SIZE_PROP} />,
 	},
 	card: {
-		icon: <IconCard size="24px" />,
+		icon: <IconCard size={SIZE_PROP} />,
 		title: ({ name }) => "Card " + Path.DELIMITER + unifyPath(name),
 	},
 	calendar: {
-		icon: <IconCalendar size="24px" />,
+		icon: <IconCalendar size={SIZE_PROP} />,
 	},
 	galery: {
-		icon: <IconGallery size="24px" />,
+		icon: <IconGallery size={SIZE_PROP} />,
 	},
 	comments: {
-		icon: <IconComment size="24px" />,
+		icon: <IconComment size={SIZE_PROP} />,
 	},
 	"router-content": {
-		icon: <IconRouterContent size="24px" />,
+		icon: <IconRouterContent size={SIZE_PROP} />,
 		title: ({ id }) => id,
 	},
 };

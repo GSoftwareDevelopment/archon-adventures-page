@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 
-// import { CaretRightFill as IconCaretRight } from "react-bootstrap-icons";
-// import { CaretDownFill as IconCaretDown } from "react-bootstrap-icons";
-
-import { Folder2 as IconCaretRight } from "react-bootstrap-icons";
-import { Folder2Open as IconCaretDown } from "react-bootstrap-icons";
+import { SIZE_PROP } from "./menu";
+import { Folder2 as IconClose } from "react-bootstrap-icons";
+import { Folder2Open as IconOpen } from "react-bootstrap-icons";
 
 export default class NodeItem extends Component {
 	constructor(props) {
@@ -34,15 +32,13 @@ export default class NodeItem extends Component {
 				>
 					{haveChildrens &&
 						(this.state.isCollapsed ? (
-							<IconCaretRight size="24px" style={{ marginRight: "5px" }} />
+							<IconClose size={SIZE_PROP} />
 						) : (
-							<IconCaretDown size="24px" style={{ marginRight: "5px" }} />
+							<IconOpen size={SIZE_PROP} />
 						))}
 
-					<span>
-						{this.props.icon}
-						{this.state.title}
-					</span>
+					{this.props.icon}
+					<span>{this.state.title}</span>
 				</div>
 				{!this.state.isCollapsed && this.props.children}
 			</div>
