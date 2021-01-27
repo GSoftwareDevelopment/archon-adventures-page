@@ -188,12 +188,16 @@ export default class CardEdit extends Component {
 							buttons={this.langButtons(editLang)}
 						/>
 					</div>
-					<textarea
-						id="card-body"
-						value={this.getContent(editLang)}
-						disabled={!isEnabled}
-						onChange={this.setContent}
-					/>
+					{this.state.status === status.READING ? (
+						<div style={{ minHeight: "200px", height: "100%" }}>Loading...</div>
+					) : (
+						<textarea
+							id="card-body"
+							value={this.getContent(editLang)}
+							disabled={!isEnabled}
+							onChange={this.setContent}
+						/>
+					)}
 				</div>
 
 				<ButtonsGroup
