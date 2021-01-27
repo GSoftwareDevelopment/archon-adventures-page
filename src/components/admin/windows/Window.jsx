@@ -27,9 +27,7 @@ export class WindowControl extends Component {
 					) : (
 						<WindowButton icon="CaretLeft" onClick={onMaximize} />
 					)
-				) : (
-					<WindowButton icon={null} />
-				)}
+				) : null}
 				{onClose && <WindowButton icon="X" onClick={onClose} />}
 				{windowState !== "minimized" && onMinimize ? (
 					<WindowButton icon="CaretRight" onClick={onMinimize} />
@@ -90,14 +88,17 @@ export default class Window extends Component {
 			default:
 				windowStateClass = "";
 		}
+
+		const disableMaximize = this.props.disableMaximize || false;
+		const disableMinimize = this.props.disableMinimize || false;
 		return (
 			<div className={className + windowStateClass}>
 				<div className="header">
 					<span title={title}>{title}</span>
 					<WindowControl
 						windowState={windowSize}
-						onMinimize={this.minimize}
-						onMaximize={this.maximize}
+						onMinimize={!disableMinimize ? this.minimize : null}
+						onMaximize={!disableMaximize ? this.maximize : null}
 						onClose={onClose}
 					/>
 				</div>
