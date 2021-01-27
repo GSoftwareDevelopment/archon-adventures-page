@@ -14,19 +14,15 @@ class FileSystemList extends Component {
 	}
 
 	render() {
-		// if (this.state.status === status.PENDING)
-		// 	return (
-		// 		<div style={{ display: "flex", justifyContent: "center" }}>
-		// 			<Spinner size="24px" color={"#36D7B7"} loading={true} />
-		// 		</div>
-		// 	);
-		// if (this.state.status !== status.DONE) return null;
-
 		if (!FSStore.isDone(this.props.collection)) {
-			return <div>Fetching...</div>;
+			return (
+				<div style={{ display: "flex", justifyContent: "center" }}>
+					<Spinner size="24px" color={"#36D7B7"} loading={true} />
+				</div>
+			);
 		}
 
-		const filesList = FSStore.getFS(this.props.collection);
+		const filesList = FSStore.fileList(this.props.collection);
 
 		return (
 			<PathTree
