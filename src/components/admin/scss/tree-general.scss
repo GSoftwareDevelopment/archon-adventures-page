@@ -33,16 +33,12 @@ $tree-line-color: #444;
 			}
 
 			svg {
-				margin-right: 0;
+				margin-right: 5px;
 			}
 
 			span {
 				white-space: nowrap;
-				padding: 5px 0;
-
-				svg {
-					margin-right: 5px;
-				}
+				padding: 3px 0;
 			}
 
 			&:hover {
