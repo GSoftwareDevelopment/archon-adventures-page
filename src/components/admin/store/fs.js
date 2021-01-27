@@ -52,7 +52,7 @@ class FSStore {
 		}
 	}
 
-	getFS(collectionName) {
+	fileList(collectionName) {
 		return this.files.filter((f) => f.collection === collectionName);
 	}
 
@@ -66,6 +66,13 @@ class FSStore {
 		};
 
 		this.files.push(newEntry);
+	}
+
+	remove({ _id }, collectionName) {
+		const index = this.files.findIndex(
+			(f) => f.collection === collectionName && f._id === _id
+		);
+		if (index !== -1) this.files.splice(index);
 	}
 }
 
