@@ -1,13 +1,11 @@
-import { action, autorun, computed, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 
 class WindowsStore {
 	windowsList = [];
-	state = "nothing";
 
 	constructor() {
 		makeObservable(this, {
 			windowsList: observable,
-			state: observable,
 			addWindow: action,
 			removeWindowById: action,
 			windows: computed,
@@ -29,9 +27,5 @@ class WindowsStore {
 }
 
 const windowsStore = (window.windowsStore = new WindowsStore());
-
-autorun(() => {
-	console.log(windowsStore);
-});
 
 export default windowsStore;
