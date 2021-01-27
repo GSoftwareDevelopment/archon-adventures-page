@@ -3,6 +3,11 @@ import { languageCheck } from "../../libs/utils";
 export const availableLangs = ["en", "pl"];
 export const defaultLang = "en";
 export const texts = {
+	// Messages and content for CMS
+	FSDeleteConfirm: {
+		en: `Are you sure you want to **Delete** the following entry?`,
+	},
+
 	// console messages in debug mode
 
 	"debug.card.userLangChoice": {
