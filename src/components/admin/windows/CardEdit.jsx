@@ -112,32 +112,24 @@ export default class CardEdit extends Component {
 			// save current card
 
 			try {
-				this.cardData.body = this.state.body;
-				this.cardData.lang = this.state.lang;
-
-				// TODO: update path & name from state.pathfile
 				const { path, name } = pathDestructure(this.state.pathfile);
 
 				if (name === "") throw new Error(`Card name can't be empty!`);
 
+				this.cardData.body = this.state.body;
+				this.cardData.lang = this.state.lang;
 				this.cardData.path = path;
 				this.cardData.name = name;
-
-				console.log(this.cardData);
 
 				let result;
 				if (this.cardData._id)
 					result = await db
 						.collection(Collections.CARDS)
-						.updateOne({ _id: this.cardData._id }, this.cardData, {
-							upsert: true,
-						});
+						.updateOne({ _id: this.cardData._id }, this.cardData);
 				else
 					result = await db
 						.collection(Collections.CARDS)
 						.insertOne(this.cardData);
-
-				console.log(result);
 
 				if (result.modifiedCount === 1) {
 					FSStore.updateCollectionFS(Collections.CARDS);
@@ -172,6 +164,8 @@ export default class CardEdit extends Component {
 		return (
 			<Window
 				className="window"
+				size="maximized"
+				sizeCycle={["maximized", "minimized"]}
 				title={this.props.name ? "Edit card: " + this.props.name : "New card"}
 				onClose={this.props.onClose}
 			>
@@ -220,8 +214,9 @@ export default class CardEdit extends Component {
 									className="justify-between"
 									type="text"
 									name="filepath"
-									label="File:"
+									label="Save&nbsp;as:"
 									value={this.state.pathfile}
+									autoFocus
 									onChange={(e) => {
 										this.setState({ pathfile: e.currentTarget.value });
 									}}
@@ -240,7 +235,6 @@ export default class CardEdit extends Component {
 						},
 						{
 							icon: <IconCancelSave />,
-							// style: { marginRight: "5px" },
 							onClick: this.cancelSaveCard,
 							visible:
 								this.state.status === status.SAVEPROMPT ||
