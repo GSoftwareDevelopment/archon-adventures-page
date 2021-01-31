@@ -70,6 +70,7 @@
 		padding: 5px;
 		// font-size: 20px;
 		color: #fff;
+		outline: 0px solid #0000;
 		transition: 0.25s;
 
 		cursor: pointer;
@@ -100,13 +101,15 @@
 			background-color: #333;
 		}
 
-		&:focus {
-			outline: none;
-		}
+		// &:focus {
+		// 	// outline: 1px solid #333;
+		// 	// outline-offset: -2px;
+		// 	background-color: #333;
+		// }
 	}
 
 	// &:hover,
-	&.isFocused {
+	&.isExpanded {
 		.sidebar-menu {
 			// padding: 5px;
 			// height: calc(100vh - 40px);
@@ -120,18 +123,28 @@
 		gap: 5px;
 
 		border-top: #333 solid 1px;
-		margin: 5px;
-		margin-bottom: 10px;
-		padding: 5px 0;
 		justify-content: flex-end;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		transition: 0.25s;
+		overflow: hidden;
+		opacity: 0;
 
-		&.group-vertical {
-			flex-direction: column;
-
-			button {
-				margin: 0 5px;
-				margin-bottom: 5px;
+		button {
+			border: none;
+			background: transparent;
+			&:hover {
+				background-color: #333;
 			}
+		}
+
+		&.isExpanded {
+			height: 43px;
+			margin: 5px;
+			margin-bottom: 10px;
+			padding: 5px 0;
+			opacity: 1;
 		}
 	}
 }
