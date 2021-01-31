@@ -7,8 +7,7 @@ export default class NodeTree extends Component {
 		return (
 			<div
 				id={this.props.id}
-				className="tree-container"
-				style={{ display: this.props.visible ? "flex" : "none" }}
+				className={"tree-container" + (this.props.visible ? " expanded" : "")}
 			>
 				{this.props.children}
 			</div>
