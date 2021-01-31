@@ -1,6 +1,6 @@
 # Layout (Szablon lub Schemat - jak kto woli :P)
 
-W ramach jednego serwisu można budować wiele szablonów.
+W ramach jednego serwisu można budować wiele szablonów. Tak to sobie wymyśliłem :P
 
 _Linie poprzedzone checkboxem, wskazują na stan implementacji danego elementu._
 

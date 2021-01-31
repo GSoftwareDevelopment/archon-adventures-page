@@ -56,7 +56,7 @@ W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początk
   - [x] - elementy kontekstowe
     - [x] - Menu-Item `[-R--]`
     - [x] - Lang-Selector `[-R--]
-    - [x] - Card `[-RU-]`
+    - [x] - Card `[CRUD]`
     - [x] - Calendar (odpowiednik bloga) `[-R--]`
     - [ ] - Galery `[----]`
     - [ ] - Comments `[----]`
