@@ -38,39 +38,34 @@ export class WindowControl extends Component {
 }
 
 export default class Window extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			windowSize: "panel",
-		};
-	}
+	static defaultProps = {
+		sizeCycle: ["maximized", "panel", "minimized"],
+	};
+
+	state = {
+		windowSize: this.props.size || "panel",
+	};
 
 	maximize = () => {
 		const { onMaximize } = this.props;
 
-		switch (this.state.windowSize) {
-			case "minimized":
-				this.setState({ windowSize: "panel" });
-				break;
-			default:
-				this.setState({ windowSize: "maximized" });
-				if (onMaximize) onMaximize();
-				break;
-		}
+		let sizeIndex = this.props.sizeCycle.indexOf(this.state.windowSize);
+		if (sizeIndex > 0) sizeIndex--;
+
+		const windowSize = this.props.sizeCycle[sizeIndex];
+		this.setState({ windowSize });
+		if (onMaximize) onMaximize(windowSize);
 	};
 
 	minimize = () => {
 		const { onMinimize } = this.props;
 
-		switch (this.state.windowSize) {
-			case "maximized":
-				this.setState({ windowSize: "panel" });
-				break;
-			default:
-				this.setState({ windowSize: "minimized" });
-				if (onMinimize) onMinimize();
-				break;
-		}
+		let sizeIndex = this.props.sizeCycle.indexOf(this.state.windowSize);
+		if (sizeIndex < this.props.sizeCycle.length - 1) sizeIndex++;
+
+		const windowSize = this.props.sizeCycle[sizeIndex];
+		this.setState({ windowSize });
+		if (onMinimize) onMinimize(windowSize);
 	};
 
 	render() {
