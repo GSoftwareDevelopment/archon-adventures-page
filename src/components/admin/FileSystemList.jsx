@@ -26,6 +26,7 @@ class FileSystemList extends Component {
 
 		return (
 			<PathTree
+				key={filesList.length}
 				list={filesList}
 				path={Path.DELIMITER}
 				renderTitle={this.props.renderTitle}
