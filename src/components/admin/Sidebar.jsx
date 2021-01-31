@@ -7,18 +7,15 @@ import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 
 import * as Icon from "react-bootstrap-icons";
-import CustomScrollbar from "../layout/CustomScrollbar";
 import SidebarMenu from "./SidebarMenu";
 
 import { MenuRoot } from "./menu";
-import { ButtonsGroup } from "./windows/Window";
 
 //
 
 class Sidebar extends Component {
 	state = {
-		isFocused: false,
-		options: [],
+		isExpanded: false,
 	};
 
 	async logout() {
@@ -35,38 +32,23 @@ class Sidebar extends Component {
 
 		return (
 			<div
-				className={"auth-sidebar" + (this.state.isFocused ? " isFocused" : "")}
+				className={
+					"auth-sidebar" + (this.state.isExpanded ? " isExpanded" : "")
+				}
 			>
-				<div className="sidebar-menu">
-					<CustomScrollbar>
-						<div style={{ display: "flex", flexDirection: "column" }}>
-							<SidebarMenu
-								items={MenuRoot}
-								onOpenWindow={() => {
-									this.setState({ isFocused: false });
-								}}
-								setOptions={(opt) => {
-									this.setState({ options: opt });
-								}}
-							/>
-						</div>
-					</CustomScrollbar>
-				</div>
-				{this.state.isFocused &&
-					Boolean(this.state.options) &&
-					Boolean(this.state.options.length) && (
-						<ButtonsGroup
-							className="options-group-button"
-							onlyIcons={false}
-							buttons={this.state.options}
-						/>
-					)}
+				<SidebarMenu
+					visible={this.state.isExpanded}
+					items={MenuRoot}
+					onOpenWindow={() => {
+						this.setState({ isExpanded: false });
+					}}
+				/>
 				<WindowsList windowsStore={WindowsStore} />
 				<div className="user">
 					<button
 						className="flat"
 						onClick={() => {
-							this.setState({ isFocused: false });
+							this.setState({ isExpanded: false });
 							this.props.history.push("/auth");
 						}}
 						title="Account"
@@ -77,11 +59,11 @@ class Sidebar extends Component {
 					<button
 						className="flat toggler"
 						onClick={() => {
-							this.setState({ isFocused: !this.state.isFocused });
+							this.setState({ isExpanded: !this.state.isExpanded });
 						}}
 						title="Toggle Site manager"
 					>
-						{this.state.isFocused ? (
+						{this.state.isExpanded ? (
 							<Icon.ChevronCompactDown size="20px" />
 						) : (
 							<Icon.ThreeDotsVertical size="20px" />
