@@ -29,7 +29,7 @@ class FileSystemList extends Component {
 				key={filesList.length}
 				list={filesList}
 				path={Path.DELIMITER}
-				renderTitle={this.props.renderTitle}
+				renderItem={this.props.renderItem}
 				selected={this.props.selected}
 				onClick={this.props.onClick}
 				onDoubleClick={this.props.onDoubleClick}
@@ -88,13 +88,17 @@ class PathTree extends Component {
 					selected={selected.path === subPath && !selected.name}
 					onClick={() => {
 						if (this.props.onClick)
-							this.props.onClick({ path: subPath, name: null, item: dir });
+							return this.props.onClick({
+								path: subPath,
+								name: null,
+								item: dir,
+							});
 					}}
 				>
 					<PathTree
 						list={this.props.list}
 						path={subPath}
-						renderTitle={this.props.renderTitle}
+						renderItem={this.props.renderItem}
 						selected={this.props.selected}
 						onClick={this.props.onClick}
 						onDoubleClick={this.props.onDoubleClick}
@@ -123,8 +127,8 @@ class PathTree extends Component {
 				{list.map((item, index) => {
 					let title = item.name;
 
-					if (this.props.renderTitle) {
-						title = this.props.renderTitle(item);
+					if (this.props.renderItem) {
+						title = this.props.renderItem(item);
 					}
 
 					return (
@@ -133,7 +137,7 @@ class PathTree extends Component {
 							title={title}
 							onClick={() => {
 								if (this.props.onClick)
-									this.props.onClick({
+									return this.props.onClick({
 										path: item.path,
 										name: item.name,
 										item,
