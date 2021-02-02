@@ -36,8 +36,14 @@ export default class TreeCalendars extends Component {
 				<div style={{ flexGrow: "2" }}>
 					<FileSystemList
 						collection={Collections.CALENDAR}
+						allowDrag={true}
+						allowDragDir={true}
+						allowDragFile={false}
 						renderItem={this.calendarItem}
-						onClick={() => true}
+						onClick={(item) => {
+							console.log(item);
+							return true;
+						}}
 						onDoubleClick={(item) => {
 							console.log(item);
 						}}

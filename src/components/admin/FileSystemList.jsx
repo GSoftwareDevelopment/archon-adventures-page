@@ -26,13 +26,10 @@ class FileSystemList extends Component {
 
 		return (
 			<PathTree
+				{...this.props}
 				key={filesList.length}
 				list={filesList}
 				path={Path.DELIMITER}
-				renderItem={this.props.renderItem}
-				selected={this.props.selected}
-				onClick={this.props.onClick}
-				onDoubleClick={this.props.onDoubleClick}
 			/>
 		);
 	}
@@ -86,6 +83,13 @@ class PathTree extends Component {
 					key={index}
 					title={dir}
 					selected={selected.path === subPath && !selected.name}
+					allowDrag={this.props.allowDrag && this.props.allowDragDir}
+					dragData={JSON.stringify({
+						src: "filesystem",
+						path: subPath,
+						name: null,
+						collection: this.props.collection,
+					})}
 					onClick={() => {
 						if (this.props.onClick)
 							return this.props.onClick({
@@ -95,14 +99,7 @@ class PathTree extends Component {
 							});
 					}}
 				>
-					<PathTree
-						list={this.props.list}
-						path={subPath}
-						renderItem={this.props.renderItem}
-						selected={this.props.selected}
-						onClick={this.props.onClick}
-						onDoubleClick={this.props.onDoubleClick}
-					/>
+					<PathTree {...this.props} path={subPath} />
 				</NodeItem>
 			);
 		});
@@ -124,34 +121,42 @@ class PathTree extends Component {
 		return (
 			<React.Fragment>
 				{this.subPaths(this.props.path)}
-				{list.map((item, index) => {
-					let title = item.name;
+				{!this.props.onlySubDirs &&
+					list.map((item, index) => {
+						let title = item.name;
 
-					if (this.props.renderItem) {
-						title = this.props.renderItem(item);
-					}
+						if (this.props.renderItem) {
+							title = this.props.renderItem(item);
+						}
 
-					return (
-						<NodeItem
-							key={index}
-							title={title}
-							onClick={() => {
-								if (this.props.onClick)
-									return this.props.onClick({
-										path: item.path,
-										name: item.name,
-										item,
-									});
-							}}
-							selected={
-								selected.path === item.path && selected.name === item.name
-							}
-							onDoubleClick={() => {
-								if (this.props.onDoubleClick) this.props.onDoubleClick(item);
-							}}
-						/>
-					);
-				})}
+						return (
+							<NodeItem
+								key={index}
+								title={title}
+								allowDrag={this.props.allowDrag && this.props.allowDragFile}
+								dragData={JSON.stringify({
+									src: "filesystem",
+									path: item.path,
+									name: item.name,
+									collection: this.props.collection,
+								})}
+								onClick={() => {
+									if (this.props.onClick)
+										return this.props.onClick({
+											path: item.path,
+											name: item.name,
+											item,
+										});
+								}}
+								selected={
+									selected.path === item.path && selected.name === item.name
+								}
+								onDoubleClick={() => {
+									if (this.props.onDoubleClick) this.props.onDoubleClick(item);
+								}}
+							/>
+						);
+					})}
 			</React.Fragment>
 		);
 	}
