@@ -92,6 +92,10 @@
 			border: none;
 		}
 
+		&.noPadding {
+			padding: 0;
+		}
+
 		&:disabled {
 			opacity: 0.5;
 			cursor: no-drop;
@@ -140,7 +144,7 @@
 		}
 
 		&.isExpanded {
-			height: 43px;
+			min-height: 43px;
 			margin: 5px;
 			margin-bottom: 10px;
 			padding: 5px 0;

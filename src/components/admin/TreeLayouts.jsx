@@ -57,6 +57,7 @@ class TreeLayouts extends Component {
 
 	openElementProps = (item) => {
 		console.log(`Property of '${item.contentType}' on ID#${item.id}...`);
+		console.log(item);
 		const { parrent, childs, ...itemAttr } = item;
 		const wnd = treeItems[item.contentType]?.elementProps;
 		if (wnd) WindowsStore.addWindow(item._id.toString(), wnd, itemAttr);
