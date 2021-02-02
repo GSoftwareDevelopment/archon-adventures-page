@@ -5,8 +5,8 @@ import NodeTree from "./NodeTree";
 import FileSystemList from "./FileSystemList";
 
 export default class TreeCalendars extends Component {
-	calendarIten(item) {
-		const title = item.createdAt
+	calendarItem(item) {
+		const createAt = item.createdAt
 			.toLocaleDateString(undefined, {
 				year: "numeric",
 				month: "long",
@@ -16,7 +16,18 @@ export default class TreeCalendars extends Component {
 			.reverse()
 			.join(" ");
 
-		return title + " - " + item.name;
+		return (
+			<React.Fragment>
+				<span style={{ fontWeight: "bold" }}>{createAt}</span>
+				<div
+					style={{
+						fontStyle: "italic",
+					}}
+				>
+					{item.name}
+				</div>
+			</React.Fragment>
+		);
 	}
 
 	render() {
@@ -25,7 +36,8 @@ export default class TreeCalendars extends Component {
 				<div style={{ flexGrow: "2" }}>
 					<FileSystemList
 						collection={Collections.CALENDAR}
-						renderItem={this.calendarIten}
+						renderItem={this.calendarItem}
+						onClick={() => true}
 						onDoubleClick={(item) => {
 							console.log(item);
 						}}

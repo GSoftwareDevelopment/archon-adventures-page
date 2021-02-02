@@ -84,7 +84,7 @@ export default class SidebarMenu extends Component {
 						className={
 							"options-group-button" + (this.props.visible ? " isExpanded" : "")
 						}
-						onlyIcons={true}
+						onlyIcons={false}
 						buttons={this.state.options}
 					/>
 				)}

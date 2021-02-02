@@ -88,7 +88,7 @@ class TreeCards extends Component {
 			{
 				icon: <Icon.Trash size="20px" style={{ color: "#F00" }} />,
 				style: { marginLeft: "auto" },
-				title: "Delete",
+				tip: "Delete",
 				onClick: () => {
 					this.openDeleteConfirm(item.item);
 				},
@@ -96,6 +96,7 @@ class TreeCards extends Component {
 			},
 		];
 		this.props.setOptions(options);
+		return true;
 	};
 
 	render() {
