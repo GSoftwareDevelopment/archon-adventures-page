@@ -45,7 +45,9 @@ W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początk
     - [ ] usuwanie
   - Elementy
 
-  W elementach zastosowałem oznaczenia "CRUD" od Create Read Update Delete, gdzie Read należy czytać jako Wyświetlenie :) Występowanie symbolu jest równoważne z implementacją.
+  Poszczególne elementy zostały opisane [TU](/src/components/page-elements/elements.md)
+
+  Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) Występowanie symbolu jest równoważne z implementacją.
 
   - [x] - elementy blokowe
     - [x] - Header `[-R--]`
@@ -65,6 +67,6 @@ W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początk
 
     Przewiduję możliwość definiowania własnych styli dla każdego elementu, z pomocą biblioteki [**Radium**](https://github.com/FormidableLabs/radium/tree/master/docs/guides) i zaszyciu ich w bazie danych.
 
-Więcej na temat elementów można przeczytać [TU](/src/components/page-elements/elements.md)
+## Podsumowanie
 
 Jak widać, dużo jeszcze zostało do zrobienia.
