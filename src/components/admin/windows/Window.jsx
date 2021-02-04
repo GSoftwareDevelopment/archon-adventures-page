@@ -111,16 +111,31 @@ export default class Window extends Component {
  * @property {string} type - Element <input type="..." /> attribute
  * @property {string} [name] - Element <input name="..." /> attribute
  * @property {string} [label] - Element label
+ * @property {boolean} [noWrapLabel] - if set, the label text will not wrap
+ * @property {string} [tip] - Tooltip message
  * @property {object} [props] - Props for <input> element
  */
 /**
  * Show input element with associated label (if exists)
  * @param {InputPropsInterface} param0 Component props
  */
-export function Input({ className, type, name, label, ...props }) {
+export function Input({
+	className,
+	type,
+	name,
+	label,
+	noWrapLabel,
+	tip,
+	...props
+}) {
 	return label ? (
-		<div className={className}>
-			<label htmlFor={name}>{label}</label>
+		<div className={className} title={tip}>
+			<label
+				htmlFor={name}
+				style={{ whiteSpace: noWrapLabel ? "nowrap" : "normal" }}
+			>
+				{label}
+			</label>
 			<input name={name} id={name} type={type} autoComplete="off" {...props} />
 		</div>
 	) : (
