@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
-import LayoutsStore from "../store/layouts";
+import LayoutsStore from "../../../store/layouts";
 import FSStore from "../store/fs";
 
 import Window, { ButtonsGroup, Input } from "./Window";

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import WindowsStore from "./store/windows";
-import LayoutsStore, { Status, ContentTypes } from "./store/layouts";
+import LayoutsStore, { Status, ContentTypes } from "../../store/layouts";
 
 import NodeTree from "./NodeTree";
 import NodeItem from "./NodeItem";
