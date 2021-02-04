@@ -2,6 +2,7 @@ import "./scss/row.scss";
 
 import * as BlockElement from "./block";
 import * as ContentElement from "./content";
+import layoutsStore from "../../store/layouts";
 
 const layoutElements = {
 	header: (index, attr, elements) => (
@@ -63,8 +64,8 @@ const layoutElements = {
 
 let currentLevel = -1;
 
-export function parseElements(parent, childs) {
-	if (!childs || childs.length === 0) {
+export function parseElements(parent, childen) {
+	if (!childen || childen.length === 0) {
 		console.log(`No child in node '${parent}'`);
 		return null;
 	}
@@ -72,14 +73,15 @@ export function parseElements(parent, childs) {
 	currentLevel++;
 	console.groupCollapsed(`${currentLevel} > Node element: ${parent}`);
 
-	const childrens = childs.map((element, index) => {
-		const { contentType, elements, ...attr } = element;
+	const childrenResult = childen.map((childId, index) => {
+		const element = layoutsStore.getElementById(childId.toString());
+		const { contentType, childs, ...attr } = element;
 		if (layoutElements[contentType]) {
 			attr._parentContentType = parent;
 			return layoutElements[contentType](
 				`${contentType}.${index}`,
 				attr,
-				elements,
+				childs,
 				currentLevel
 			);
 		} else {
@@ -91,7 +93,7 @@ export function parseElements(parent, childs) {
 	console.groupEnd();
 	currentLevel--;
 
-	return childrens;
+	return childrenResult;
 }
 
 export default layoutElements;

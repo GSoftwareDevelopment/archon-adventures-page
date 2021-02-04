@@ -8,9 +8,10 @@ import * as Messages from "../layout/Messages";
 import { Link } from "react-router-dom";
 
 function MenuLink(props) {
-	const defaultLang = LayoutsStore.getDefaultLang();
-	const availableLangs = LayoutsStore.getAvailableLang();
-	const currentLang = LayoutsStore.getCurrentLang();
+	const currentLayout = LayoutsStore.current;
+	const defaultLang = currentLayout.defaultLang;
+	const availableLangs = currentLayout.langs;
+	const currentLang = LayoutsStore.getCurrentLang;
 
 	const route = props.routes.find((entry) => entry.id === props.attr.id);
 	if (!route) {

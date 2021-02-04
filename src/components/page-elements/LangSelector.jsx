@@ -14,7 +14,8 @@ export default function LangSelector(props) {
 		);
 	};
 
-	const langList = LayoutsStore.getAvailableLang();
+	const currentLayout = LayoutsStore.current;
+	const langList = currentLayout.langs;
 
 	const child = (
 		<ul>

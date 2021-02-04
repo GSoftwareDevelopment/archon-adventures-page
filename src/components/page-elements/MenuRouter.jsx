@@ -21,11 +21,15 @@ class MenuRouter extends Component {
 	};
 
 	render() {
-		this.routes = LayoutsStore.getSchema()
-			.filter((part) => part.contentType === "router-content")
-			.map((part) => ({
-				id: part.id,
-				path: part.path,
+		const currentLayout = LayoutsStore.current;
+		this.routes = currentLayout.childs
+			.map((id) => {
+				return LayoutsStore.getElementById(id.toString());
+			})
+			.filter((element) => element.contentType === "router-content")
+			.map((element) => ({
+				id: element.id,
+				path: element.path,
 			}));
 
 		const updateChildrenWithProps = React.Children.map(

@@ -115,8 +115,10 @@ class Card extends Component {
 		}
 		Messages.toConsole("debug.card.render.bodyLanguages", cardLangs);
 
-		const defaultLang = LayoutsStore.getDefaultLang();
-		const currentLang = LayoutsStore.getCurrentLang();
+		const currentLayout = LayoutsStore.current;
+		const defaultLang = currentLayout.defaultLang;
+		const currentLang = LayoutsStore.getCurrentLang;
+
 		let langChange;
 
 		const usedLang = languageCheck(
@@ -195,8 +197,10 @@ class Card extends Component {
 
 function LangWarning(props) {
 	if (!props.cardLangs || !props.cardLangs.length === 0) return null;
-	const availableLangs = LayoutsStore.getAvailableLang();
-	const preferedLang = LayoutsStore.getCurrentLang();
+
+	const currentLayout = LayoutsStore.current;
+	const availableLangs = currentLayout.langs;
+	const preferedLang = LayoutsStore.getCurrentLang;
 
 	return (
 		<div className="warning">

@@ -158,8 +158,9 @@ export class CalendarEntry extends Component {
 		}
 		// Messages.toConsole("debug.card.render.bodyLanguages", entryLangs);
 
-		const defaultLang = LayoutsStore.getDefaultLang();
-		const currentLang = LayoutsStore.getCurrentLang();
+		const currentLayout = LayoutsStore.current;
+		const defaultLang = currentLayout.defaultLang;
+		const currentLang = LayoutsStore.getCurrentLang;
 
 		const usedLang = languageCheck(
 			currentLang,
