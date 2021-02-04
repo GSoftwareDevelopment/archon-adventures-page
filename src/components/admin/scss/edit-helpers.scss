@@ -1,4 +1,12 @@
 @mixin editHelpers {
+	.hover {
+		border-bottom: #0000 solid 1px;
+		cursor: default;
+
+		&:hover {
+			border-bottom: #3338 solid 1px;
+		}
+	}
 	// text aligment
 	.left-align {
 		text-align: left !important;

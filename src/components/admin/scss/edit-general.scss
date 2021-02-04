@@ -1,5 +1,6 @@
 $bg-color-normal: #0004;
 $border-color-normal: #fff2;
+$border-color-focused: #fff8;
 
 @import "edit-helpers";
 
@@ -163,6 +164,7 @@ $border-color-normal: #fff2;
 
 		label {
 			margin: 5px;
+			cursor: inherit;
 		}
 
 		legend {
@@ -187,6 +189,7 @@ $border-color-normal: #fff2;
 
 			&:focus {
 				outline: none;
+				border-bottom: $border-color-focused solid 1px;
 			}
 
 			&::-webkit-calendar-picker-indicator {
@@ -197,7 +200,7 @@ $border-color-normal: #fff2;
 		input[type="checkbox"],
 		input[type="radio"] {
 			width: unset;
-			cursor: default;
+			cursor: inherit;
 		}
 
 		select {
@@ -236,6 +239,8 @@ $border-color-normal: #fff2;
 
 			&:focus {
 				outline: none;
+				border-top: $border-color-focused solid 1px;
+				border-bottom: $border-color-focused solid 1px;
 			}
 		}
 
