@@ -10,7 +10,7 @@ export default class DeleteConfirmation extends Component {
 		return (
 			<Window
 				className="window"
-				title={"Confirm operation"}
+				title={Messages.getText("filesystem.deleteConfirm.window.title")}
 				onClose={this.props.onClose}
 				disableMaximize={true}
 				disableMinimize={true}
@@ -18,7 +18,7 @@ export default class DeleteConfirmation extends Component {
 				<div className="d-flex flex-row">
 					<Icon.Trash size="32px" style={{ margin: "5px" }} />
 					<div className="align-center">
-						{Messages.getText("FSDeleteConfirm", "en")}
+						{Messages.getTextAsMarkdown("filesystem.deleteConfirm")}
 					</div>
 				</div>
 				<div
@@ -33,7 +33,9 @@ export default class DeleteConfirmation extends Component {
 					buttons={[
 						{
 							icon: <Icon.Check2 />,
-							title: "Delete",
+							title: Messages.getText(
+								"filesystem.deleteConfirm.buttons.delete"
+							),
 							onClick: () => {
 								const result = this.props.actions[0](); // TODO:	Niepodoba mi się ta forma wywołania akcji :/
 								if (result) this.props.onClose();
@@ -41,7 +43,9 @@ export default class DeleteConfirmation extends Component {
 						},
 						{
 							icon: <Icon.X />,
-							title: "Cancel",
+							title: Messages.getText(
+								"filesystem.deleteConfirm.buttons.cancel"
+							),
 							onClick: this.props.onClose,
 						},
 					]}
