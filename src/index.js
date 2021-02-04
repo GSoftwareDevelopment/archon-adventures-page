@@ -1,4 +1,5 @@
 import "./components/layout/main.scss";
+import "./components/layout/messages-init";
 
 import React from "react";
 import ReactDOM from "react-dom";
