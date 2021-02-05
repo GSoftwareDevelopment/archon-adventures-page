@@ -4,6 +4,7 @@ import {
 	makeObservable,
 	observable,
 	runInAction,
+	toJS,
 } from "mobx";
 
 import { Collections } from "../setup";
@@ -14,7 +15,9 @@ import { db } from "../libs/db";
 export const Status = {
 	INIT: "init",
 	PENDING: "pending",
+	SILENT: "silent",
 	DONE: "done",
+	WARN: "warn",
 	ERROR: "error",
 };
 
@@ -35,6 +38,7 @@ export const ContentTypes = {
 
 class LayoutsStore {
 	status = Status.INIT;
+	message = "";
 	layoutsList = [];
 	elements = [];
 	currentLang = "";
@@ -42,16 +46,20 @@ class LayoutsStore {
 	constructor() {
 		makeObservable(this, {
 			status: observable,
+			message: observable,
 			layoutsList: observable,
 			elements: observable,
 			currentLang: observable,
 			//
 			currentStatus: computed,
+			getMessage: computed,
 			available: computed,
 			default: computed,
 			current: computed,
 			getCurrentLang: computed,
 			//
+			resetMessage: action,
+			updateElementAttr: action,
 			setCurrentLang: action,
 			getElementById: action,
 			moveItemInNode: action,
@@ -61,6 +69,14 @@ class LayoutsStore {
 
 	get currentStatus() {
 		return this.status;
+	}
+
+	get getMessage() {
+		return this.message;
+	}
+
+	resetMessage() {
+		this.message = "";
 	}
 
 	get available() {
@@ -109,8 +125,40 @@ class LayoutsStore {
 		}
 	}
 
-	async fetchList() {
-		this.status = Status.PENDING;
+	async updateElementAttr(id, updateAttr) {
+		const element = this.getElementById(id);
+
+		for (const attrKey in updateAttr) {
+			element[attrKey] = updateAttr[attrKey];
+		}
+
+		this.status = Status.SILENT;
+		const { _id, ...updateElement } = toJS(element);
+
+		try {
+			const result = await db
+				.collection(Collections.LAYOUT)
+				.updateOne({ _id: { $oid: id } }, updateElement);
+			runInAction(() => {
+				console.log(result);
+				if (result.matchedCount === 1 && result.modifiedCount === 1) {
+					this.status = Status.DONE;
+					this.message = "Element was correct updated.";
+				} else {
+					this.status = Status.WARN;
+					this.message = "Unexcepted error. Element is NOT updated!";
+				}
+			});
+		} catch (error) {
+			console.error(error);
+			this.status = Status.WARN;
+			this.message = error.message;
+		}
+	}
+
+	async fetchList(silent = false) {
+		if (silent) this.status = Status.SILENT;
+		else this.status = Status.PENDING;
 		try {
 			const elements = await db
 				.collection(Collections.LAYOUT)
@@ -133,7 +181,9 @@ class LayoutsStore {
 			});
 		} catch (error) {
 			console.error(error);
-			this.status = Status.ERROR;
+			if (silent) this.status = Status.WARN;
+			else this.status = Status.ERROR;
+			this.message = error.message;
 		}
 	}
 
