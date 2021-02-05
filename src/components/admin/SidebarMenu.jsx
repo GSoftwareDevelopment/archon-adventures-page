@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import CustomScrollbar from "../layout/CustomScrollbar";
 import { ButtonsGroup } from "./windows/Window";
 
-export default class SidebarMenu extends Component {
+class SidebarMenu extends Component {
 	constructor(props) {
 		super(props);
 
@@ -79,16 +79,22 @@ export default class SidebarMenu extends Component {
 						</div>
 					</CustomScrollbar>
 				</div>
-				{Boolean(this.state.options?.length) && (
-					<ButtonsGroup
-						className={
-							"options-group-button" + (this.props.visible ? " isExpanded" : "")
-						}
-						onlyIcons={false}
-						buttons={this.state.options}
-					/>
-				)}
+				<OptionsBar options={this.state.options} visible={this.props.visible} />
 			</React.Fragment>
 		);
 	}
 }
+
+export default SidebarMenu;
+
+const OptionsBar = ({ options, visible }) => {
+	if (options?.length)
+		return (
+			<ButtonsGroup
+				className={"options-group-button" + (visible ? " isExpanded" : "")}
+				onlyIcons={false}
+				buttons={options}
+			/>
+		);
+	else return null;
+};

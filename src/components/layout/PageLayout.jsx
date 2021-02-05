@@ -13,16 +13,19 @@ class PageLayout extends Component {
 	render() {
 		switch (LayoutsStore.currentStatus) {
 			case Status.DONE:
+			case Status.SILENT:
+			case Status.WARN:
 				const rootElements = LayoutsStore.default.childs;
 				return <div id="layout">{parseElements("Root", rootElements)}</div>;
 			case Status.INIT:
 			case Status.PENDING:
-				return <div className="content-loader">Loading...</div>;
+				return <div className="content-loader">Loading Layout...</div>;
 			default:
 				return (
 					<div className="content-loader">
 						<EmojiFrown size="64px" />
 						<p>Layout error</p>
+						<p>{LayoutsStore.getMessage.message}</p>
 					</div>
 				);
 		}

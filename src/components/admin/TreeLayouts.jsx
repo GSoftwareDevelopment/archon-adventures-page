@@ -26,7 +26,7 @@ class TreeLayouts extends Component {
 	};
 
 	async componentDidMount() {
-		await this.getLayoutData();
+		// await this.getLayoutData();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -52,7 +52,7 @@ class TreeLayouts extends Component {
 
 	async getLayoutData() {
 		console.log("> Getting layouts data...");
-		await LayoutsStore.fetchList();
+		await LayoutsStore.fetchList(true);
 	}
 
 	openElementProps = (item) => {
@@ -126,7 +126,8 @@ class TreeLayouts extends Component {
 			},
 		]);
 
-		if (this.state.selected === itemId) return true;
+		// if (this.state.selected === itemId) return true;
+		return false;
 	};
 
 	render() {
@@ -137,7 +138,12 @@ class TreeLayouts extends Component {
 					<Spinner size="24px" color={"#36D7B7"} loading={true} />
 				</div>
 			);
-		if (_status !== Status.DONE) return null;
+		if (
+			_status !== Status.DONE &&
+			_status !== Status.SILENT &&
+			_status !== Status.WARN
+		)
+			return null;
 
 		const layoutsIds = LayoutsStore.available.map((layout) => layout._id);
 
