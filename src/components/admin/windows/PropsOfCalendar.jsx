@@ -1,13 +1,16 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
+import LayoutsStore, { Status } from "../../../store/layouts";
 import { Collections } from "../../../setup";
 import DropTarget from "../DropTarget";
 import "../scss/select-list.scss";
 
 import * as Messages from "../../layout/Messages.js";
 
-import Window, { Input } from "./Window";
+import Window, { Input, ButtonsGroup } from "./Window";
+import { Upload as IconSave, X as IconCancel } from "react-bootstrap-icons";
 
-export default class PropsOfCalendar extends Component {
+class PropsOfCalendar extends Component {
 	state = {
 		sourcePath: this.props.path || "",
 		view: [...this.props.options.view],
@@ -16,6 +19,10 @@ export default class PropsOfCalendar extends Component {
 	};
 
 	viewFlags = ["showDate", "showTitle", "showDescription"];
+
+	componentDidMount() {
+		LayoutsStore.resetMessage();
+	}
 
 	updateSourcePath = (newPath) => {
 		this.setState({ sourcePath: newPath });
@@ -33,6 +40,18 @@ export default class PropsOfCalendar extends Component {
 		} catch (error) {
 			console.log("Dropped data is not in JSON format");
 		}
+	};
+
+	save = (e) => {
+		e.preventDefault();
+		LayoutsStore.updateElementAttr(this.props._id, {
+			path: this.state.sourcePath,
+			options: {
+				pagination: this.state.pagination,
+				limit: this.state.limit,
+				view: this.state.view,
+			},
+		});
 	};
 
 	render() {
@@ -112,10 +131,40 @@ export default class PropsOfCalendar extends Component {
 						}}
 					/>
 				</fieldset>
-				<div className="justify-right">
-					<button onClick={this.save}>Save</button>
-				</div>
+
+				<ButtonsGroup
+					className="group-button justify-right"
+					style={{ marginBottom: "5px" }}
+					onlyIcons={true}
+					buttons={[
+						{
+							component: LayoutsStore.getMessage,
+							tip: "Operation result: " + LayoutsStore.getMessage,
+							className: "full-width",
+							visible: LayoutsStore.getMessage !== "",
+						},
+						{
+							icon: <IconSave />,
+							tip: "Save",
+							onClick: this.save,
+							enabled: LayoutsStore.currentStatus !== Status.SILENT,
+							visible:
+								LayoutsStore.currentStatus !== Status.WARN &&
+								LayoutsStore.getMessage === "",
+						},
+						{
+							icon: <IconCancel />,
+							tip: "Cancel",
+							onClick: () => {
+								LayoutsStore.resetMessage();
+							},
+							visible: LayoutsStore.getMessage !== "",
+						},
+					]}
+				/>
 			</Window>
 		);
 	}
 }
+
+export default observer(PropsOfCalendar);

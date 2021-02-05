@@ -7,6 +7,7 @@ import Window, { Input, ButtonsGroup, SelectList } from "./Window";
 
 import * as Icon from "react-bootstrap-icons";
 import Alert from "../../layout/Alert";
+import LayoutsStore from "../../../store/layouts";
 
 export default class PropsOfLayout extends Component {
 	constructor(props) {
@@ -37,6 +38,12 @@ export default class PropsOfLayout extends Component {
 			(entry) => entry.symbol !== langSymbol
 		);
 		this.setState({ langs: newLangs });
+	};
+
+	save = (e) => {
+		e.preventDefault();
+
+		LayoutsStore.updateElementAttr(this.props._id, this.state);
 	};
 
 	render() {
