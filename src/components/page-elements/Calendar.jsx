@@ -70,7 +70,7 @@ class Calendar extends Component {
 			return (
 				<div className="warning">
 					<IconJournalX size="32" />
-					<MarkdownView markdown={Messages.getText("fetchingError", "en")} />
+					<MarkdownView markdown={Messages.getText("fetchingError")} />
 				</div>
 			);
 
@@ -86,6 +86,7 @@ class Calendar extends Component {
 					<Route exact path={this.props.match.path}>
 						<CalendarCardsList
 							cardList={this.state.calendar}
+							options={this.props.attr.options}
 							matchUrl={this.props.match.url}
 							onChoice={this.setCard}
 						/>
@@ -96,19 +97,25 @@ class Calendar extends Component {
 	}
 }
 
-const CalendarCardsList = (props) => {
+const CalendarCardsList = ({ cardList, matchUrl, options, ...props }) => {
+	const view = {
+		date: options.view.includes("showDate"),
+		title: options.view.includes("showTitle"),
+		description: options.view.includes("showDescription"),
+	};
+
 	return (
 		<React.Fragment>
-			{props.cardList.map((entry, index) => (
+			{cardList.map((entry, index) => (
 				<Link
 					key={index + Math.random().toString()}
 					className="calendar-link"
-					to={`${props.matchUrl}/${entry.cardRefTo}`}
+					to={`${matchUrl}/${entry.cardRefTo}`}
 					onClick={() => {
 						props.onChoice(entry);
 					}}
 				>
-					<CalendarEntry key={index} entry={entry} />
+					<CalendarEntry key={index} entry={entry} show={view} />
 				</Link>
 			))}
 		</React.Fragment>
@@ -174,19 +181,32 @@ export class CalendarEntry extends Component {
 		const title = entry.body[usedLang].title;
 		const description = entry.body[usedLang].description;
 
+		const show = this.props.show || {
+			date: true,
+			title: true,
+			description: true,
+		};
+		const showDate = show.date;
+		const showTitle = show.title;
+		const showDescription = show.description;
+
 		return (
 			<div className="calendar">
 				<div className="calendar-entry">
 					<div>
-						<div className="date-content">
-							{entryDate.map((part, index) => (
-								<div key={index}>{part}</div>
-							))}
-						</div>
+						{showDate && (
+							<div className="date-content">
+								{entryDate.map((part, index) => (
+									<div key={index}>{part}</div>
+								))}
+							</div>
+						)}
 					</div>
 					<div className="entry-content">
-						<div className="entry-title">{title}</div>
-						<div className="entry-description">{description}</div>
+						{showTitle && <div className="entry-title">{title}</div>}
+						{showDescription && (
+							<div className="entry-description">{description}</div>
+						)}
 					</div>
 				</div>
 			</div>
