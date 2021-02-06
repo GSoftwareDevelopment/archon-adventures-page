@@ -16,11 +16,13 @@
 	flex-direction: column;
 	justify-content: flex-end;
 
+	height: 40px;
 	max-height: 100vh;
 
 	cursor: default;
 	background-color: #400d;
 	box-shadow: -5px 0px 10px #000;
+	transition: 0.25s;
 
 	.sidebar-menu {
 		display: flex;
@@ -29,7 +31,6 @@
 		padding: 0px;
 		height: 0px;
 
-		transition: 0.25s;
 		overflow: hidden;
 	}
 
@@ -116,9 +117,10 @@
 
 	// &:hover,
 	&.isExpanded {
+		height: 100vh;
 		.sidebar-menu {
 			// padding: 5px;
-			height: calc(100vh - 40px);
+			height: 100%;
 			// height: 100vh;
 		}
 	}
