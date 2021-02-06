@@ -173,7 +173,7 @@ export const ButtonsGroup = ({ className, style, onlyIcons, buttons }) => (
 	<div className={className} style={style}>
 		{buttons.map((btn: ButtonsInterface, index) => {
 			if (typeof btn.visible === "boolean" && !btn.visible) return null;
-			let title = false;
+			let title = undefined;
 			if (typeof btn.title === "string") {
 				title = btn.title.trim();
 			}
