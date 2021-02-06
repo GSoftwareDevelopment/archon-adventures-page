@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { useParams, withRouter } from "react-router";
-import { Switch, Route, Link } from "react-router-dom";
 import LayoutsStore from "../../store/layouts";
 import { languageCheck } from "../../libs/utils";
-import "./scss/calendar.scss";
-
 import { Path, Collections } from "../../setup";
 import { db } from "../../libs/db";
+import "./scss/calendar.scss";
+
+import { Switch, Route, Link } from "react-router-dom";
 import Card from "./Card";
 
 import ContentLoader from "../layout/ContentLoader";
@@ -55,6 +55,9 @@ class Calendar extends Component {
 			)
 			.asArray();
 
+		console.log(
+			`Calendar at ${this.props.attr.path}. Found: ${calendar.length} elements`
+		);
 		this.setState({ calendar, status: status.DONE });
 	}
 
@@ -96,6 +99,8 @@ class Calendar extends Component {
 		);
 	}
 }
+
+export default withRouter(Calendar);
 
 const CalendarCardsList = ({ cardList, matchUrl, options, ...props }) => {
 	const view = {
@@ -227,5 +232,3 @@ const CalendarCard = (props) => {
 		</React.Fragment>
 	);
 };
-
-export default withRouter(Calendar);

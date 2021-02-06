@@ -57,7 +57,7 @@ class Sidebar extends Component {
 						<span>{userName}</span>
 					</button>
 					<button
-						className="flat toggler"
+						className="round flat toggler"
 						onClick={() => {
 							this.setState({ isExpanded: !this.state.isExpanded });
 						}}
