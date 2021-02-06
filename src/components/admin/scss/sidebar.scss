@@ -96,6 +96,10 @@
 			padding: 0;
 		}
 
+		&.round {
+			border-radius: 50%;
+		}
+
 		&:disabled {
 			opacity: 0.5;
 			cursor: no-drop;
