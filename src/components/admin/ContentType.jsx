@@ -19,7 +19,12 @@ const SIZE_PROP = "20px";
 export const treeItems = {
 	layout: {
 		icon: null,
-		title: ({ name }) => <div style={{ fontWeight: "bold" }}>{name}</div>,
+		title: ({ name, ...attr }) => (
+			<div style={{ fontWeight: "bold" }}>
+				{name}
+				{attr.default && <span> (default)</span>}
+			</div>
+		),
 		elementProps: PropsOfLayout,
 	},
 	"menu-link": {
