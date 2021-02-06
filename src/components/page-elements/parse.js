@@ -55,7 +55,7 @@ const layoutElements = {
 	),
 
 	calendar: (index, attr) => (
-		<ContentElement.Calendar key={index} attr={attr} />
+		<ContentElement.Calendar key={index + attr.path} attr={attr} />
 	),
 
 	galery: (index, attr) => null,
@@ -79,7 +79,7 @@ export function parseElements(parent, childen) {
 		if (layoutElements[contentType]) {
 			attr._parentContentType = parent;
 			return layoutElements[contentType](
-				`${contentType}.${index}`,
+				childId.toString(),
 				attr,
 				childs,
 				currentLevel
