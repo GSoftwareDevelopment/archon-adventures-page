@@ -7,6 +7,7 @@ import FSStore from "../store/fs";
 import Window, { ButtonsGroup, Input } from "./Window";
 import { Upload as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
 import { combinePathName, pathDestructure } from "../../../libs/utils";
+import { toast } from "react-toastify";
 
 const status = {
 	INIT: "init",
@@ -19,7 +20,6 @@ const status = {
 export default class CardEdit extends Component {
 	state = {
 		status: status.INIT,
-		message: "",
 		editLang: "en",
 		lang: [],
 		body: [],
@@ -104,7 +104,7 @@ export default class CardEdit extends Component {
 	}
 
 	cancelSaveCard = () => {
-		this.setState({ status: status.DONE, message: "" });
+		this.setState({ status: status.DONE });
 	};
 
 	switchToSavePropmt = async () => {
@@ -133,28 +133,31 @@ export default class CardEdit extends Component {
 
 				if (result.modifiedCount === 1) {
 					FSStore.updateCollectionFS(Collections.CARDS);
+					toast.success("Card correctly saved.");
 					this.setState({
 						status: status.DONE,
 						message: "Card correctly saved",
 					});
 				} else if (result.insertedId) {
 					FSStore.add(this.cardData, Collections.CARDS);
+					toast.success("Card was created.");
 					this.setState({
 						status: status.DONE,
-						message: "Card was created",
 					});
-				} else
+				} else {
+					toast.error("Something went wrong");
 					this.setState({
 						status: status.ERROR,
-						message: "Something went wrong!",
 					});
+				}
 			} catch (error) {
+				toast.error(error.message);
 				console.error(error);
-				this.setState({ status: status.ERROR, message: error.message });
+				this.setState({ status: status.ERROR });
 			}
 		} else {
 			// show filepath
-			this.setState({ status: status.SAVEPROMPT, message: "" });
+			this.setState({ status: status.SAVEPROMPT });
 		}
 	};
 
@@ -200,15 +203,6 @@ export default class CardEdit extends Component {
 					onlyIcons={true}
 					buttons={[
 						{
-							component: this.state.message,
-							title: "Operation result: " + this.state.message,
-							className: "full-width",
-							visible:
-								this.state.message !== "" &&
-								(this.state.status === status.DONE ||
-									this.state.status === status.ERROR),
-						},
-						{
 							component: (
 								<Input
 									className="justify-between"
@@ -223,22 +217,19 @@ export default class CardEdit extends Component {
 								/>
 							),
 							className: "full-width",
-							title: "File name with Full path",
+							tip: "File name with Full path",
 							visible: this.state.status === status.SAVEPROMPT,
 						},
 						{
 							icon: <IconSave />,
-							title: "Save",
+							tip: "Save",
 							onClick: this.switchToSavePropmt,
 							enabled: isEnabled || this.state.status === status.SAVEPROMPT,
-							visible: this.state.status !== status.ERROR,
 						},
 						{
 							icon: <IconCancelSave />,
 							onClick: this.cancelSaveCard,
-							visible:
-								this.state.status === status.SAVEPROMPT ||
-								this.state.status === status.ERROR,
+							visible: this.state.status === status.SAVEPROMPT,
 						},
 					]}
 				/>

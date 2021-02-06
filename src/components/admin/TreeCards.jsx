@@ -5,6 +5,7 @@ import WindowsStore from "./store/windows";
 import { combinePathName } from "../../libs/utils";
 import { db } from "../../libs/db";
 import { Collections, Path } from "../../setup";
+import { toast } from "react-toastify";
 
 import * as Icon from "react-bootstrap-icons";
 import NodeTree from "./NodeTree";
@@ -57,8 +58,13 @@ class TreeCards extends Component {
 			if (result.deletedCount === 1) {
 				FSStore.remove({ _id }, Collections.CARDS);
 				this.updateOptions({ path: Path.DELIMITER, name: null });
+				toast.success("Entry was deleted.");
+			} else {
+				console.warn(result);
+				toast.dark("Something went wrong!");
 			}
 		} catch (error) {
+			toast.error(error.message);
 			console.error(error);
 		}
 		return true;

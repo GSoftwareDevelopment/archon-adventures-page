@@ -8,7 +8,7 @@ import "../scss/select-list.scss";
 import * as Messages from "../../layout/Messages.js";
 
 import Window, { Input, ButtonsGroup } from "./Window";
-import { Upload as IconSave, X as IconCancel } from "react-bootstrap-icons";
+import { Upload as IconSave } from "react-bootstrap-icons";
 
 class PropsOfCalendar extends Component {
 	state = {
@@ -138,27 +138,12 @@ class PropsOfCalendar extends Component {
 					onlyIcons={true}
 					buttons={[
 						{
-							component: LayoutsStore.getMessage,
-							tip: "Operation result: " + LayoutsStore.getMessage,
-							className: "full-width",
-							visible: LayoutsStore.getMessage !== "",
-						},
-						{
 							icon: <IconSave />,
 							tip: "Save",
 							onClick: this.save,
-							enabled: LayoutsStore.currentStatus !== Status.SILENT,
-							visible:
-								LayoutsStore.currentStatus !== Status.WARN &&
-								LayoutsStore.getMessage === "",
-						},
-						{
-							icon: <IconCancel />,
-							tip: "Cancel",
-							onClick: () => {
-								LayoutsStore.resetMessage();
-							},
-							visible: LayoutsStore.getMessage !== "",
+							enabled:
+								LayoutsStore.currentStatus !== Status.SILENT ||
+								LayoutsStore.currentStatus === Status.WARN,
 						},
 					]}
 				/>

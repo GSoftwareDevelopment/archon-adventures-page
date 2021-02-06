@@ -49,3 +49,18 @@ li {
 	margin-left: 5px;
 	cursor: help;
 }
+
+$rt-color-default: #fff;
+$rt-color-dark: #121212;
+$rt-color-info: #0a6099;
+$rt-color-success: #055f08;
+$rt-color-warning: #080808;
+$rt-color-error: #c22b1a;
+$rt-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+@import "../../../node_modules/react-toastify/scss/main.scss";
+
+.#{$rt-namespace}__toast {
+	font-size: 16px;
+	box-shadow: 0 0 10px #000;
+}

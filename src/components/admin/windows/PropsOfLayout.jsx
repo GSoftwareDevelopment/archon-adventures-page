@@ -1,15 +1,14 @@
 import React, { Component, useState } from "react";
-// import { db } from "../../../libs/db";
-// import { Collections } from "../../../setup";
-// import LayoutsStore from "../store/layouts";
+import { observer } from "mobx-react";
+import LayoutsStore, { Status } from "../../../store/layouts";
 import "../scss/select-list.scss";
+
 import Window, { Input, ButtonsGroup, SelectList } from "./Window";
-
 import * as Icon from "react-bootstrap-icons";
+import { Upload as IconSave } from "react-bootstrap-icons";
 import Alert from "../../layout/Alert";
-import LayoutsStore from "../../../store/layouts";
 
-export default class PropsOfLayout extends Component {
+class PropsOfLayout extends Component {
 	constructor(props) {
 		super(props);
 
@@ -43,7 +42,12 @@ export default class PropsOfLayout extends Component {
 	save = (e) => {
 		e.preventDefault();
 
-		LayoutsStore.updateElementAttr(this.props._id, this.state);
+		LayoutsStore.updateElementAttr(this.props._id, {
+			name: this.state.name,
+			default: this.state.default,
+			langs: this.state.langs,
+			defaultLang: this.state.defaultLang,
+		});
 	};
 
 	render() {
@@ -81,13 +85,27 @@ export default class PropsOfLayout extends Component {
 						onDelete={this.onDeleteLang}
 					/>
 				</fieldset>
-				<div className="justify-right">
-					<button onClick={this.save}>Save</button>
-				</div>
+				<ButtonsGroup
+					className="group-button justify-right"
+					style={{ marginBottom: "5px" }}
+					onlyIcons={true}
+					buttons={[
+						{
+							icon: <IconSave />,
+							tip: "Save",
+							onClick: this.save,
+							enabled:
+								LayoutsStore.currentStatus !== Status.SILENT ||
+								LayoutsStore.currentStatus === Status.WARN,
+						},
+					]}
+				/>
 			</Window>
 		);
 	}
 }
+
+export default observer(PropsOfLayout);
 
 export class ManageLangs extends Component {
 	state = {

@@ -9,6 +9,7 @@ import {
 
 import { Collections } from "../setup";
 import { db } from "../libs/db";
+import { toast } from "react-toastify";
 
 //
 
@@ -140,16 +141,20 @@ class LayoutsStore {
 				.collection(Collections.LAYOUT)
 				.updateOne({ _id: { $oid: id } }, updateElement);
 			runInAction(() => {
-				console.log(result);
+				const contentType = updateElement.contentType.toUpperCase();
 				if (result.matchedCount === 1 && result.modifiedCount === 1) {
 					this.status = Status.DONE;
-					this.message = "Element was correct updated.";
+					toast.success(`${contentType} element updated.`);
 				} else {
 					this.status = Status.WARN;
-					this.message = "Unexcepted error. Element is NOT updated!";
+					toast.dark(
+						`Unexcepted error! ${contentType} element is NOT updated!`
+					);
+					console.log(result);
 				}
 			});
 		} catch (error) {
+			toast.error(error.message);
 			console.error(error);
 			this.status = Status.WARN;
 			this.message = error.message;
@@ -174,8 +179,12 @@ class LayoutsStore {
 					(el) => el.contentType === ContentTypes.LAYOUT
 				);
 				const defaultLayout = this.layoutsList.find((layout) => layout.default);
-				defaultLayout.current = true;
-				this.currentLang = defaultLayout.defaultLang;
+				if (defaultLayout) {
+					defaultLayout.current = true;
+					this.currentLang = defaultLayout.defaultLang;
+				} else {
+					this.currentLang = "";
+				}
 
 				this.status = Status.DONE;
 			});

@@ -8,6 +8,7 @@ import PageLayout from "./components/layout/PageLayout";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/admin/Login";
 import Sidebar from "./components/admin/Sidebar";
+import { ToastContainer } from "react-toastify";
 
 class App extends Component {
 	async componentDidMount() {
@@ -19,6 +20,12 @@ class App extends Component {
 			case userStatus.DONE:
 				return (
 					<Router>
+						<ToastContainer
+							position="bottom-left"
+							draggable
+							pauseOnHover
+							pauseOnFocusLoss
+						/>
 						<Sidebar />
 						<Switch>
 							<Route key="authorize" exact path="/auth">
