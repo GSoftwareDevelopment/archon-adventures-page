@@ -15,8 +15,18 @@ class PageLayout extends Component {
 			case Status.DONE:
 			case Status.SILENT:
 			case Status.WARN:
-				const rootElements = LayoutsStore.default.childs;
-				return <div id="layout">{parseElements("Root", rootElements)}</div>;
+				const defaultLayout = LayoutsStore.default;
+				if (defaultLayout)
+					return (
+						<div id="layout">{parseElements("Root", defaultLayout.childs)}</div>
+					);
+				else
+					return (
+						<div className="content-loader">
+							<EmojiFrown size="64px" />
+							<p>Default Layout is not defiend!</p>
+						</div>
+					);
 			case Status.INIT:
 			case Status.PENDING:
 				return <div className="content-loader">Loading Layout...</div>;
