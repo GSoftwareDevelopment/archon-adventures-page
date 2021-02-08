@@ -5,7 +5,10 @@ import UsersStore, { state, status } from "../../store/users";
 import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 
-import * as Icon from "react-bootstrap-icons";
+import {
+	ThreeDotsVertical as IconExpand,
+	ChevronCompactDown as IconCollaps,
+} from "react-bootstrap-icons";
 
 //
 
@@ -23,36 +26,22 @@ class Sidebar extends Component {
 		if (UsersStore.getState() !== state.authorized) return null;
 		if (!UsersStore.getCurrentUser()) return null;
 
-		const userName = UsersStore.getCurrentUserName();
 		const isExpanded = this.state.isExpanded;
 
 		return (
 			<div className={"sidebar" + (isExpanded ? " isExpanded" : "")}>
 				{this.props.children}
-				<div className="sidebar-user">
-					<button
-						className="flat"
-						onClick={() => {
-							this.setState({ isExpanded: false });
-							this.props.history.push("/admin/dashboard");
-						}}
-						title="Open Dashboard..."
-					>
-						<Icon.Person size="20px" className="icon" />
-						<span>{userName}</span>
-					</button>
-					<button
-						className="sidebar-toggler"
-						onClick={this.toggleVisibility}
-						title="Toggle Menu"
-					>
-						{isExpanded ? (
-							<Icon.ChevronCompactDown size="20px" />
-						) : (
-							<Icon.ThreeDotsVertical size="20px" />
-						)}
-					</button>
-				</div>
+				<button
+					className="sidebar-toggler"
+					onClick={this.toggleVisibility}
+					title="Toggle Menu"
+				>
+					{isExpanded ? (
+						<IconCollaps size="32px" />
+					) : (
+						<IconExpand size="32px" />
+					)}
+				</button>
 			</div>
 		);
 	}
