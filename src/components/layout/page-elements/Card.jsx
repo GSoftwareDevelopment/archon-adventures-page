@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import { db } from "../../libs/db";
-import { Collections } from "../../setup";
+import { db } from "../../../libs/db";
+import { Collections } from "../../../setup";
 import { observer } from "mobx-react";
-import LayoutsStore from "../../store/layouts";
-import { languageCheck, pathDestructure } from "../../libs/utils";
+import LayoutsStore from "../../../store/layouts";
+import { languageCheck, pathDestructure } from "../../../libs/utils";
 
 import "./scss/card.scss";
-import * as Messages from "../../libs/Messages";
+import * as Messages from "../../../libs/Messages";
 
 import MarkdownView from "react-showdown";
 import { showdown_ext, showdown_options } from "./Card-markdown-ext.js";
-import ContentLoader from "../layout/ContentLoader";
+import ContentLoader from "../ContentLoader";
 import {
 	InfoSquare as IconInfoSquare,
 	JournalX as IconJournalX,

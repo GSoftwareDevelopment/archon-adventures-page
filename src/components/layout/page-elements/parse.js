@@ -2,7 +2,7 @@ import "./scss/row.scss";
 
 import * as BlockElement from "./block";
 import * as ContentElement from "./content";
-import layoutsStore from "../../store/layouts";
+import layoutsStore from "../../../store/layouts";
 
 const layoutElements = {
 	header: (index, attr, elements) => (

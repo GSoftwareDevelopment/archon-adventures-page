@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../store/layouts";
 
 import { EmojiFrown } from "react-bootstrap-icons";
-import { parseElements } from "../page-elements/parse";
+import { parseElements } from "./page-elements/parse";
 
 class PageLayout extends Component {
 	async componentDidMount() {

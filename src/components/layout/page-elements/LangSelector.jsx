@@ -1,8 +1,8 @@
 import "./scss/lang-selector.scss";
 import { observer } from "mobx-react";
-import LayoutsStore from "../../store/layouts";
+import LayoutsStore from "../../../store/layouts";
 
-import * as Messages from "../../libs/Messages";
+import * as Messages from "../../../libs/Messages";
 import Flag from "react-flags";
 
 function LangSelector(props) {

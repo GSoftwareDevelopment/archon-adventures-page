@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { useParams, withRouter } from "react-router";
-import LayoutsStore from "../../store/layouts";
-import { languageCheck } from "../../libs/utils";
-import { Path, Collections } from "../../setup";
-import { db } from "../../libs/db";
+import LayoutsStore from "../../../store/layouts";
+import { languageCheck } from "../../../libs/utils";
+import { Path, Collections } from "../../../setup";
+import { db } from "../../../libs/db";
 import "./scss/calendar.scss";
 
 import { Switch, Route, Link } from "react-router-dom";
 import Card from "./Card";
 
-import ContentLoader from "../layout/ContentLoader";
+import ContentLoader from "../ContentLoader";
 
-import * as Messages from "../../libs/Messages";
+import * as Messages from "../../../libs/Messages";
 
 import MarkdownView from "react-showdown";
 import { JournalX as IconJournalX } from "react-bootstrap-icons";

@@ -2,7 +2,7 @@ import "./scss/router-menu.scss";
 
 import React, { Component } from "react";
 import { observer } from "mobx-react";
-import LayoutsStore from "../../store/layouts";
+import LayoutsStore from "../../../store/layouts";
 
 class MenuRouter extends Component {
 	constructor(props) {
