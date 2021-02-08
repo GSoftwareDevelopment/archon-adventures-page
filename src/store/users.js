@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { client, authorizeDB } from "../libs/db";
+import { toast } from "react-toastify";
 
 export const state = {
 	unknown: "unknown",
@@ -10,7 +11,9 @@ export const state = {
 export const status = {
 	INIT: "init",
 	PENDING: "pending",
+	SILENT: "silent",
 	DONE: "done",
+	WARN: "warn",
 	ERROR: "error",
 };
 
@@ -80,8 +83,9 @@ class UsersStore {
 		return true;
 	}
 
-	async login(credentials) {
-		this.status = status.PENDING;
+	async login(credentials, silent) {
+		if (silent) this.status = status.SILENT;
+		else this.status = status.PENDING;
 
 		try {
 			const user = await authorizeDB(credentials);
@@ -90,6 +94,8 @@ class UsersStore {
 					this.state = state.anonymous;
 				} else {
 					this.state = state.authorized;
+					console.log(user);
+					toast.info("Hello " + user.profile.data.email);
 				}
 				this.status = status.DONE;
 				console.log("Success logged in as ", user.loggedInProviderType);
@@ -97,13 +103,17 @@ class UsersStore {
 			return user;
 		} catch (error) {
 			console.error(error);
-			this.state = state.unknown;
-			this.status = status.ERROR;
+			runInAction(() => {
+				this.state = state.unknown;
+				toast.error(error.message);
+				if (silent) this.status = status.WARN;
+				else this.status = status.ERROR;
+			});
 		}
 	}
 
 	async logout() {
-		this.status = status.PENDING;
+		this.status = status.SILENT;
 		try {
 			// await client.auth.removeUser();
 			await client.auth.logout();
@@ -125,8 +135,7 @@ class UsersStore {
 			});
 		} catch (error) {
 			console.error(error);
-			// this.state = state.error;
-			this.status = status.ERROR;
+			this.status = status.WARN;
 		}
 	}
 }
