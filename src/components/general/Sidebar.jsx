@@ -29,12 +29,12 @@ class Sidebar extends Component {
 		return (
 			<div className={"sidebar" + (isExpanded ? " isExpanded" : "")}>
 				{this.props.children}
-				<div className="user">
+				<div className="sidebar-user">
 					<button
 						className="flat"
 						onClick={() => {
-							// this.setState({ isExpanded: false });
-							this.props.history.push("/dashboard");
+							this.setState({ isExpanded: false });
+							this.props.history.push("/admin/dashboard");
 						}}
 						title="Open Dashboard..."
 					>
@@ -42,7 +42,7 @@ class Sidebar extends Component {
 						<span>{userName}</span>
 					</button>
 					<button
-						className="toggler"
+						className="sidebar-toggler"
 						onClick={this.toggleVisibility}
 						title="Toggle Menu"
 					>

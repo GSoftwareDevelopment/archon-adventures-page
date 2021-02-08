@@ -1,3 +1,6 @@
+import "../../scss/sidebar-menu.scss";
+import "../../scss/sidebar-options-menu.scss";
+
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
@@ -103,7 +106,7 @@ const OptionsBar = ({ options, visible }) => {
 	if (options?.length)
 		return (
 			<ButtonsGroup
-				className={"options-group-button" + (visible ? " isExpanded" : "")}
+				className={"sidebar-options-menu" + (visible ? " isExpanded" : "")}
 				onlyIcons={false}
 				buttons={options}
 			/>

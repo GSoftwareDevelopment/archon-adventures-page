@@ -3,7 +3,6 @@ import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 import { Collections } from "../../../setup";
 import DropTarget from "../../general/DropTarget";
-import "../scss/select-list.scss";
 
 import * as Messages from "../../../libs/Messages.js";
 

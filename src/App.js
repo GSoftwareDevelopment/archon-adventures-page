@@ -45,7 +45,7 @@ class App extends Component {
 									<Login />
 								</div>
 							</Route>
-							<Route key="dashboard" exact path="/dashboard">
+							<Route key="admin" exact path="/admin/:id">
 								{authState === userState.authorized ? (
 									<div className="fullscreen">
 										<Admin />
