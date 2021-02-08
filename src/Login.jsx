@@ -6,6 +6,7 @@ import "./scss/login.scss";
 import ContentLoader from "./components/layout/ContentLoader";
 
 import { BoxArrowInRight as IconLogin } from "react-bootstrap-icons";
+import { Redirect } from "react-router-dom";
 
 class Login extends Component {
 	constructor(props) {
@@ -13,6 +14,7 @@ class Login extends Component {
 		this.state = {
 			username: "",
 			password: "",
+			user: undefined,
 		};
 	}
 
@@ -20,7 +22,8 @@ class Login extends Component {
 		e.preventDefault();
 		const { username, password } = this.state;
 
-		await UsersStore.login({ username, password }, true);
+		const user = await UsersStore.login({ username, password }, true);
+		this.setState({ user });
 	};
 
 	render() {
@@ -61,6 +64,7 @@ class Login extends Component {
 						<span>Login</span>
 					</button>
 				</ContentLoader>
+				{Boolean(this.state.user) && <Redirect to="/admin/dashboard" />}
 			</form>
 		);
 	}

@@ -50,7 +50,7 @@ class SidebarMenu extends Component {
 							style={{
 								display: "flex",
 								flexDirection: "column",
-								height: "calc(100% - 15px)",
+								height: "100%",
 							}}
 						>
 							{this.props.items.map((item, index) => {

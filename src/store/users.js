@@ -94,7 +94,6 @@ class UsersStore {
 					this.state = state.anonymous;
 				} else {
 					this.state = state.authorized;
-					console.log(user);
 					toast.info("Hello " + user.profile.data.email);
 				}
 				this.status = status.DONE;
@@ -109,6 +108,7 @@ class UsersStore {
 				if (silent) this.status = status.WARN;
 				else this.status = status.ERROR;
 			});
+			return undefined;
 		}
 	}
 
@@ -118,6 +118,7 @@ class UsersStore {
 			// await client.auth.removeUser();
 			await client.auth.logout();
 			runInAction(() => {
+				toast.info("You are log out.");
 				this.state = "unknown";
 				const users = this.getAllUsersAuthInfo();
 				users.forEach((user) => {
