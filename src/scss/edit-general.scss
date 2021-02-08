@@ -9,6 +9,8 @@
 	width: 280px;
 
 	background: $window-background;
+	box-shadow: -5px 0px 10px #000, -5px -5px 10px #000, 0 -10px 10px #000;
+
 	text-shadow: none;
 	transition: 0.25s;
 
@@ -75,7 +77,6 @@
 
 		margin: 0px;
 		padding: 5px;
-		box-shadow: 0 -10px 10px #000;
 		z-index: 1;
 
 		font-weight: bold;
