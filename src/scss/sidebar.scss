@@ -1,26 +1,26 @@
-.auth-sidebar {
-	svg {
-		// shape-rendering: optimizeSpeed;
-	}
+@import "./var";
+@import "./button";
 
+.sidebar {
 	position: fixed;
 	right: 0;
 	bottom: 0;
 	z-index: 100;
 
 	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-	font-size: 14px;
+	font-size: 15px;
 	font-weight: 100;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 
+	// height: 40px;
 	max-height: 100vh;
 
 	cursor: default;
-	background-color: #400d;
 	box-shadow: -5px 0px 10px #000;
+	// transition: 0.25s;
 
 	.sidebar-menu {
 		display: flex;
@@ -28,8 +28,9 @@
 		justify-content: flex-start;
 		padding: 0px;
 		height: 0px;
-
 		transition: 0.25s;
+		background-color: $sidebar-menu-color;
+
 		overflow: hidden;
 	}
 
@@ -41,6 +42,7 @@
 		padding: 5px;
 		width: 280px;
 		box-shadow: 0 -10px 10px #000;
+		background-color: $sidebar-user-color;
 		z-index: 1;
 
 		.icon {
@@ -59,58 +61,24 @@
 		}
 	}
 
-	button {
-		font: inherit;
+	.toggler {
+		position: absolute;
+		bottom: -10px;
+		right: 0px;
+		width: 60px;
+		height: 60px;
+
 		display: flex;
-		flex-direction: row;
+		justify-content: center;
 		align-items: center;
 
-		background-color: #222;
-		border: #333 solid 1px;
-		padding: 5px;
-		// font-size: 20px;
-		color: #fff;
-		outline: 0px solid #0000;
-		transition: 0.25s;
-
-		cursor: pointer;
-
-		span {
-			margin-left: 5px;
-		}
-
-		&.no-bg {
-			background: transparent;
-		}
-
-		&.no-border {
-			border: none;
-		}
-
-		&.flat {
-			background: transparent;
-			border: none;
-		}
-
-		&.noPadding {
-			padding: 0;
-		}
-
-		&.round {
-			border-radius: 50%;
-		}
-
-		&:disabled {
-			opacity: 0.5;
-			cursor: no-drop;
-		}
+		background: $sidebar-menu-toggler;
+		border: #000 solid 3px;
+		border-radius: 50%;
+		box-shadow: 0px 0px 20px #000;
 
 		&:hover {
-			background-color: #3338;
-		}
-
-		&:focus {
-			outline: none;
+			background-color: $sidebar-menu-toggler-hover;
 		}
 	}
 
@@ -118,10 +86,11 @@
 	&.isExpanded {
 		.sidebar-menu {
 			// padding: 5px;
-			height: calc(100vh - 40px);
-			// height: 100vh;
+			height: 100vh;
 		}
 	}
+
+	@include general-button;
 
 	.options-group-button {
 		display: flex;
@@ -129,6 +98,7 @@
 		gap: 5px;
 
 		border-top: #333 solid 1px;
+		background-color: $sidebar-menu-option-color;
 		justify-content: flex-end;
 		height: 0;
 		margin: 0;
@@ -139,17 +109,16 @@
 
 		button {
 			border: none;
-			background: transparent;
+			background: $button-bg-color;
 			&:hover {
-				background-color: #333;
+				background-color: $button-bg-hover-color;
 			}
 		}
 
 		&.isExpanded {
-			min-height: 43px;
-			margin: 5px;
-			margin-bottom: 10px;
-			padding: 5px 0;
+			min-height: 53px;
+			padding: 5px;
+			padding-bottom: 15px;
 			opacity: 1;
 		}
 	}

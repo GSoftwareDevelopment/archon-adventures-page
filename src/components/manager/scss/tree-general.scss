@@ -1,4 +1,4 @@
-$tree-line-color: #444;
+@import "../../../scss/var";
 
 .tree-container {
 	user-select: none;
@@ -21,7 +21,6 @@ $tree-line-color: #444;
 		margin-left: 1em;
 		padding-left: 7px;
 		line-height: 20px;
-		// color: #369;
 		border-left: 1px solid $tree-line-color;
 
 		.node-item {
@@ -30,16 +29,11 @@ $tree-line-color: #444;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
-			// width: 100%;
 
 			color: #fff;
 
 			&.selected {
-				background: linear-gradient(
-					90deg,
-					rgba(255, 255, 255, 0.2),
-					rgba(255, 255, 255, 0.05)
-				);
+				background: $tree-choiced-item;
 				border-left: #ffff solid 2px;
 			}
 
@@ -53,7 +47,7 @@ $tree-line-color: #444;
 			}
 
 			&:hover {
-				background-color: #3338;
+				background-color: $tree-hover-item;
 			}
 		}
 

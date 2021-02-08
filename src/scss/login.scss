@@ -3,9 +3,10 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-	height: 230px;
+	height: 270px;
 	background-color: #400;
 	padding: 20px;
+	font-size: 24px;
 
 	h1,
 	h2 {
@@ -21,6 +22,8 @@
 	}
 
 	input {
+		font-family: inherit;
+		font-size: inherit;
 		padding: 5px;
 		background: transparent;
 		border: none;
@@ -30,10 +33,22 @@
 	}
 
 	button {
+		display: flex;
+		align-items: center;
 		margin-top: 15px;
 		padding: 10px;
-		background: #000;
-		border: #333 solid 1px;
+		background: #fff2;
+		border: #000 solid 3px;
 		color: #fff;
+		transition: 0.25s;
+
+		svg {
+			margin-right: 10px;
+		}
+
+		&:hover {
+			background: #fff8;
+			color: #000;
+		}
 	}
 }

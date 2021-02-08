@@ -1,0 +1,65 @@
+@mixin general-button {
+	button {
+		font: inherit;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		background-color: $button-bg-color;
+		border: $button-border;
+		padding: 5px;
+		// font-size: 20px;
+		color: #fff;
+		// outline: 0px solid #0000;
+		transition: 0.25s;
+
+		cursor: pointer;
+
+		span {
+			margin-left: 5px;
+		}
+
+		&.no-bg {
+			background: transparent;
+		}
+
+		&.no-border {
+			border: none;
+		}
+
+		&.flat {
+			background: transparent;
+			border: none;
+		}
+
+		&.noPadding {
+			padding: 0;
+		}
+
+		&.round {
+			border-radius: 50%;
+		}
+
+		&.active {
+			border-bottom: #fff solid 3px;
+		}
+
+		&:hover {
+			background-color: $button-bg-hover-color;
+		}
+
+		&:focus {
+			outline: none;
+		}
+
+		&:disabled {
+			opacity: 0.25;
+			border: #0000 3px solid;
+			cursor: default;
+
+			&:hover {
+				background-color: transparent;
+			}
+		}
+	}
+}

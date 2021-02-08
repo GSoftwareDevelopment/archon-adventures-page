@@ -1,6 +1,4 @@
-$bg-color-normal: #0004;
-$border-color-normal: #fff2;
-$border-color-focused: #fff8;
+@import "./var";
 
 @import "edit-helpers";
 
@@ -8,11 +6,11 @@ $border-color-focused: #fff8;
 	display: flex;
 	flex-direction: column;
 
-	height: 100%;
 	width: 280px;
 
+	background: $window-background;
 	text-shadow: none;
-	// transition: 0.25s;
+	transition: 0.25s;
 
 	&.maximized {
 		position: fixed;
@@ -21,8 +19,6 @@ $border-color-focused: #fff8;
 
 		width: calc(100% - 280px);
 		height: 100%;
-
-		background-color: #400d;
 	}
 
 	&.minimized {
@@ -70,12 +66,6 @@ $border-color-focused: #fff8;
 
 @mixin generalEdit-header {
 	.header {
-		// font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-		// font-size: 16px;
-		font-weight: bold;
-
-		box-sizing: border-box;
-
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -85,9 +75,10 @@ $border-color-focused: #fff8;
 
 		margin: 0px;
 		padding: 5px;
-		// background-color: #333;
 		box-shadow: 0 -10px 10px #000;
 		z-index: 1;
+
+		font-weight: bold;
 
 		span {
 			overflow: hidden;
@@ -114,8 +105,9 @@ $border-color-focused: #fff8;
 				padding: 0;
 				margin: 0;
 				border: 0;
+				margin-left: 5px;
 
-				background-color: #222;
+				background-color: $window-control-button-bg;
 				color: #fff;
 				transition: 0.25s;
 
@@ -130,7 +122,7 @@ $border-color-focused: #fff8;
 
 				&:not(:disabled) {
 					&:hover {
-						background-color: #444;
+						background-color: $window-control-button-hover;
 					}
 				}
 			}
@@ -140,26 +132,19 @@ $border-color-focused: #fff8;
 
 @mixin generalEdit-form {
 	form {
-		// font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-		// font-size: 14px;
-		// text-shadow: none;
-
-		margin-top: 0;
-		padding: 5px;
-
 		display: flex;
 		flex-direction: column;
 
-		width: 100%;
-		height: 100%;
-		overflow-y: auto;
-		// overflow-x: hidden;
+		padding: 5px;
+
+		overflow-y: hidden;
+		overflow-x: hidden;
 
 		fieldset {
 			border: none;
 			margin: 0;
 			padding: 0;
-			border-bottom: $border-color-normal solid 1px;
+			border-bottom: $form-control-border-color-normal solid 1px;
 		}
 
 		label {
@@ -169,7 +154,7 @@ $border-color-focused: #fff8;
 
 		legend {
 			font-weight: bold;
-			border-bottom: $border-color-normal solid 1px;
+			border-bottom: $form-control-border-color-normal solid 1px;
 			width: 100%;
 			padding: 5px;
 			margin-bottom: 5px;
@@ -177,19 +162,21 @@ $border-color-focused: #fff8;
 
 		input {
 			display: block;
-			padding: 5px;
-			background-color: $bg-color-normal;
+			padding: 8px;
+			background-color: $form-control-bg-color-normal;
 			border: none;
-			border-bottom: $border-color-normal solid 1px;
+			border-bottom: $form-control-border-color-normal solid 3px;
 			width: 100%;
 			cursor: text;
 
 			font-weight: bold;
+			font-size: inherit;
 			color: #fff;
 
 			&:focus {
 				outline: none;
-				border-bottom: $border-color-focused solid 1px;
+				background-color: $hover;
+				border-bottom: $form-control-border-color-focused solid 3px;
 			}
 
 			&::-webkit-calendar-picker-indicator {
@@ -205,14 +192,14 @@ $border-color-focused: #fff8;
 
 		select {
 			border: 0;
-			border-bottom: $border-color-normal solid 1px;
+			border-bottom: $form-control-border-color-normal solid 1px;
 			padding: 4px 10px;
-			background-color: $bg-color-normal;
+			background-color: $form-control-bg-color-normal;
 			color: #fff;
 			cursor: pointer;
 
 			option {
-				background-color: $bg-color-normal;
+				background-color: $form-control-bg-color-normal;
 				color: #000;
 			}
 
@@ -224,13 +211,15 @@ $border-color-focused: #fff8;
 		textarea {
 			display: block;
 			width: 100%;
+			min-width: 100%;
+			max-width: 100%;
 			min-height: 200px;
 			height: 100%;
 			border: 0;
-			border-top: $border-color-normal solid 1px;
-			border-bottom: $border-color-normal solid 1px;
+			border-top: $form-control-border-color-normal solid 1px;
+			border-bottom: $form-control-border-color-normal solid 1px;
 			padding: 10px;
-			background-color: $bg-color-normal;
+			background-color: $form-control-bg-color-normal;
 			color: #fff;
 
 			&:disabled {
@@ -239,8 +228,8 @@ $border-color-focused: #fff8;
 
 			&:focus {
 				outline: none;
-				border-top: $border-color-focused solid 1px;
-				border-bottom: $border-color-focused solid 1px;
+				border-top: $form-control-border-color-focused solid 1px;
+				border-bottom: $form-control-border-color-focused solid 1px;
 			}
 		}
 
@@ -250,13 +239,21 @@ $border-color-focused: #fff8;
 			white-space: nowrap;
 
 			&.green {
-				border: #030 solid 1px;
+				border: #000 solid 3px;
 				background-color: #020;
+
+				&:hover {
+					background-color: #060;
+				}
 			}
 
 			&.red {
-				border: #300 solid 1px;
+				border: #000 solid 3px;
 				background-color: #200;
+
+				&:hover {
+					background-color: #600;
+				}
 			}
 		}
 
