@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { db } from "../../../libs/db";
+import { db } from "../libs/db";
 
 const status = {
 	INIT: "init",
