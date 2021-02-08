@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 import WindowsStore from "../../store/windows";
 import LayoutsStore, { Status, ContentTypes } from "../../store/layouts";
+import { ICON_SIZE } from "../general/SidebarMenu";
 
 import NodeTree from "./NodeTree";
 import NodeItem from "./NodeItem";
@@ -20,7 +21,6 @@ import {
 	Trash as IconTrash,
 } from "react-bootstrap-icons";
 
-import { SIZE_PROP } from "../general/menu";
 // const SIZE_PROP = "1.5em";
 
 class TreeLayouts extends Component {
@@ -37,13 +37,13 @@ class TreeLayouts extends Component {
 			this.setState({ selected: null });
 			this.props.setOptions([
 				{
-					icon: <IconCreateLayout size={SIZE_PROP} />,
+					icon: <IconCreateLayout size={ICON_SIZE} />,
 					style: { marginRight: "auto" },
 					title: "New layout...",
 					tip: "Create new layout",
 				},
 				{
-					icon: <IconRefresh size={SIZE_PROP} />,
+					icon: <IconRefresh size={ICON_SIZE} />,
 					tip: "Refresh",
 					onClick: () => {
 						this.getLayoutData();
@@ -91,18 +91,18 @@ class TreeLayouts extends Component {
 
 		this.props.setOptions([
 			{
-				icon: <IconAddElement size={SIZE_PROP} />,
+				icon: <IconAddElement size={ICON_SIZE} />,
 				title: "Add",
 				tip: `Add new element in '${item.contentType}' node`,
 			},
 			{
-				icon: <IconLayoutProps size={SIZE_PROP} />,
+				icon: <IconLayoutProps size={ICON_SIZE} />,
 				title: "Props...",
 				tip: `Edit '${item.contentType}' properties`,
 				onClick: () => this.openElementProps(item),
 			},
 			{
-				icon: <IconMoveBefore size={SIZE_PROP} />,
+				icon: <IconMoveBefore size={ICON_SIZE} />,
 				tip: "Move Up",
 				onClick: () => {
 					LayoutsStore.moveItemInNode(item.parrent.toString(), itemIndex, -1);
@@ -112,7 +112,7 @@ class TreeLayouts extends Component {
 				visible: item.contentType !== ContentTypes.LAYOUT,
 			},
 			{
-				icon: <IconMoveAfter size={SIZE_PROP} />,
+				icon: <IconMoveAfter size={ICON_SIZE} />,
 				tip: "Move Down",
 				onClick: () => {
 					LayoutsStore.moveItemInNode(item.parrent.toString(), itemIndex, 1);
@@ -123,7 +123,7 @@ class TreeLayouts extends Component {
 				visible: item.contentType !== ContentTypes.LAYOUT,
 			},
 			{
-				icon: <IconTrash size={SIZE_PROP} style={{ color: "#f00" }} />,
+				icon: <IconTrash size={ICON_SIZE} style={{ color: "#f00" }} />,
 				style: { marginLeft: "auto" },
 				tip: "Delete",
 			},

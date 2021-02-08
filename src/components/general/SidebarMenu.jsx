@@ -7,6 +7,12 @@ import { withRouter } from "react-router-dom";
 import CustomScrollbar from "../layout/CustomScrollbar";
 import { ButtonsGroup } from "./Window";
 
+//
+
+export const ICON_SIZE = "1.5em";
+
+//
+
 class SidebarMenu extends Component {
 	constructor(props) {
 		super(props);

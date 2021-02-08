@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { SIZE_PROP } from "../general/menu";
+import { ICON_SIZE } from "../general/SidebarMenu";
 import { Folder2 as IconClose } from "react-bootstrap-icons";
 import { Folder2Open as IconOpen } from "react-bootstrap-icons";
 import Drag from "../general/Drag";
@@ -72,9 +72,9 @@ export default class NodeItem extends Component {
 						{haveChildrens && (
 							<button className="flat noPadding" onClick={this.toggleNode}>
 								{isCollapsed ? (
-									<IconClose size={SIZE_PROP} />
+									<IconClose size={ICON_SIZE} />
 								) : (
-									<IconOpen size={SIZE_PROP} />
+									<IconOpen size={ICON_SIZE} />
 								)}
 							</button>
 						)}

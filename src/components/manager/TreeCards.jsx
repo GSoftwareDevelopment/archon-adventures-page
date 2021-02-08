@@ -6,6 +6,7 @@ import { combinePathName } from "../../libs/utils";
 import { db } from "../../libs/db";
 import { Collections, Path } from "../../setup";
 import { toast } from "react-toastify";
+import { ICON_SIZE } from "../general/SidebarMenu";
 
 import * as Icon from "react-bootstrap-icons";
 import NodeTree from "./NodeTree";
@@ -13,9 +14,6 @@ import FileSystemList from "./FileSystemList";
 
 import CardEdit from "./windows/CardEdit";
 import DeleteConfirmation from "./windows/DeleteConfirmation";
-
-import { SIZE_PROP } from "../general/menu";
-// const SIZE_PROP = "1.5em";
 
 class TreeCards extends Component {
 	state = {
@@ -79,7 +77,7 @@ class TreeCards extends Component {
 		const enabled = item && item.name !== null ? true : false;
 		const options = [
 			{
-				icon: <Icon.JournalPlus size={SIZE_PROP} />,
+				icon: <Icon.JournalPlus size={ICON_SIZE} />,
 				title: "New",
 				onClick: () => {
 					console.log(item);
@@ -87,7 +85,7 @@ class TreeCards extends Component {
 				},
 			},
 			{
-				icon: <Icon.PencilSquare size={SIZE_PROP} />,
+				icon: <Icon.PencilSquare size={ICON_SIZE} />,
 				title: "Edit",
 				onClick: () => {
 					this.openCardEdit(item.item);
@@ -95,7 +93,7 @@ class TreeCards extends Component {
 				enabled,
 			},
 			{
-				icon: <Icon.Trash size={SIZE_PROP} style={{ color: "#F00" }} />,
+				icon: <Icon.Trash size={ICON_SIZE} style={{ color: "#F00" }} />,
 				style: { marginLeft: "auto" },
 				tip: "Delete",
 				onClick: () => {

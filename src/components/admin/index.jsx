@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 
 import { ClipboardData as IconDashboard } from "react-bootstrap-icons";
 import Sidebar from "../general/Sidebar";
-import { menuAdmin } from "../general/menu-admin";
+import { menu } from "./sidebar";
 import SidebarMenu from "../general/SidebarMenu";
 
 class Admin extends Component {
@@ -27,7 +27,7 @@ class Admin extends Component {
 					Dashboard
 				</div>
 				<Sidebar>
-					<SidebarMenu items={menuAdmin} active="dashboard" />
+					<SidebarMenu items={menu} active="dashboard" />
 				</Sidebar>
 			</div>
 		);
