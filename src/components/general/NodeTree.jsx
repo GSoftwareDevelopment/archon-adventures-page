@@ -1,4 +1,4 @@
-import "./scss/tree-general.scss";
+import "../../scss/tree-general.scss";
 
 import React, { Component } from "react";
 

@@ -4,7 +4,7 @@ import WindowsStore from "../../store/windows";
 import LayoutsStore, { Status, ContentTypes } from "../../store/layouts";
 import { ICON_SIZE } from "../general/SidebarMenu";
 
-import NodeTree from "./NodeTree";
+import NodeTree from "../general/NodeTree";
 import NodeItem from "./NodeItem";
 import { treeItems } from "./ContentType";
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Collections } from "../../setup";
 
-import NodeTree from "./NodeTree";
+import NodeTree from "../general/NodeTree";
 import FileSystemList from "./FileSystemList";
 
 export default class TreeCalendars extends Component {

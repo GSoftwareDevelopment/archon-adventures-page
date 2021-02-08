@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { ICON_SIZE } from "../general/SidebarMenu";
 
 import * as Icon from "react-bootstrap-icons";
-import NodeTree from "./NodeTree";
+import NodeTree from "../general/NodeTree";
 import FileSystemList from "./FileSystemList";
 
 import CardEdit from "./windows/CardEdit";
