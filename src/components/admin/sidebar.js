@@ -5,6 +5,8 @@ import {
 	BoxArrowLeft as IconLogout,
 } from "react-bootstrap-icons";
 
+import LogoutUser from "./LogoutUser";
+
 export const menu = [
 	{
 		id: "backToSite",
@@ -22,6 +24,7 @@ export const menu = [
 		id: "logoutUser",
 		icon: <IconLogout size={ICON_SIZE} />,
 		name: "Logout User",
-		style: { marginTop: "auto" },
+		style: { marginTop: "auto", marginBottom: "10px" },
+		Component: LogoutUser,
 	},
 ];
