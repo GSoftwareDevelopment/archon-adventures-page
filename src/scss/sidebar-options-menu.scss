@@ -1,0 +1,32 @@
+@import "./var";
+
+.sidebar-options-menu {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+
+	border-top: #333 solid 1px;
+	background-color: $sidebar-menu-option-color;
+	justify-content: flex-end;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	transition: 0.25s;
+	overflow: hidden;
+	opacity: 0;
+
+	button {
+		border: none;
+		background: $button-bg-color;
+		&:hover {
+			background-color: $button-bg-hover-color;
+		}
+	}
+
+	&.isExpanded {
+		min-height: 53px;
+		padding: 5px;
+		padding-bottom: 15px;
+		opacity: 1;
+	}
+}

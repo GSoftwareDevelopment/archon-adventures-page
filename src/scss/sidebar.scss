@@ -15,111 +15,18 @@
 	flex-direction: column;
 	justify-content: flex-end;
 
+	height: 40px;
 	max-height: 100vh;
 
 	cursor: default;
-	box-shadow: -5px 0px 10px #000;
+	transition: 0.25s;
 
-	.sidebar-menu {
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-		padding: 0px;
-		height: 0px;
-		transition: 0.25s;
-		background-color: $sidebar-menu-color;
-
-		overflow: hidden;
-	}
-
-	.user {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		padding: 5px;
-		width: 280px;
-		box-shadow: 0 -10px 10px #000;
-		background-color: $sidebar-user-color;
-		z-index: 1;
-
-		.icon {
-			width: 20px;
-			height: 20px;
-			margin-right: 5px;
-		}
-
-		span {
-			// padding: 5px;
-			text-align: left;
-			width: 155px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-	}
-
-	.toggler {
-		position: absolute;
-		bottom: -10px;
-		right: 0px;
-		width: 60px;
-		height: 60px;
-
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		background: $sidebar-menu-toggler;
-		border: #000 solid 3px;
-		border-radius: 50%;
-		box-shadow: 0px 0px 20px #000;
-
-		&:hover {
-			background-color: $sidebar-menu-toggler-hover;
-		}
-	}
-
-	// &:hover,
 	&.isExpanded {
 		height: 100vh;
-		.sidebar-menu {
-			// padding: 5px;
-			height: 100%;
-			// height: 100vh;
-		}
 	}
 
 	@include general-button;
-
-	.options-group-button {
-		display: flex;
-		flex-direction: row;
-		gap: 5px;
-
-		border-top: #333 solid 1px;
-		background-color: $sidebar-menu-option-color;
-		justify-content: flex-end;
-		height: 0;
-		margin: 0;
-		padding: 0;
-		transition: 0.25s;
-		overflow: hidden;
-		opacity: 0;
-
-		button {
-			border: none;
-			background: $button-bg-color;
-			&:hover {
-				background-color: $button-bg-hover-color;
-			}
-		}
-
-		&.isExpanded {
-			min-height: 53px;
-			padding: 5px;
-			padding-bottom: 15px;
-			opacity: 1;
-		}
-	}
 }
+
+@import "./sidebar-toggler";
+@import "./sidebar-user";

@@ -1,0 +1,20 @@
+button.sidebar-toggler {
+	position: absolute;
+	bottom: -10px;
+	right: 0px;
+	width: 60px;
+	height: 60px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background: $sidebar-menu-toggler;
+	border: #000 solid 3px;
+	border-radius: 50%;
+	box-shadow: 0px 0px 20px #000;
+
+	&:hover {
+		background-color: $sidebar-menu-toggler-hover;
+	}
+}
