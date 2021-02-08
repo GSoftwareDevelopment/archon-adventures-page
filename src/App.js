@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 
-import UsersStore, { status as userStatus } from "./store/users";
+import UsersStore, {
+	status as userStatus,
+	state as userState,
+} from "./store/users";
 
 import { EmojiDizzy } from "react-bootstrap-icons";
 import PageLayout from "./components/layout/PageLayout";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Login from "./components/admin/Login";
-import Sidebar from "./components/admin/Sidebar";
+import {
+	BrowserRouter as Router,
+	Redirect,
+	Route,
+	Switch,
+} from "react-router-dom";
+import Login from "./Login";
+import Admin from "./components/admin";
+import SiteManager from "./components/manager/";
 import { ToastContainer } from "react-toastify";
 
 class App extends Component {
@@ -16,8 +25,12 @@ class App extends Component {
 	}
 
 	render() {
-		switch (UsersStore.getStatus()) {
+		const authStatus = UsersStore.getStatus();
+		switch (authStatus) {
 			case userStatus.DONE:
+			case userStatus.WARN:
+			case userStatus.SILENT:
+				const authState = UsersStore.getState();
 				return (
 					<Router>
 						<ToastContainer
@@ -26,15 +39,24 @@ class App extends Component {
 							pauseOnHover
 							pauseOnFocusLoss
 						/>
-						<Sidebar />
 						<Switch>
 							<Route key="authorize" exact path="/auth">
 								<div className="fullscreen h-center v-center">
 									<Login />
 								</div>
 							</Route>
-
-							<PageLayout />
+							<Route key="dashboard" exact path="/dashboard">
+								{authState === userState.authorized ? (
+									<div className="fullscreen">
+										<Admin />
+									</div>
+								) : (
+									<Redirect to="/auth" />
+								)}
+							</Route>
+							<PageLayout>
+								<SiteManager />
+							</PageLayout>
 						</Switch>
 					</Router>
 				);

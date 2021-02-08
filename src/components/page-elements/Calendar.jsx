@@ -11,7 +11,7 @@ import Card from "./Card";
 
 import ContentLoader from "../layout/ContentLoader";
 
-import * as Messages from "../layout/Messages";
+import * as Messages from "../../libs/Messages";
 
 import MarkdownView from "react-showdown";
 import { JournalX as IconJournalX } from "react-bootstrap-icons";

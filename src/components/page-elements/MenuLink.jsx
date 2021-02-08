@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import LayoutsStore from "../../store/layouts";
 import { languageCheck } from "../../libs/utils";
 
-import * as Messages from "../layout/Messages";
+import * as Messages from "../../libs/Messages";
 import { Link } from "react-router-dom";
 
 function MenuLink(props) {

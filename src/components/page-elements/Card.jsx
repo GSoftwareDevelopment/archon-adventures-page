@@ -6,7 +6,7 @@ import LayoutsStore from "../../store/layouts";
 import { languageCheck, pathDestructure } from "../../libs/utils";
 
 import "./scss/card.scss";
-import * as Messages from "../layout/Messages";
+import * as Messages from "../../libs/Messages";
 
 import MarkdownView from "react-showdown";
 import { showdown_ext, showdown_options } from "./Card-markdown-ext.js";
