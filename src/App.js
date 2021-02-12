@@ -14,7 +14,9 @@ import {
 	Route,
 	Switch,
 } from "react-router-dom";
-import Login from "./Login";
+import Login from "./components/auth/Login";
+import ConfirmRegistration from "./components/auth/ConfirmRegistration";
+import ResetPassword from "./components/auth/ResetPassword";
 import Admin from "./components/admin";
 import SiteManager from "./components/manager/";
 import { ToastContainer } from "react-toastify";
@@ -40,9 +42,22 @@ class App extends Component {
 							pauseOnFocusLoss
 						/>
 						<Switch>
-							<Route key="authorize" exact path="/auth">
+							<Route key="authorize" exact path="/auth/:id">
 								<div className="fullscreen h-center v-center">
-									<Login />
+									<Switch>
+										<Route
+											key="confirm-reg"
+											path="/auth/confirm"
+											component={ConfirmRegistration}
+										/>
+										<Route
+											key="pwd-reset"
+											path="/auth/reset"
+											component={ResetPassword}
+										/>
+										<Route key="login" path="/auth/login" component={Login} />
+										<Redirect to="/auth/login" />
+									</Switch>
 								</div>
 							</Route>
 							<Route key="admin" exact path="/admin/:id">
@@ -51,7 +66,7 @@ class App extends Component {
 										<Admin />
 									</div>
 								) : (
-									<Redirect to="/auth" />
+									<Redirect to="/auth/login" />
 								)}
 							</Route>
 							<PageLayout>
