@@ -3,3 +3,5 @@ import "./msgs-siteLayout";
 
 import "./msgs-CMS";
 import "./msgs-CMS-PropsOfCalendar";
+
+import "./msgs-admin-profile";

@@ -1,0 +1,321 @@
+.admin {
+	> .content {
+		.basic-fieldset {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			width: 630px;
+			gap: 20px;
+
+			.user-photo {
+				border: #000 solid 3px;
+				border-radius: 50%;
+
+				width: 250px;
+				height: 250px;
+				box-shadow: 5px 5px 10px #000;
+
+				background-color: #000;
+				background-position: center;
+				background-size: cover;
+			}
+
+			.fields {
+				flex-grow: 2;
+			}
+		}
+
+		.extra-fieldset {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+
+			width: 630px;
+			gap: 20px;
+
+			div.info,
+			div.footer {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				gap: 20px;
+
+				p {
+					padding: 0;
+					margin: 0;
+				}
+			}
+
+			> div.footer-info {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				gap: 20px;
+
+				border-top: #000 solid 1px;
+				padding: 15px;
+				width: 100%;
+
+				p {
+					padding: 0;
+					margin: 0;
+				}
+			}
+		}
+
+		.extra-field {
+			display: flex;
+			flex-direction: column;
+			width: 583px;
+
+			div.control-buttons {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				border-bottom: #fff2 solid 3px;
+			}
+
+			div.row {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				width: 100%;
+			}
+
+			div.field {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				width: 100%;
+
+				label {
+					width: 100%;
+				}
+
+				input {
+					border: none;
+				}
+
+				.text {
+					width: 100%;
+					padding: 8px;
+					font-size: inherit;
+
+					p {
+						margin: 0;
+						padding: 0;
+					}
+				}
+			}
+		}
+
+		.new-extra-field {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			gap: 10px;
+
+			border-top: #fff2 solid 1px;
+			border-bottom: #fff2 solid 1px;
+
+			div.label {
+				width: 182px;
+				margin-left: 10px;
+			}
+
+			div.filler {
+				width: 280px;
+			}
+
+			input {
+				width: 280px;
+			}
+
+			select {
+				width: 280px;
+			}
+
+			select.field-type-select {
+				width: auto;
+			}
+
+			textarea {
+				min-width: 280px;
+				max-width: 280px;
+				width: 280px;
+				min-height: 50px;
+				max-height: 100px;
+				height: 100px;
+			}
+
+			div.control-buttons {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				align-items: center;
+			}
+		}
+
+		.security {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+
+			width: 630px;
+			gap: 20px;
+
+			> div {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				width: 100%;
+
+				p {
+					padding: 0;
+					margin: 0;
+				}
+
+				.text {
+					width: 100%;
+				}
+			}
+		}
+
+		.footer {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			align-items: center;
+
+			width: 630px;
+			gap: 20px;
+		}
+	}
+
+	//
+	//
+	//
+
+	@media screen and (max-width: 640px) {
+		> .content {
+			.basic-fieldset {
+				flex-direction: column;
+				width: 100%;
+
+				.user-photo {
+					width: 200px;
+					height: 200px;
+				}
+
+				.fields {
+					width: 100%;
+					flex-grow: unset;
+				}
+			}
+
+			.extra-fieldset {
+				flex-direction: column;
+				width: 100%;
+
+				div.info {
+					flex-direction: column;
+					justify-content: center;
+				}
+
+				div.footer-info {
+					flex-direction: column;
+					justify-content: center;
+					padding-bottom: 0;
+				}
+			}
+
+			.extra-field {
+				width: 100%;
+
+				div.field {
+					label {
+						width: 100%;
+					}
+
+					.text {
+						width: 100%;
+					}
+				}
+			}
+
+			.new-extra-field {
+				// border: #000 solid 3px;
+				// background: #0008;
+
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				width: calc(100vw - 40px);
+				padding: 0 10px;
+				padding-top: 5px;
+
+				div.label {
+					width: 100%;
+				}
+
+				div.filler {
+					display: none;
+				}
+
+				input {
+					width: 100%;
+				}
+
+				select {
+					width: 100%;
+				}
+
+				select.field-type-select {
+					width: 100%;
+				}
+
+				textarea {
+					min-width: 100%;
+					max-width: 100%;
+					width: 100%;
+				}
+
+				div.control-buttons {
+					width: 100%;
+				}
+			}
+
+			.security {
+				width: 100%;
+
+				> div {
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					width: 100%;
+
+					p {
+						padding: 0;
+						margin: 0;
+						width: 100%;
+					}
+				}
+			}
+
+			.footer {
+				flex-direction: column;
+				align-items: center;
+
+				width: 100%;
+			}
+		}
+	}
+}
