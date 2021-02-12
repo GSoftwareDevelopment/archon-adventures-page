@@ -60,7 +60,7 @@ W projekcie "zaszyte" jest zaplecze CMSa do zarządzania stroną oraz część a
     - [ ] usuwanie
   - Elementy
 
-  Poszczególne elementy zostały opisane [TU](/src/components/page-elements/elements.md)
+  Poszczególne elementy zostały opisane [TU](/src/components/layout/page-elements/elements.md)
 
   Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) _Występowanie symbolu jest równoważne z implementacją._
 
@@ -78,7 +78,7 @@ W projekcie "zaszyte" jest zaplecze CMSa do zarządzania stroną oraz część a
     - [ ] - Galery `[----]`
     - [ ] - Comments `[----]`
   - [ ] - Style elementów `[----]`
-      Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/page-elements/scss/) "zaszytymi" w aplikacji.
+      Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/layout/page-elements/scss/) "zaszytymi" w aplikacji.
 
     Przewiduję możliwość definiowania własnych styli dla każdego elementu, z pomocą biblioteki [**Radium**](https://github.com/FormidableLabs/radium/tree/master/docs/guides) i zaszyciu ich w bazie danych.
 
