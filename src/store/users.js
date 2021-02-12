@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { client, authorizeDB } from "../libs/db";
+import { client, authorizeDB, db } from "../libs/db";
+import { Collections } from "../setup";
 import { toast } from "react-toastify";
 
 export const state = {
@@ -17,9 +18,13 @@ export const status = {
 	ERROR: "error",
 };
 
+const disallowFields = ["displayName", "firstName", "lastName", "imageURL"];
+
 class UsersStore {
 	status = status.INIT;
 	state = state.unknown;
+	profile = null;
+	customData = null;
 
 	constructor() {
 		makeAutoObservable(this);
@@ -39,6 +44,7 @@ class UsersStore {
 			client.auth.switchToUserWithId(currentUser.id);
 			this.status = status.DONE;
 		}
+		await this.fetchUserData();
 		console.log(currentUser);
 	}
 
@@ -58,15 +64,72 @@ class UsersStore {
 		}
 	}
 
-	getCurrentUserName() {
+	get userData() {
+		return { profile: this.profile, customData: this.customData };
+	}
+
+	get userName() {
+		if (this.customData) {
+			if (this.customData.displayName) {
+				return this.customData.displayName;
+			} else if (this.customData.firstName || this.customData.lastName) {
+				return this.customData.firstName + " " + this.customData.lastName;
+			}
+		}
+		if (this.profile) {
+			if (this.profile.data) {
+				if (this.profile.data.email) {
+					return this.profile.data.email;
+				}
+			}
+		}
+		return "Guset";
+	}
+
+	async fetchUserData() {
 		const currentUser = this.getCurrentUser();
 		if (currentUser) {
-			const userData = currentUser.profile.data;
-			let currentUserName = "Guest";
-			if (userData && userData.email) currentUserName = userData.email;
-			return currentUserName;
+			await currentUser.auth.refreshCustomData().then(() => {
+				runInAction(() => {
+					this.customData = currentUser.customData;
+					this.profile = currentUser.profile;
+				});
+			});
 		} else {
-			return "Guest";
+			this.profile = null;
+			this.customData = null;
+		}
+	}
+
+	async updateUserCustomData(newCustomData) {
+		const { _id, userId, role, ...oldCustomData } = this.customData;
+		let $unset = undefined;
+		for (const field in oldCustomData) {
+			if (disallowFields.includes(field)) continue;
+			if (!newCustomData[field]) {
+				if (!$unset) $unset = {};
+				$unset[field] = 1;
+			}
+		}
+		try {
+			const result = await db
+				.collection(Collections.USERS)
+				.updateOne(
+					{ _id: { $oid: _id } },
+					$unset
+						? { $set: { ...newCustomData }, $unset }
+						: { $set: { ...newCustomData } }
+				);
+			runInAction(() => {
+				if (result.modifiedCount === 1) {
+					toast.success("Your profile was updated.");
+				} else {
+					toast.error("Something went wrong!");
+				}
+			});
+		} catch (error) {
+			console.error(error);
+			toast.error(error.message);
 		}
 	}
 
@@ -98,6 +161,7 @@ class UsersStore {
 				}
 				this.status = status.DONE;
 				console.log("Success logged in as ", user.loggedInProviderType);
+				console.log(user);
 			});
 			return user;
 		} catch (error) {
