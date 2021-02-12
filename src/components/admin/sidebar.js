@@ -2,29 +2,29 @@ import { ICON_SIZE } from "../general/SidebarMenu";
 import {
 	ClipboardData as IconDashboard,
 	Back as IconBackToPage,
-	BoxArrowLeft as IconLogout,
+	PersonBadge as IconAccount,
 } from "react-bootstrap-icons";
 
-import LogoutUser from "./LogoutUser";
+import Account from "./Account";
 
 export const menu = [
 	{
-		id: "backToSite",
-		icon: <IconBackToPage size={ICON_SIZE} />,
-		name: "Back to Site Manager",
-		redirectTo: "/",
+		id: "account",
+		icon: <IconAccount size={ICON_SIZE} />,
+		name: "Account",
+		Component: Account,
 	},
 	{
 		id: "dashboard",
 		icon: <IconDashboard size={ICON_SIZE} />,
 		name: "Dashboard",
-		redirectTo: "/dashboard",
+		redirectTo: "/admin/dashboard",
 	},
 	{
-		id: "logoutUser",
-		icon: <IconLogout size={ICON_SIZE} />,
-		name: "Logout User",
+		id: "backToSite",
+		icon: <IconBackToPage size={ICON_SIZE} />,
+		name: "Back to Site Manager",
 		style: { marginTop: "auto", marginBottom: "10px" },
-		Component: LogoutUser,
+		redirectTo: "/",
 	},
 ];

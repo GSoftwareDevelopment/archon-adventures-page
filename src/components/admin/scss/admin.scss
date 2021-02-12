@@ -1,5 +1,6 @@
 @import "../../../scss/var";
 @import "../../../scss/edit-general";
+@import "../../../scss/edit-helpers";
 @import "../../../scss/button";
 
 .admin {
@@ -8,7 +9,7 @@
 	font-weight: 100;
 
 	width: 100%;
-	height: 100%;
+	flex-grow: 2;
 
 	background: rgb(37, 0, 68);
 	background: linear-gradient(
@@ -18,10 +19,11 @@
 	);
 
 	@include generalEdit-form;
-
 	@include general-button;
 
 	> .header {
+		position: sticky;
+		top: 0;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -32,6 +34,43 @@
 		font-size: 1.5em;
 		font-weight: bold;
 
+		background: rgb(37, 0, 68);
 		border-bottom: #000 solid 3px;
 	}
+
+	> .content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+		padding: 20px;
+
+		// height: 100%;
+		margin-right: 280px;
+
+		fieldset {
+			padding: 15px;
+
+			background-color: #0001;
+			// box-shadow: -0px 0px 5px #0008;
+		}
+
+		legend {
+			font-weight: bold;
+			width: unset;
+			padding: 5px 0;
+			padding-left: 10px;
+			padding-right: 15px;
+			border: none;
+		}
+	}
+
+	@media screen and (max-width: 940px) {
+		> .content {
+			margin-right: 0;
+		}
+	}
+
+	@include generalEdit-form;
 }
