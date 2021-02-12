@@ -17,8 +17,8 @@ Chciałem stworzyć stronę internetową która nie potrzebowałaby **_dedykowan
 
 Projekt składa się z dwóch części:
 
-- aplikacji strony
-- interfejsu CMS
+- aplikacja strony
+- zaplecze CMS oraz administracja aplikacji
 
 ## Aplikacja strony
 
@@ -29,19 +29,29 @@ To nic innego, jak "parser" informacji zawartych w bazie danych na podstawie kt�
 W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początkowej fazie rozwoju i zawiera:
 
 - Proces autoryzacji
+
   - [x] logowanie
   - [x] wylogowanie
-  - [ ] podział na role użytkowników
+  - [x] podział na role użytkowników
+    - Dostępne role
+      - Super-User - nieograniczony dostęp do zasobów
+      - Maker - Administrator strony
+      - Writer - Administrator treści
+      - Mod - Moderator treści
+      - User - może przeglądać treści oraz je komentować
+      - Guest - przeglądanie treści
+    - Implementacja ról po stronie bazy danych.
+
 - Zarządzanie szablonami
 
   - [ ] tworzenie nowego szablonu
   - [x] modyfikacja
     - [x] widok okna właściwości szablonu
-    - [ ] zapis właściwości szablonu
+    - [x] zapis właściwości szablonu
   - [ ] usuwanie
   - Operacje na elementach
     - [ ] tworzenie nowych elementów
-    - [ ] edycja
+    - [x] edycja
     - [ ] usuwanie
   - Elementy
 
@@ -59,13 +69,15 @@ W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początk
     - [x] - Menu-Item `[-R--]`
     - [x] - Lang-Selector `[-R--]
     - [x] - Card `[CRUD]`
-    - [x] - Calendar (odpowiednik bloga) `[-R--]`
+    - [x] - Calendar (odpowiednik bloga) `[-RU-]`
     - [ ] - Galery `[----]`
     - [ ] - Comments `[----]`
   - [ ] - Style elementów `[----]`
       Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/page-elements/scss/) "zaszytymi" w aplikacji.
 
     Przewiduję możliwość definiowania własnych styli dla każdego elementu, z pomocą biblioteki [**Radium**](https://github.com/FormidableLabs/radium/tree/master/docs/guides) i zaszyciu ich w bazie danych.
+
+## Zaplecze
 
 ## Podsumowanie
 
