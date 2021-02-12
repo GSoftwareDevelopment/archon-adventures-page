@@ -44,12 +44,10 @@
 			border-bottom: #fff solid 3px;
 		}
 
+		&:focus,
 		&:hover {
-			background-color: $button-bg-hover-color;
-		}
-
-		&:focus {
 			outline: none;
+			background-color: $button-bg-hover-color;
 		}
 
 		&:disabled {

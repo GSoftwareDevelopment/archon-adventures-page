@@ -14,7 +14,7 @@ import {
 
 class Sidebar extends Component {
 	state = {
-		isExpanded: false,
+		isExpanded: this.props.isExpanded,
 	};
 
 	toggleVisibility = () => {

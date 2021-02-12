@@ -9,6 +9,7 @@ export const Collections = {
 	CARDS: "card",
 	CALENDAR: "calendar",
 	GALLERIES: "galery",
+	USERS: "users",
 };
 
 // Internal path identyficators

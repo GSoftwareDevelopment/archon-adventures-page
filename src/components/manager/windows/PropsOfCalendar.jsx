@@ -115,7 +115,7 @@ class PropsOfCalendar extends Component {
 					/>
 					<Input
 						className="justify-between hover"
-						style={{ textAlign: "right", width: "75px" }}
+						inputStyle={{ textAlign: "right", width: "75px" }}
 						type="number"
 						name="limit"
 						min="0"

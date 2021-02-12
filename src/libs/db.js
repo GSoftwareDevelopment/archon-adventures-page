@@ -3,6 +3,7 @@ import {
 	AnonymousCredential,
 	UserPasswordCredential,
 	RemoteMongoClient,
+	UserPasswordAuthProviderClient,
 } from "mongodb-stitch-browser-sdk";
 import { APP_ID, DB_NAME } from "../setup";
 
@@ -10,7 +11,6 @@ import { APP_ID, DB_NAME } from "../setup";
 const client = Stitch.hasAppClient(APP_ID)
 	? Stitch.getAppClient(APP_ID)
 	: Stitch.initializeDefaultAppClient(APP_ID);
-// console.log(client);
 
 // Get a MongoDB Service Client
 // This is used for logging in and communicating with Stitch
@@ -38,4 +38,8 @@ const isCurrentUserAnonymous = () => {
 	return !currentUser || currentUser.loggedInProviderType === "anon-user";
 };
 
-export { client, authorizeDB, db, isCurrentUserAnonymous };
+const getProviderClient = () => {
+	return client.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
+};
+
+export { client, authorizeDB, db, isCurrentUserAnonymous, getProviderClient };

@@ -1,14 +1,18 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import UsersStore from "../../store/users";
+
 import { withRouter } from "react-router-dom";
 import { ICON_SIZE } from "./SidebarMenu";
 
 import * as Icon from "react-bootstrap-icons";
 
 class SidebarUser extends Component {
-	render() {
-		const userName = UsersStore.getCurrentUserName();
+	async componentDidMount() {
+		await UsersStore.fetchUserData();
+	}
 
+	render() {
 		return (
 			<div className="sidebar-user">
 				<button
@@ -19,11 +23,11 @@ class SidebarUser extends Component {
 					title="Open Dashboard..."
 				>
 					<Icon.Person size={ICON_SIZE} />
-					<span>{userName}</span>
+					<span>{UsersStore.userName}</span>
 				</button>
 			</div>
 		);
 	}
 }
 
-export default withRouter(SidebarUser);
+export default withRouter(observer(SidebarUser));

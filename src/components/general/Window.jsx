@@ -108,6 +108,7 @@ export default class Window extends Component {
  *
  * @typedef {Object} InputPropsInterface
  * @property {string} [className] - Class string definition
+ * @property {React.CSSProperties} [style]
  * @property {string} type - Element <input type="..." /> attribute
  * @property {string} [name] - Element <input name="..." /> attribute
  * @property {string} [label] - Element label
@@ -121,6 +122,8 @@ export default class Window extends Component {
  */
 export function Input({
 	className,
+	style,
+	inputStyle,
 	type,
 	name,
 	label,
@@ -129,17 +132,32 @@ export function Input({
 	...props
 }) {
 	return label ? (
-		<div className={className} title={tip}>
+		<div className={className} style={style} title={tip}>
 			<label
 				htmlFor={name}
 				style={{ whiteSpace: noWrapLabel ? "nowrap" : "normal" }}
 			>
 				{label}
 			</label>
-			<input name={name} id={name} type={type} autoComplete="off" {...props} />
+			<input
+				name={name}
+				id={name}
+				type={type}
+				autoComplete="off"
+				style={inputStyle}
+				{...props}
+			/>
 		</div>
 	) : (
-		<input name={name} id={name} type={type} autoComplete="off" {...props} />
+		<input
+			className={className}
+			style={style}
+			name={name}
+			id={name}
+			type={type}
+			autoComplete="off"
+			{...props}
+		/>
 	);
 }
 
