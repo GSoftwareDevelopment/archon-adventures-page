@@ -24,9 +24,9 @@ Projekt składa się z dwóch części:
 
 To nic innego, jak "parser" informacji zawartych w bazie danych na podstawie których, buduje szkielet routingu oraz wyświetla treści.
 
-## Interfejs CMS
+## Zaplecze CMS
 
-W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początkowej fazie rozwoju i zawiera:
+W projekcie "zaszyte" jest zaplecze CMSa do zarządzania stroną oraz część administracyjna aplikacji. Są one w zaawansowanej fazie rozwoju i zawierą:
 
 - Proces autoryzacji
 
@@ -41,6 +41,11 @@ W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początk
       - User - może przeglądać treści oraz je komentować
       - Guest - przeglądanie treści
     - Implementacja ról po stronie bazy danych.
+
+- Profile użytkowników
+
+  - [ ] Zakładanie kont
+  - [x] Edycja profili
 
 - Zarządzanie szablonami
 
@@ -57,7 +62,7 @@ W projekcie "zaszyty" interfejs CMSa do zarządzania stroną. Jest on w początk
 
   Poszczególne elementy zostały opisane [TU](/src/components/page-elements/elements.md)
 
-  Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) Występowanie symbolu jest równoważne z implementacją.
+  Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) _Występowanie symbolu jest równoważne z implementacją._
 
   - [x] - elementy blokowe
     - [x] - Header `[-R--]`
