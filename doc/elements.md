@@ -86,7 +86,8 @@ Tworzy pozycje menu.
 
 **Atrybuty**:
 
-- [x] _id_ - identyfikator kojarzony z elementem router-content
+- ~~[x] _id_ - identyfikator kojarzony z elementem router-content~~
+- [x] _destRoute_ - ścieżka docelowa trasy (więcej o zmianie [tutaj, v2.3](./db.md#2.3))
 - [x] _title_ - nazwa wyświetlana (`langObject`)
 
 ### `lang-selector`
@@ -108,11 +109,14 @@ Wyświetla treść karty podanej jako argument _name_.
 
     Domyślnie: ustawiona
 
-  - [ ] _useMarkdown_ - flaga, pozwala używać do formatowania treści karty języka znaczników Markdown.
+  - [ ] _useMarkdown_ - flaga, pozwala używać do formatowania treści karty język znaczników Markdown.
 
     Domyślnie: ustawiona
 
-  - [x] _body_ - zawiera treść karty (`langObject`)
+  - [ ] _allowUserComments_ - flaga, dopuszczająca możliwość komentowania przez zarejestrowanych użytkowników
+  - [ ] _allowAnonimousComments_ flaga, podobnie jak _allowUserComments_ tylko dla użytkowników anonimowych
+
+- [x] _body_ - zawiera treść karty (`langObject`)
 
 ### `calendar`
 
@@ -151,7 +155,7 @@ Jak wspomniałem wcześniej, elementy szablonu można teoretycznie układać w d
 
 Przedstawiam więc przewidziany właściwy układ, który na pewno będzie działać bez zaskoczenia :P
 
-```
+```txt
 ROOT
  |
  +- header
