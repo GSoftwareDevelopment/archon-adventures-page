@@ -73,17 +73,14 @@ export function parseElements(parent, childen) {
 	currentLevel++;
 	console.groupCollapsed(`${currentLevel} > Node element: ${parent}`);
 
-	const childrenResult = childen.map((childId, index) => {
-		const element = layoutsStore.getElementById(childId.toString());
+	const childrenResult = childen.map((_childId, index) => {
+		const childId = _childId.toString();
+		const element = layoutsStore.getElementById(childId);
+		// if (!element || element?._new) debugger;
 		const { contentType, childs, ...attr } = element;
 		if (layoutElements[contentType]) {
 			attr._parentContentType = parent;
-			return layoutElements[contentType](
-				childId.toString(),
-				attr,
-				childs,
-				currentLevel
-			);
+			return layoutElements[contentType](childId, attr, childs, currentLevel);
 		} else {
 			console.log(`content type '${contentType} element not recognized.`);
 			return null;

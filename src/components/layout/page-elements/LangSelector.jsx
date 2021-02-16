@@ -17,33 +17,42 @@ function LangSelector(props) {
 	const currentLayout = LayoutsStore.current;
 	const langList = currentLayout.langs;
 
-	const child = (
-		<ul>
-			{langList.map((langDef) => {
-				let langSymbol = langDef.symbol;
-				return (
-					<li
-						key={langSymbol}
-						title={langDef.name}
-						onClick={() => {
-							changeLanguage(langSymbol);
-						}}
-					>
-						<Flag
-							name={langSymbol === "en" ? "GB" : langSymbol}
-							format="svg"
-							alt={langDef.name}
-							basePath="/imgs/flags"
-						/>
-					</li>
-				);
-			})}
-		</ul>
+	return (
+		<ConditionalWrapper
+			condition={props.attr._parentContentType === "router-menu"}
+			wrapperTrue={(children) => <li id="lang-selector">{children}</li>}
+			wrapperFalse={(children) => <nav id="lang-selector">{children}</nav>}
+		>
+			<ul>
+				{langList.map((langDef) => {
+					let langSymbol = langDef.symbol;
+					return (
+						<li
+							key={langSymbol}
+							title={langDef.name}
+							onClick={() => {
+								changeLanguage(langSymbol);
+							}}
+						>
+							<Flag
+								name={langSymbol === "en" ? "GB" : langSymbol}
+								format="svg"
+								alt={langDef.name}
+								basePath="/imgs/flags"
+							/>
+						</li>
+					);
+				})}
+			</ul>
+		</ConditionalWrapper>
 	);
-
-	if (props.attr._parentContentType === "router-menu")
-		return <li id="lang-selector">{child}</li>;
-	else return <nav id="lang-selector">{child}</nav>;
 }
 
 export default observer(LangSelector);
+
+const ConditionalWrapper = ({
+	condition,
+	wrapperTrue,
+	wrapperFalse,
+	children,
+}) => (condition ? wrapperTrue(children) : wrapperFalse(children));

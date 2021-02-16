@@ -2,15 +2,14 @@ import "./scss/router-menu.scss";
 
 import React, { Component } from "react";
 import { observer } from "mobx-react";
-import LayoutsStore from "../../../store/layouts";
+import LayoutsStore, { ContentTypes } from "../../../store/layouts";
 
 class MenuRouter extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			collapsed: true,
-		};
-	}
+	state = {
+		collapsed: true,
+	};
+
+	routes;
 
 	toggleCollapse = () => {
 		this.setState({ collapsed: !this.state.collapsed });
@@ -21,16 +20,13 @@ class MenuRouter extends Component {
 	};
 
 	render() {
-		const currentLayout = LayoutsStore.current;
-		this.routes = currentLayout.childs
-			.map((id) => {
-				return LayoutsStore.getElementById(id.toString());
-			})
-			.filter((element) => element.contentType === "router-content")
-			.map((element) => ({
-				id: element.id,
-				path: element.path,
-			}));
+		// const currentLayout = LayoutsStore.current;
+		this.routes = LayoutsStore.getElementsByContentType(
+			ContentTypes.ROUTERCONTENT
+		).map((element) => ({
+			id: element.id,
+			path: element.path,
+		}));
 
 		const updateChildrenWithProps = React.Children.map(
 			this.props.children,

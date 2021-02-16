@@ -43,6 +43,23 @@ class Card extends Component {
 		} else if (this.props.name) {
 			const { path, name } = pathDestructure(this.props.name);
 			findCondition = { path, name };
+			if (name === "") {
+				Messages.toConsole("cardPathNameError", findCondition);
+				this.setState({
+					card: null,
+					status: status.ERROR,
+					errorMsg: "cardPathNameError",
+				});
+				return;
+			}
+		} else {
+			Messages.toConsole("cardPathNameError");
+			this.setState({
+				card: null,
+				status: status.ERROR,
+				errorMsg: "cardPathNameError",
+			});
+			return;
 		}
 
 		try {
