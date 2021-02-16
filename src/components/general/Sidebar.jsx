@@ -1,7 +1,7 @@
 import "../../scss/sidebar.scss";
 
 import React, { Component } from "react";
-import UsersStore, { state, status } from "../../store/users";
+import UsersStore, { state } from "../../store/users";
 import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 
@@ -18,19 +18,21 @@ class Sidebar extends Component {
 	};
 
 	toggleVisibility = () => {
-		this.setState({ isExpanded: !this.state.isExpanded });
+		const isExpanded = !this.state.isExpanded;
+		if (this.props.onToggle) this.props.onToggle(isExpanded);
+		this.setState({ isExpanded });
 	};
 
 	render() {
-		if (UsersStore.getStatus() !== status.DONE) return null;
+		// if (UsersStore.getStatus() !== status.DONE) return null;
 		if (UsersStore.getState() !== state.authorized) return null;
 		if (!UsersStore.getCurrentUser()) return null;
 
 		const isExpanded = this.state.isExpanded;
 
 		return (
-			<div className={"sidebar" + (isExpanded ? " isExpanded" : "")}>
-				{this.props.children}
+			<React.Fragment>
+				<div className="sidebar">{this.props.children}</div>
 				<button
 					className="sidebar-toggler"
 					onClick={this.toggleVisibility}
@@ -42,7 +44,7 @@ class Sidebar extends Component {
 						<IconExpand size="32px" />
 					)}
 				</button>
-			</div>
+			</React.Fragment>
 		);
 	}
 }

@@ -39,6 +39,16 @@ If the above steps did not work, contact the site administrator.
 `,
 });
 
+create("cardPathNameError", {
+	console: {
+		type: "error",
+		content: `Card path/name is not defined.\n%o`,
+	},
+	en: `
+# Card path/name is not defined.
+`,
+});
+
 create("langWarning", {
 	console: {
 		type: "log",

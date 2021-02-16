@@ -35,6 +35,7 @@ const Drag = (props) => {
 
 	return (
 		<div
+			className={props.className}
 			style={isDragging ? draggingStyle : {}}
 			draggable
 			onDragStart={startDrag}

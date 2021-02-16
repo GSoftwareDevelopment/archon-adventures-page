@@ -14,6 +14,7 @@ import {
 
 import PropsOfLayout from "./windows/PropsOfLayout";
 import PropsOfCalendar from "./windows/PropsOfCalendar";
+import PropsOfMenuLink from "./windows/PropsOfMenuLink";
 
 const SIZE_PROP = "1.5em";
 export const treeItems = {
@@ -29,7 +30,10 @@ export const treeItems = {
 	},
 	"menu-link": {
 		icon: <IconMenuLink size={SIZE_PROP} />,
-		title: ({ id }) => <div style={{ fontStyle: "italic" }}>{id}</div>,
+		title: ({ destRoute, id }) => (
+			<div style={{ fontStyle: "italic" }}>{destRoute || id}</div>
+		),
+		elementProps: PropsOfMenuLink,
 	},
 	"lang-selector": {
 		icon: <IconLangSelector size={SIZE_PROP} />,

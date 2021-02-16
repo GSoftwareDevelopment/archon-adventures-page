@@ -25,14 +25,14 @@ export default class DeleteConfirmation extends Component {
 					className="align-center"
 					style={{ fontWeight: "bold", margin: "5px 0" }}
 				>
-					{this.props.item}
+					{this.props.attr.item}
 				</div>
 				<ButtonsGroup
 					className="group-button justify-between"
 					style={{ marginBottom: "5px" }}
 					buttons={[
 						{
-							icon: <Icon.Check2 />,
+							icon: <Icon.Check2 size="1.5em" />,
 							title: Messages.getText(
 								"filesystem.deleteConfirm.buttons.delete"
 							),
@@ -42,7 +42,7 @@ export default class DeleteConfirmation extends Component {
 							},
 						},
 						{
-							icon: <Icon.X />,
+							icon: <Icon.X size="1.5em" />,
 							title: Messages.getText(
 								"filesystem.deleteConfirm.buttons.cancel"
 							),

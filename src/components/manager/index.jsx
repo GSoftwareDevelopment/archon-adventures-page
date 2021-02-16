@@ -8,13 +8,22 @@ import WindowsList from "../general/WindowsList";
 import SidebarUser from "../general/SidebarUser";
 
 export default class SiteManager extends Component {
+	state = {
+		isExpanded: false,
+	};
 	render() {
 		return (
-			<Sidebar>
-				<SidebarMenu items={menu} />
-				<WindowsList windowsStore={WindowsStore} />
-				<SidebarUser />
-			</Sidebar>
+			<React.Fragment>
+				<Sidebar
+					onToggle={(state) => {
+						this.setState({ isExpanded: state });
+					}}
+				>
+					<WindowsList windowsStore={WindowsStore} />
+					<SidebarMenu items={menu} isExpanded={this.state.isExpanded} />
+					<SidebarUser />
+				</Sidebar>
+			</React.Fragment>
 		);
 	}
 }

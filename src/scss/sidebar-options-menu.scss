@@ -10,6 +10,7 @@
 	justify-content: flex-end;
 	height: 0;
 	margin: 0;
+	margin-bottom: 40px;
 	padding: 0;
 	transition: 0.25s;
 	overflow: hidden;
@@ -20,6 +21,9 @@
 		background: $button-bg-color;
 		&:hover {
 			background-color: $button-bg-hover-color;
+		}
+		&:disabled {
+			border: none;
 		}
 	}
 

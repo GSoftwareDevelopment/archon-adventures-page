@@ -255,7 +255,7 @@ export const SelectList = ({
 						<div
 							className={"list-row selectable" + (isChoiced ? " choiced" : "")}
 							onClick={() => {
-								onChoice(listItem);
+								if (onChoice) onChoice(listItem);
 							}}
 						>
 							{item}

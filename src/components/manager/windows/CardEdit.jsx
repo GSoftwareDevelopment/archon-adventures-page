@@ -5,9 +5,11 @@ import LayoutsStore from "../../../store/layouts";
 import FSStore from "../../../store/fs";
 
 import Window, { ButtonsGroup, Input } from "../../general/Window";
-import { Upload as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
+import { Save as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
 import { combinePathName, pathDestructure } from "../../../libs/utils";
 import { toast } from "react-toastify";
+import CustomScrollbar from "../../layout/CustomScrollbar";
+import ContentLoader from "../../layout/ContentLoader";
 
 const status = {
 	INIT: "init",
@@ -28,7 +30,7 @@ export default class CardEdit extends Component {
 
 	async componentDidMount() {
 		this.setState({ status: status.READING });
-		const { _id, path, name } = this.props;
+		const { _id, path, name } = this.props.attr;
 
 		if (_id) {
 			try {
@@ -165,39 +167,46 @@ export default class CardEdit extends Component {
 	render() {
 		const editLang = this.state.editLang;
 		const isEnabled = this.state.status === status.DONE;
+		const { name } = this.props.attr;
+
 		return (
 			<Window
-				className="window"
+				className="window max-height"
 				size="maximized"
 				sizeCycle={["maximized", "minimized"]}
-				title={this.props.name ? "Edit card: " + this.props.name : "New card"}
+				title={name ? "Edit card: " + name : "New card"}
 				onClose={this.props.onClose}
 			>
-				<div
-					className="d-flex flex-column justify-content-start align-items-start"
-					style={{ flexGrow: "2" }}
-				>
-					<div className="d-flex flex-row justify-content-between align-items-center full-width">
-						<label htmlFor="card-body">Body:</label>
-						<ButtonsGroup
-							className="group-button"
-							style={{ marginLeft: "auto" }}
-							onlyIcons={true}
-							buttons={this.langButtons(editLang)}
-						/>
-					</div>
-					{this.state.status === status.READING ? (
-						<div style={{ minHeight: "200px", height: "100%" }}>Loading...</div>
-					) : (
-						<textarea
-							id="card-body"
-							value={this.getContent(editLang)}
-							disabled={!isEnabled}
-							onChange={this.setContent}
-						/>
-					)}
+				<div className="d-flex flex-row justify-content-between align-items-center full-width">
+					<label htmlFor="card-body">Body:</label>
+					<ButtonsGroup
+						className="group-button"
+						style={{ marginLeft: "auto" }}
+						onlyIcons={true}
+						buttons={this.langButtons(editLang)}
+					/>
 				</div>
-
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						justifyContent: "center",
+						alignItems: "center",
+						minHeight: "200px",
+						height: "100%",
+					}}
+				>
+					<ContentLoader busy={this.state.status === status.READING}>
+						<CustomScrollbar>
+							<textarea
+								id="card-body"
+								value={this.getContent(editLang)}
+								disabled={!isEnabled}
+								onChange={this.setContent}
+							/>
+						</CustomScrollbar>
+					</ContentLoader>
+				</div>
 				<ButtonsGroup
 					className="group-button justify-right"
 					style={{ marginBottom: "5px" }}
@@ -222,13 +231,13 @@ export default class CardEdit extends Component {
 							visible: this.state.status === status.SAVEPROMPT,
 						},
 						{
-							icon: <IconSave />,
+							icon: <IconSave size="1.5em" />,
 							tip: "Save",
 							onClick: this.switchToSavePropmt,
 							enabled: isEnabled || this.state.status === status.SAVEPROMPT,
 						},
 						{
-							icon: <IconCancelSave />,
+							icon: <IconCancelSave size="1.5em" />,
 							onClick: this.cancelSaveCard,
 							visible: this.state.status === status.SAVEPROMPT,
 						},

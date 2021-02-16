@@ -34,6 +34,25 @@ Information You provide is __not available__ to people who are **not logged in**
 });
 create(`${base}.extraFields.button.privacyPolicy`, { en: "Privacy Policy..." });
 
+create(`${base}.extraFields.toast.fieldCreated`, {
+	en: `
+**New field was created**
+
+Don't forget update Profile!`,
+});
+create(`${base}.extraFields.toast.fieldUpdated`, {
+	en: `
+**Field was updated**
+
+Don't forget update Profile!`,
+});
+create(`${base}.extraFields.toast.fieldDeleted`, {
+	en: `
+**Field was deleted**
+
+Don't forget update Profile!`,
+});
+
 //
 
 create(`${base}.newExtraField.fieldTypeSelect.placeholder`, {
@@ -46,7 +65,6 @@ create(`${base}.newExtraField.textarea.defaultPlaceholder`, {
 create(`${base}.newExtraField.input.defaultPlaceholder`, {
 	en: "Enter value...",
 });
-
 //
 
 create(`${base}.security`, { en: "Security" });

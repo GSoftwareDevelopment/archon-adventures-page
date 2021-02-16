@@ -23,6 +23,7 @@ function BasicFields({ fields, onChange }) {
 						onChange={(e) =>
 							onChange({ field: field.name, value: e.currentTarget.value })
 						}
+						maxLength="64"
 					/>
 				))}
 			</div>

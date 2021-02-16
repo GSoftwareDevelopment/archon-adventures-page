@@ -7,14 +7,14 @@ import DropTarget from "../../general/DropTarget";
 import * as Messages from "../../../libs/Messages.js";
 
 import Window, { Input, ButtonsGroup } from "../../general/Window";
-import { Upload as IconSave } from "react-bootstrap-icons";
+import { Save as IconSave } from "react-bootstrap-icons";
 
 class PropsOfCalendar extends Component {
 	state = {
-		sourcePath: this.props.path || "",
-		view: [...this.props.options.view],
-		pagination: this.props.options.pagination || false,
-		limit: this.props.options.limit || 0,
+		sourcePath: this.props.attr.path || "",
+		view: [...this.props.attr.options.view],
+		pagination: this.props.attr.options.pagination || false,
+		limit: this.props.attr.options.limit || 0,
 	};
 
 	viewFlags = ["showDate", "showTitle", "showDescription"];
@@ -39,7 +39,7 @@ class PropsOfCalendar extends Component {
 
 	save = (e) => {
 		e.preventDefault();
-		LayoutsStore.updateElementAttr(this.props._id, {
+		LayoutsStore.updateElementAttr(this.props.attr._id, {
 			path: this.state.sourcePath,
 			options: {
 				pagination: this.state.pagination,
@@ -54,25 +54,27 @@ class PropsOfCalendar extends Component {
 
 		return (
 			<Window
-				className="window"
+				className="window max-height"
 				title={Messages.getText("props.calendar.window.title")}
 				onClose={this.props.onClose}
 			>
-				<label htmlFor="source-path">
-					{Messages.getText("props.calendar.sourcePath")}
-				</label>
-				<DropTarget onItemDropped={this.dropSourcePath} dropEffect="link">
-					<Input
-						className="hover"
-						type="text"
-						name="source-path"
-						value={this.state.sourcePath}
-						onChange={(e) => {
-							this.updateSourcePath(e.currentTarget.value);
-						}}
-					/>
-				</DropTarget>
-				<fieldset>
+				<div>
+					<label htmlFor="source-path">
+						{Messages.getText("props.calendar.sourcePath")}
+					</label>
+					<DropTarget onItemDropped={this.dropSourcePath} dropEffect="link">
+						<input
+							className="hover"
+							type="text"
+							name="source-path"
+							value={this.state.sourcePath}
+							onChange={(e) => {
+								this.updateSourcePath(e.currentTarget.value);
+							}}
+						/>
+					</DropTarget>
+				</div>
+				<fieldset style={{ flexGrow: "2" }}>
 					<legend>{Messages.getText("props.calendar.attributes")}</legend>
 					{this.viewFlags.map((flag) => {
 						const isSet = currentViewFlags.includes(flag);
@@ -134,7 +136,7 @@ class PropsOfCalendar extends Component {
 					onlyIcons={true}
 					buttons={[
 						{
-							icon: <IconSave />,
+							icon: <IconSave size="1.5em" />,
 							tip: "Save",
 							onClick: this.save,
 							enabled:

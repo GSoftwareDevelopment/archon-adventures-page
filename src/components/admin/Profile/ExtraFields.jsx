@@ -51,7 +51,11 @@ function ExtraFields({
 					}}
 					onOK={(field) => {
 						setNewField(false);
-						toast.info("New field was created");
+						toast.info(
+							Messages.getTextAsMarkdown(
+								"admin.account.profile.extraFields.toast.fieldCreated"
+							)
+						);
 						onChange(field);
 					}}
 				/>
@@ -61,7 +65,11 @@ function ExtraFields({
 				fields={fields}
 				visibility={visibility}
 				onChange={(field) => {
-					toast.info("Field was updated");
+					toast.info(
+						Messages.getTextAsMarkdown(
+							"admin.account.profile.extraFields.toast.fieldUpdated"
+						)
+					);
 					onChange(field);
 				}}
 				onDelete={onDelete}

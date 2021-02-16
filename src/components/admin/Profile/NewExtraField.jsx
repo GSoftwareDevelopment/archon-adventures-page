@@ -110,7 +110,7 @@ function NewExtraField({
 							onOK({ field, value });
 						}}
 					>
-						<IconAddField size="1.5em" />
+						<IconAddField size="1.5em" color="#0F0" />
 					</button>
 				) : (
 					<div style={{ width: "50px" }} />

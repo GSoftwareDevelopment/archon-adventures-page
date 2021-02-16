@@ -5,7 +5,7 @@ import "../scss/select-list.scss";
 
 import Window, { Input, ButtonsGroup, SelectList } from "../../general/Window";
 import * as Icon from "react-bootstrap-icons";
-import { Upload as IconSave } from "react-bootstrap-icons";
+import { Save as IconSave } from "react-bootstrap-icons";
 import Alert from "../../layout/Alert";
 
 class PropsOfLayout extends Component {
@@ -13,10 +13,10 @@ class PropsOfLayout extends Component {
 		super(props);
 
 		this.state = {
-			name: props.name,
-			default: props.default,
-			defaultLang: props.defaultLang,
-			langs: props.langs.map((entry) => ({
+			name: props.attr.name,
+			default: props.attr.default,
+			defaultLang: props.attr.defaultLang,
+			langs: props.attr.langs.map((entry) => ({
 				symbol: entry.symbol,
 				name: entry.name,
 			})),
@@ -42,7 +42,7 @@ class PropsOfLayout extends Component {
 	save = (e) => {
 		e.preventDefault();
 
-		LayoutsStore.updateElementAttr(this.props._id, {
+		LayoutsStore.updateElementAttr(this.props.attr._id, {
 			name: this.state.name,
 			default: this.state.default,
 			langs: this.state.langs,
@@ -53,7 +53,7 @@ class PropsOfLayout extends Component {
 	render() {
 		return (
 			<Window
-				className="window"
+				className="window max-height"
 				title="Property of layout"
 				onClose={this.props.onClose}
 			>
@@ -77,7 +77,7 @@ class PropsOfLayout extends Component {
 						this.setState({ default: e.currentTarget.checked });
 					}}
 				/>
-				<fieldset>
+				<fieldset style={{ flexGrow: "2", minHeight: "200px" }}>
 					<legend>Languages:</legend>
 					<ManageLangs
 						langs={this.state.langs}
@@ -92,7 +92,7 @@ class PropsOfLayout extends Component {
 					onlyIcons={true}
 					buttons={[
 						{
-							icon: <IconSave />,
+							icon: <IconSave size="1.5em" />,
 							tip: "Save",
 							onClick: this.save,
 							enabled:

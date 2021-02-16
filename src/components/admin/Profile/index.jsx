@@ -51,7 +51,11 @@ export default class Profile extends Component {
 		const extraData = this.state.extraData;
 		delete extraData[field];
 		this.setState({ extraData });
-		toast.info(`Field was deleted.`);
+		toast.info(
+			Messages.getTextAsMarkdown(
+				"admin.account.profile.extraFields.toast.fieldDeleted"
+			)
+		);
 	}
 
 	updateProfile = async (e) => {
@@ -91,7 +95,7 @@ export default class Profile extends Component {
 
 						<div className="footer">
 							{this.state.status === "update" ? (
-								<button disabled>
+								<button onClick={() => {}}>
 									{Messages.getText(
 										"admin.account.profile.button.updateProgress"
 									)}

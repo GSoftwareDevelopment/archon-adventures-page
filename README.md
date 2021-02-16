@@ -22,11 +22,13 @@ Projekt składa się z dwóch części:
 
 ## Aplikacja strony
 
-To nic innego, jak "parser" informacji zawartych w bazie danych na podstawie których, buduje szkielet routingu oraz wyświetla treści.
+To nic innego, jak "parser" informacji zawartych w bazie danych na podstawie których, budowany jest szkielet routingu oraz wyświetlana jest treści.
 
 ## Zaplecze CMS
 
-W projekcie "zaszyte" jest zaplecze CMSa do zarządzania stroną oraz część administracyjna aplikacji. Są one w zaawansowanej fazie rozwoju i zawierą:
+W projekcie "zaszyte" jest zaplecze CMSa, pozwalające na zarządzanie wyglądem strony oraz zawartymi w niej treściami.
+
+Aktualny postęp:
 
 - Proces autoryzacji
 
@@ -46,6 +48,7 @@ W projekcie "zaszyte" jest zaplecze CMSa do zarządzania stroną oraz część a
 
   - [ ] Zakładanie kont
   - [x] Edycja profili
+  - [x] Resetowane hasła
 
 - Zarządzanie szablonami
 
@@ -60,29 +63,31 @@ W projekcie "zaszyte" jest zaplecze CMSa do zarządzania stroną oraz część a
     - [ ] usuwanie
   - Elementy
 
-  Poszczególne elementy zostały opisane [TU](/src/components/layout/page-elements/elements.md)
+    Poszczególne elementy zostały opisane [TU](/doc/elements.md)
 
-  Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) _Występowanie symbolu jest równoważne z implementacją._
+    Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) _Występowanie symbolu jest równoważne z implementacją._
 
-  - [x] - elementy blokowe
-    - [x] - Header `[-R--]`
-    - [x] - Router-Menu `[-R--]`
-    - [x] - Router-Content `[-R--]`
-    - [x] - Footer `[-R--]`
-    - [x] - Row `[-R--]`
-  - [x] - elementy kontekstowe
-    - [x] - Menu-Item `[-R--]`
-    - [x] - Lang-Selector `[-R--]
-    - [x] - Card `[CRUD]`
-    - [x] - Calendar (odpowiednik bloga) `[-RU-]`
-    - [ ] - Galery `[----]`
-    - [ ] - Comments `[----]`
+    - [x] - elementy blokowe
+      - [x] - Header `[-R--]`
+      - [x] - Router-Menu `[-R--]`
+      - [x] - Router-Content `[-R--]`
+      - [x] - Footer `[-R--]`
+      - [x] - Row `[-R--]`
+    - [x] - elementy kontekstowe
+      - [x] - Menu-Item `[-R--]`
+      - [x] - Lang-Selector `[-R--]
+      - [x] - Card `[CRUD]`
+      - [x] - Calendar (odpowiednik bloga) `[-RU-]`
+      - [ ] - Galery `[----]`
+      - [ ] - Comments `[----]`
+
   - [ ] - Style elementów `[----]`
-      Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/layout/page-elements/scss/) "zaszytymi" w aplikacji.
+
+    Jak na razie, cały wygląd strony definiowany jest [stylami SCSS](/src/components/layout/page-elements/scss/) "zaszytymi" w aplikacji.
 
     Przewiduję możliwość definiowania własnych styli dla każdego elementu, z pomocą biblioteki [**Radium**](https://github.com/FormidableLabs/radium/tree/master/docs/guides) i zaszyciu ich w bazie danych.
 
-## Zaplecze
+## Administracja aplikacji
 
 ## Podsumowanie
 

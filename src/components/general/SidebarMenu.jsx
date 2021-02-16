@@ -44,7 +44,11 @@ class SidebarMenu extends Component {
 		const currentActive = this.state.active;
 		return (
 			<React.Fragment>
-				<div className="sidebar-menu">
+				<div
+					className={
+						"sidebar-menu" + (this.props.isExpanded ? " isExpanded" : "")
+					}
+				>
 					<CustomScrollbar>
 						<div
 							style={{

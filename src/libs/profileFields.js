@@ -1,10 +1,10 @@
 //
 
 export const basicFieldsDef = [
-	{ name: "displayName", title: "Display name:", type: "text" },
-	{ name: "firstName", title: "First name:", type: "text" },
-	{ name: "lastName", title: "Last name:", type: "text" },
-	{ name: "imageURL", title: "Image URL:", type: "text" },
+	{ name: "displayName", title: "Display name", type: "text" },
+	{ name: "firstName", title: "First name", type: "text" },
+	{ name: "lastName", title: "Last name", type: "text" },
+	{ name: "imageURL", title: "Image URL", type: "text" },
 ];
 
 //

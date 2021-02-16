@@ -26,15 +26,21 @@ export function getText(msgId, lang) {
 			return msg[l];
 		});
 		if (usedLang) return msg[usedLang];
-		else return null;
+		else {
+			console.log(`! Empty message key ${msgId}`);
+			return null;
+		}
 	} else {
+		console.error(`! Message key ${msgId} not founnd`);
 		return undefined;
 	}
 }
 
 export function getTextAsMarkdown(msgId, lang) {
 	const text = getText(msgId, lang);
-	if (text) return <MarkdownView markdown={text} />;
+	if (text) {
+		return <MarkdownView markdown={text} />;
+	}
 }
 
 /**
@@ -49,6 +55,6 @@ export function toConsole(msgId, ...params) {
 			console[msg.console.type](msg.console.content, ...params);
 		}
 	} else {
-		console.error(`! Key ${msgId} not founnd`);
+		console.error(`! Message key ${msgId} not founnd`);
 	}
 }

@@ -14,7 +14,7 @@ create("debug.card.userLangChoice", {
 create("debug.menuRouter.render.itemLangsNotDefined", {
 	console: {
 		type: "error",
-		content: "! The menu item #%n does not have any languages defined",
+		content: "! The menu item #%s does not have any languages defined",
 	},
 });
 
