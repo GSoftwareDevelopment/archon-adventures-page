@@ -1,0 +1,51 @@
+.admin {
+	> .content {
+		.users-list {
+			display: flex;
+			flex-direction: column;
+
+			.row {
+				display: flex;
+				flex-direction: row;
+				padding: 5px;
+				border-bottom: #fff1 solid 1px;
+
+				&.selectable {
+					cursor: pointer;
+
+					&:hover {
+						background-color: #fff2;
+					}
+				}
+			}
+
+			.header {
+				font-weight: bold;
+				border-bottom: #fff3 solid 1px;
+				margin-bottom: 5px;
+			}
+
+			.col {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.col.userId {
+				width: 220px;
+			}
+			.col.role {
+				width: 100px;
+			}
+			.col.displayName {
+				width: 150px;
+			}
+			.col.firstName {
+				width: 150px;
+			}
+			.col.lastName {
+				width: 150px;
+			}
+		}
+	}
+}
