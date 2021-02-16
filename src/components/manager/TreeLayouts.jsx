@@ -21,7 +21,7 @@ import {
 	Trash as IconTrash,
 } from "react-bootstrap-icons";
 
-// const SIZE_PROP = "1.5em";
+import AddElement from "./windows/AddElement";
 
 class TreeLayouts extends Component {
 	state = {
@@ -58,12 +58,17 @@ class TreeLayouts extends Component {
 		await LayoutsStore.fetchList(true);
 	}
 
+	openElementAdd = (item) => {
+		console.log(`Create element in `, item);
+		WindowsStore.addWindow("new_element", AddElement, item);
+	};
+
 	openElementProps = (item) => {
 		console.log(`Property of '${item.contentType}' on ID#${item.id}...`);
 		console.log(item);
-		const { parrent, childs, ...itemAttr } = item;
+		// const { parrent, childs, ...itemAttr } = item;
 		const wnd = treeItems[item.contentType]?.elementProps;
-		if (wnd) WindowsStore.addWindow(item._id.toString(), wnd, itemAttr);
+		if (wnd) WindowsStore.addWindow(item._id.toString(), wnd, item);
 		else {
 			console.error(
 				`! Class for window properties of '${item.contentType}' is not defined.`
@@ -76,6 +81,9 @@ class TreeLayouts extends Component {
 		this.setState({ selected: itemId });
 
 		this.props.setActive();
+
+		// update current item attributes in "New element" window, if opened.
+		WindowsStore.setAttr("new_element", item);
 
 		let parentNode = null;
 		let parentNodeChilds = [];
@@ -94,6 +102,7 @@ class TreeLayouts extends Component {
 				icon: <IconAddElement size={ICON_SIZE} />,
 				title: "Add",
 				tip: `Add new element in '${item.contentType}' node`,
+				onClick: () => this.openElementAdd(item),
 			},
 			{
 				icon: <IconLayoutProps size={ICON_SIZE} />,
@@ -133,6 +142,20 @@ class TreeLayouts extends Component {
 		return false;
 	};
 
+	handleOnDrop = (src, index, id) => {
+		const parent = LayoutsStore.getElementById(id);
+		const parentId = index !== null ? parent.parrent.toString() : id;
+		const Src = JSON.parse(src);
+		const newElement = Src.element;
+		if (Src.src === "add-element") {
+			newElement._id = new Date().getTime().toString();
+		}
+		LayoutsStore.insert(newElement, parentId, index);
+		// console.log(JSON.parse(src), index, LayoutsStore.getElementById(parentId));
+	};
+
+	doInsertNewElement(newElement, destElementId, destChildIndex) {}
+
 	render() {
 		const _status = LayoutsStore.currentStatus;
 		if (_status === Status.PENDING)
@@ -158,6 +181,7 @@ class TreeLayouts extends Component {
 					selected={this.state.selected}
 					onClick={this.doSelect}
 					onDoubleClick={this.openElementProps}
+					onDrop={this.handleOnDrop}
 				/>
 			</NodeTree>
 		);
@@ -167,13 +191,25 @@ class TreeLayouts extends Component {
 export default observer(TreeLayouts);
 
 const ElementsList = observer(
-	({ id, list, selected, onClick, onDoubleClick, ...props }) => {
+	({ id, list, selected, onClick, onDoubleClick, onDrop, ...props }) => {
 		if (!list) {
 			console.error("TreeLayouts list data is not defined.");
 			return null;
 		}
 
-		return list.map((id) => {
+		if (list.length === 0) {
+			return (
+				<NodeItem
+					key={id}
+					title={"(empty node)"}
+					dropOnItem={true}
+					onItemDropped={(src, place) => {
+						if (onDrop) onDrop(src, null, id);
+					}}
+				/>
+			);
+		}
+		return list.map((id, index) => {
 			id = id.toString();
 			const element = LayoutsStore.getElementById(id);
 			if (!element) {
@@ -203,6 +239,15 @@ const ElementsList = observer(
 					onDoubleClick={() => {
 						if (onDoubleClick) onDoubleClick(element);
 					}}
+					dropBefore={element.contentType !== "layout" && index === 0}
+					dropAfter={
+						element.contentType !== "layout" && index <= list.length - 1
+					}
+					onItemDropped={(src, place) => {
+						if (place === "after") index++;
+						if (onDrop) onDrop(src, index, id);
+						// console.log(list, index, src);
+					}}
 				>
 					{haveChildrens && (
 						<ElementsList
@@ -211,6 +256,7 @@ const ElementsList = observer(
 							selected={selected}
 							onClick={onClick}
 							onDoubleClick={onDoubleClick}
+							onDrop={onDrop}
 						/>
 					)}
 				</NodeItem>
