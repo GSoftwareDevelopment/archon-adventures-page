@@ -6,7 +6,7 @@ import LayoutsStore, { Status, ContentTypes } from "../../../store/layouts";
 
 // import * as Messages from "../../../libs/Messages.js";
 
-import Window, { Input, ButtonsGroup, SelectList } from "../../general/Window";
+import Window, { ButtonsGroup, SelectList } from "../../general/Window";
 import { Save as IconSave } from "react-bootstrap-icons";
 
 export default class PropsOfMenuLink extends Component {

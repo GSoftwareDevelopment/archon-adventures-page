@@ -3,7 +3,6 @@ import { observer } from "mobx-react";
 
 import LayoutsStore, { ContentTypes } from "../../../store/layouts";
 import { languageCheck } from "../../../libs/utils";
-import { Path } from "../../../setup";
 
 import * as Messages from "../../../libs/Messages";
 import { Link } from "react-router-dom";
