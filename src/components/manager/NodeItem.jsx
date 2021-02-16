@@ -4,6 +4,7 @@ import { ICON_SIZE } from "../general/SidebarMenu";
 import { Folder2 as IconClose } from "react-bootstrap-icons";
 import { Folder2Open as IconOpen } from "react-bootstrap-icons";
 import Drag from "../general/Drag";
+import DropTarget from "../general/DropTarget";
 
 /**
  *
@@ -14,10 +15,14 @@ import Drag from "../general/Drag";
  * @property {boolean} [selected] if set to 'true' element has set 'selected' class
  * @property {boolean} allowDrag make element draggable
  * @property {*} dragData drag content data
+ * @property {boolean} dropOnItem
+ * @property {boolean} dropBefore
+ * @property {boolean} dropAfter
  * @property {React.ReactNode} [children]
  * @property {function} [onToggleNode] event function for toggle node (collapsed/expanded)
  * @property {function} [onClick] event function for click
  * @property {function} [onDobuleClick] event function for dobule-click
+ * @property {function} onItemDropped
  */
 export default class NodeItem extends Component {
 	/**
@@ -37,6 +42,10 @@ export default class NodeItem extends Component {
 		this.setState({ isCollapsed: nodeState });
 		if (this.props.onToggleNode) this.props.onToggleNode(nodeState);
 	};
+
+	handleDropItem(src, place) {
+		this.props.onItemDropped(src, place);
+	}
 
 	render() {
 		const haveChildrens = Boolean(this.props.children);
@@ -58,30 +67,66 @@ export default class NodeItem extends Component {
 						</Drag>
 					)}
 				>
-					<div
-						className={"node-item" + (this.props.selected ? " selected" : "")}
-						onClick={() => {
-							let toggle = true;
-							if (this.props.onClick) toggle = this.props.onClick();
-							if (toggle) this.toggleNode();
-						}}
-						onDoubleClick={() => {
-							if (this.props.onDoubleClick) this.props.onDoubleClick();
-						}}
-					>
-						{haveChildrens && (
-							<button className="flat noPadding" onClick={this.toggleNode}>
-								{isCollapsed ? (
-									<IconClose size={ICON_SIZE} />
-								) : (
-									<IconOpen size={ICON_SIZE} />
-								)}
-							</button>
-						)}
+					{this.props.onItemDropped && this.props.dropBefore && (
+						<DropTarget
+							onItemDropped={(src) => {
+								this.handleDropItem(src, "before");
+							}}
+							dropEffect="copy"
+						>
+							<div className="dropArea"></div>
+						</DropTarget>
+					)}
 
-						{this.props.icon}
-						<span>{this.props.title}</span>
-					</div>
+					<ConditionalWrapper
+						condition={this.props.dropOnItem}
+						wrapper={(children) => (
+							<DropTarget
+								onItemDropped={(src) => {
+									this.handleDropItem(src, "before");
+								}}
+								dropEffect="copy"
+							>
+								{children}
+							</DropTarget>
+						)}
+					>
+						<div
+							className={"node-item" + (this.props.selected ? " selected" : "")}
+							onClick={() => {
+								let toggle = true;
+								if (this.props.onClick) toggle = this.props.onClick();
+								if (toggle) this.toggleNode();
+							}}
+							onDoubleClick={() => {
+								if (this.props.onDoubleClick) this.props.onDoubleClick();
+							}}
+						>
+							{haveChildrens && (
+								<button className="flat noPadding" onClick={this.toggleNode}>
+									{isCollapsed ? (
+										<IconClose size={ICON_SIZE} />
+									) : (
+										<IconOpen size={ICON_SIZE} />
+									)}
+								</button>
+							)}
+
+							{this.props.icon}
+							<span>{this.props.title}</span>
+						</div>
+					</ConditionalWrapper>
+
+					{this.props.onItemDropped && this.props.dropAfter && (
+						<DropTarget
+							onItemDropped={(src) => {
+								this.handleDropItem(src, "after");
+							}}
+							dropEffect="copy"
+						>
+							<div className="dropArea"></div>
+						</DropTarget>
+					)}
 				</ConditionalWrapper>
 				{!isCollapsed && this.props.children}
 			</div>
