@@ -87,7 +87,7 @@ Tworzy pozycje menu.
 **Atrybuty**:
 
 - ~~[x] _id_ - identyfikator kojarzony z elementem router-content~~
-- [x] _destRoute_ - ścieżka docelowa trasy (więcej o zmianie [tutaj, v2.3](./db.md#2.3))
+- [x] _destRoute_ - ścieżka docelowa trasy (więcej o zmianie [tutaj, v2.3](./db.md#v23))
 - [x] _title_ - nazwa wyświetlana (`langObject`)
 
 ### `lang-selector`
