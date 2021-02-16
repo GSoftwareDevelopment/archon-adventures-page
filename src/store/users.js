@@ -18,6 +18,15 @@ export const status = {
 	ERROR: "error",
 };
 
+export const userRole = {
+	SUPERUSER: "super-user",
+	MAKER: "maker",
+	WRITER: "writer",
+	MOD: "mod",
+	USER: "user",
+	GUEST: "guest",
+};
+
 const disallowFields = ["displayName", "firstName", "lastName", "imageURL"];
 
 class UsersStore {
@@ -83,16 +92,22 @@ class UsersStore {
 				}
 			}
 		}
-		return "Guset";
+		return undefined;
+	}
+
+	get userRole() {
+		return this.customData.role;
 	}
 
 	async fetchUserData() {
 		const currentUser = this.getCurrentUser();
 		if (currentUser) {
+			this.status = status.SILENT;
 			await currentUser.auth.refreshCustomData().then(() => {
 				runInAction(() => {
 					this.customData = currentUser.customData;
 					this.profile = currentUser.profile;
+					this.status = status.DONE;
 				});
 			});
 		} else {
@@ -102,6 +117,8 @@ class UsersStore {
 	}
 
 	async updateUserCustomData(newCustomData) {
+		this.status = status.SILENT;
+
 		const { _id, userId, role, ...oldCustomData } = this.customData;
 		let $unset = undefined;
 		for (const field in oldCustomData) {
@@ -111,6 +128,7 @@ class UsersStore {
 				$unset[field] = 1;
 			}
 		}
+
 		try {
 			const result = await db
 				.collection(Collections.USERS)
@@ -123,11 +141,14 @@ class UsersStore {
 			runInAction(() => {
 				if (result.modifiedCount === 1) {
 					toast.success("Your profile was updated.");
+					this.status = status.DONE;
 				} else {
+					this.status = status.WARN;
 					toast.error("Something went wrong!");
 				}
 			});
 		} catch (error) {
+			this.status = status.WARN;
 			console.error(error);
 			toast.error(error.message);
 		}
@@ -183,7 +204,7 @@ class UsersStore {
 			await client.auth.logout();
 			runInAction(() => {
 				toast.info("You are log out.");
-				this.state = "unknown";
+				this.state = state.unknown;
 				const users = this.getAllUsersAuthInfo();
 				users.forEach((user) => {
 					if (user.loggedInProviderType === "anon-user" && user.isLoggedIn) {

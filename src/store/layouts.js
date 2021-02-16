@@ -26,10 +26,14 @@ export const ContentTypes = {
 	LAYOUT: "layout",
 
 	// container blocks types
-	MENULINK: "menu-link",
+	HEADER: "header",
+	MENUROUTER: "menu-router",
 	ROUTERCONTENT: "router-content",
+	ROW: "row",
+	FOOTER: "footer",
 
 	// content blocks types
+	MENULINK: "menu-link",
 	LANGSELECTOR: "lang-selector",
 	CARD: "card",
 	CALENDAR: "calendar",
@@ -63,6 +67,7 @@ class LayoutsStore {
 			updateElementAttr: action,
 			setCurrentLang: action,
 			getElementById: action,
+			getElementsByContentType: action,
 			moveItemInNode: action,
 			fetchList: action,
 		});
@@ -108,7 +113,13 @@ class LayoutsStore {
 		return this.elements.find((el) => el._id === id);
 	}
 
-	getElementsByContentType(rootNode, contentType) {}
+	getElementsByContentType(contentType, rootNode) {
+		if (!rootNode) {
+			return this.elements.filter((el) => el.contentType === contentType);
+		} else {
+			// TODO: Search the content recursively
+		}
+	}
 
 	moveItemInNode(nodeId, itemIndex, direction) {
 		const nodeChilds = this.getElementById(nodeId).childs;
@@ -124,9 +135,20 @@ class LayoutsStore {
 			nodeChilds[itemIndex + 1] = itemSrc;
 			nodeChilds[itemIndex] = itemDst;
 		}
+
+		// TODO: Update node in DB!!!
+	}
+
+	insert(element, destElementId, destChildsIndex) {
+		const destElement = this.getElementById(destElementId);
+		const destChilds = destElement.childs;
+		element.parrent = destElementId;
+		this.elements.push(element);
+		destChilds.splice(destChildsIndex, 0, element._id);
 	}
 
 	async updateElementAttr(id, updateAttr) {
+		// TODO: Live upgrade - move it to runInAtion behind when correct update in DB
 		const element = this.getElementById(id);
 
 		for (const attrKey in updateAttr) {
@@ -229,5 +251,5 @@ class LayoutsStore {
 	// }
 }
 
-const _LayoutsStore = new LayoutsStore();
-export default _LayoutsStore;
+const layoutsStore = (window.layoutsStore = new LayoutsStore());
+export default layoutsStore;
