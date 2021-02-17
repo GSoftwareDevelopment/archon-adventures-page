@@ -3,13 +3,14 @@ import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 import LayoutsStore from "../../../store/layouts";
 import FSStore from "../../../store/fs";
+import { combinePathName, pathDestructure } from "../../../libs/utils";
 
 import Window, { ButtonsGroup, Input } from "../../general/Window";
 import { Save as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
-import { combinePathName, pathDestructure } from "../../../libs/utils";
 import { toast } from "react-toastify";
-import CustomScrollbar from "../../layout/CustomScrollbar";
-import ContentLoader from "../../layout/ContentLoader";
+// import CustomScrollbar from "../../layout/CustomScrollbar";
+// import ContentLoader from "../../layout/ContentLoader";
+import InputML from "../../general/InputML";
 
 const status = {
 	INIT: "init",
@@ -22,9 +23,8 @@ const status = {
 export default class CardEdit extends Component {
 	state = {
 		status: status.INIT,
-		editLang: "en",
 		lang: [],
-		body: [],
+		body: {},
 		pathfile: "",
 	};
 
@@ -165,7 +165,6 @@ export default class CardEdit extends Component {
 	};
 
 	render() {
-		const editLang = this.state.editLang;
 		const isEnabled = this.state.status === status.DONE;
 		const { name } = this.props.attr;
 
@@ -177,38 +176,17 @@ export default class CardEdit extends Component {
 				title={name ? "Edit card: " + name : "New card"}
 				onClose={this.props.onClose}
 			>
-				<div className="d-flex flex-row justify-content-between align-items-center full-width">
-					<label htmlFor="card-body">Body:</label>
-					<ButtonsGroup
-						className="group-button"
-						style={{ marginLeft: "auto" }}
-						onlyIcons={true}
-						buttons={this.langButtons(editLang)}
-					/>
-				</div>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "center",
-						alignItems: "center",
-						minHeight: "200px",
-						height: "100%",
-					}}
+				<InputML
+					name="card-body"
+					label="Content body"
+					currentLang="en"
+					langContent={this.state.body}
+					disabled={!isEnabled}
 				>
-					<ContentLoader busy={this.state.status === status.READING}>
-						<CustomScrollbar>
-							<textarea
-								id="card-body"
-								value={this.getContent(editLang)}
-								disabled={!isEnabled}
-								onChange={this.setContent}
-							/>
-						</CustomScrollbar>
-					</ContentLoader>
-				</div>
+					<textarea style={{ minHeight: "200px", height: "100%" }} />
+				</InputML>
 				<ButtonsGroup
-					className="group-button justify-right"
+					className="window-footer group-button"
 					style={{ marginBottom: "5px" }}
 					onlyIcons={true}
 					buttons={[

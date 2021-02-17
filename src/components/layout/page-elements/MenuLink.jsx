@@ -21,7 +21,7 @@ function MenuLink({ routes, attr, ...props }) {
 			destRoute = route.path.trim();
 		} else {
 			console.log("Route ID#%o not exist", attr.id);
-			return;
+			return null;
 		}
 	}
 
@@ -41,11 +41,11 @@ function MenuLink({ routes, attr, ...props }) {
 			const route = routesData.find((entry) => entry.id === id);
 			if (!route) {
 				console.log("Route ID#%o not exist", id);
-				return;
+				return null;
 			}
 			if (!route.path.trim()) {
 				console.log("Route path in ID#%o is not defined", id);
-				return;
+				return null;
 			}
 			let _routePath = route.path;
 			if (_routePath[0] === "/") _routePath = _routePath.slice(1);

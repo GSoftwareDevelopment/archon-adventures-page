@@ -1,0 +1,18 @@
+.window-menulink {
+	.select-list {
+		> .list-row {
+			div.id {
+				width: 40%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			div.route {
+				width: 60%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+	}
+}

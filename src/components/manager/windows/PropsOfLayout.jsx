@@ -77,7 +77,7 @@ class PropsOfLayout extends Component {
 						this.setState({ default: e.currentTarget.checked });
 					}}
 				/>
-				<fieldset style={{ flexGrow: "2", minHeight: "200px" }}>
+				<fieldset style={{ minHeight: "200px" }}>
 					<legend>Languages:</legend>
 					<ManageLangs
 						langs={this.state.langs}
@@ -86,8 +86,9 @@ class PropsOfLayout extends Component {
 						onDelete={this.onDeleteLang}
 					/>
 				</fieldset>
+				<div style={{ flexGrow: "2" }} />
 				<ButtonsGroup
-					className="group-button justify-right"
+					className="window-footer group-button"
 					style={{ marginBottom: "5px" }}
 					onlyIcons={true}
 					buttons={[
@@ -164,7 +165,7 @@ export class ManageLangs extends Component {
 			isChoiced,
 			item: (
 				<React.Fragment>
-					<span style={{ width: "30px" }}>{symbol}</span>
+					<span style={{ width: "40px", textAlign: "center" }}>{symbol}</span>
 					<span>
 						{name}
 						{isDefault ? " (default)" : ""}
@@ -250,7 +251,7 @@ const NewItem = ({ onOK, onCancel, onValidate, props }) => {
 				name="symbol"
 				type="text"
 				maxLength="6"
-				style={{ width: "30px" }}
+				style={{ width: "40px", textAlign: "center" }}
 				autoFocus
 				value={newLangSymbol}
 				onChange={(e) => {

@@ -74,7 +74,7 @@ class PropsOfCalendar extends Component {
 						/>
 					</DropTarget>
 				</div>
-				<fieldset style={{ flexGrow: "2" }}>
+				<fieldset>
 					<legend>{Messages.getText("props.calendar.attributes")}</legend>
 					{this.viewFlags.map((flag) => {
 						const isSet = currentViewFlags.includes(flag);
@@ -129,9 +129,9 @@ class PropsOfCalendar extends Component {
 						}}
 					/>
 				</fieldset>
-
+				<div style={{ flexGrow: "2" }} />
 				<ButtonsGroup
-					className="group-button justify-right"
+					className="window-footer group-button"
 					style={{ marginBottom: "5px" }}
 					onlyIcons={true}
 					buttons={[

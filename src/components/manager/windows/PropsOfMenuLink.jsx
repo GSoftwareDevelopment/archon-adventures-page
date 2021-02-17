@@ -1,17 +1,19 @@
+import "../scss/poprsOfMenuLink.scss";
 import React, { Component } from "react";
-// import { observer } from "mobx-react";
-import LayoutsStore, { Status, ContentTypes } from "../../../store/layouts";
+import LayoutsStore, { Status } from "../../../store/layouts";
 // import { Collections } from "../../../setup";
 // import DropTarget from "../../general/DropTarget";
 
 // import * as Messages from "../../../libs/Messages.js";
 
-import Window, { ButtonsGroup, SelectList } from "../../general/Window";
+import Window, { ButtonsGroup } from "../../general/Window";
 import { Save as IconSave } from "react-bootstrap-icons";
+import InputML from "../../general/InputML";
 
-export default class PropsOfMenuLink extends Component {
+class PropsOfMenuLink extends Component {
 	state = {
 		destRoute: this.props.attr.destRoute || "",
+		title: this.props.attr.title || {},
 	};
 
 	updateDestRoute(destRoute) {
@@ -23,21 +25,17 @@ export default class PropsOfMenuLink extends Component {
 			isChoiced: false,
 			item: (
 				<React.Fragment>
-					<div>{item.id}</div>
-					<div>{item.path}</div>
+					<div className="id">{item.id}</div>
+					<div className="route">{item.path}</div>
 				</React.Fragment>
 			),
 		};
 	};
 
 	render() {
-		const routes = LayoutsStore.getElementsByContentType(
-			ContentTypes.ROUTERCONTENT
-		);
-
 		return (
 			<Window
-				className="window max-height"
+				className="window window-menulink max-height"
 				title={"Properties of Menu link"}
 				onClose={this.props.onClose}
 			>
@@ -53,12 +51,19 @@ export default class PropsOfMenuLink extends Component {
 						}}
 					/>
 				</div>
-				<fieldset style={{ flexGrow: "2" }}>
-					<legend>Routes defined</legend>
-					<SelectList list={routes} onItemRender={this.handleRenderItem} />
-				</fieldset>
+
+				<InputML
+					name="title"
+					label="Link title"
+					currentLang="en"
+					langContent={this.state.title}
+				>
+					<input autoComplete="Off" />
+				</InputML>
+
+				<div style={{ flexGrow: "2" }} />
 				<ButtonsGroup
-					className="group-button justify-right"
+					className="window-footer group-button"
 					style={{ marginBottom: "5px" }}
 					onlyIcons={true}
 					buttons={[
@@ -76,3 +81,5 @@ export default class PropsOfMenuLink extends Component {
 		);
 	}
 }
+
+export default PropsOfMenuLink;

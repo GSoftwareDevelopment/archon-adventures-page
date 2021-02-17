@@ -5,10 +5,11 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	padding: 0px;
-	width: 280px;
+	width: $sidebar-width;
 	height: 0;
 	background-color: $sidebar-menu-color;
-	box-shadow: -5px 0px 10px #000;
+	border-left: #000 solid 3px;
+	// box-shadow: -5px 0px 10px #000;
 
 	overflow: hidden;
 	transition: 0.25s;
