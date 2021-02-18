@@ -1,0 +1,50 @@
+{
+    "collection": "galery",
+    "database": "ArchonSite",
+    "id": "5fe1c097e332eaf8f3fe4a8b",
+    "roles": [
+        {
+            "name": "anonymous",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": false
+                }
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                }
+            },
+            "read": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "images": {
+                "bsonType": "array",
+                "items": {
+                    "bsonType": "string"
+                }
+            },
+            "title": {
+                "bsonType": "string"
+            }
+        },
+        "title": "galery"
+    }
+}

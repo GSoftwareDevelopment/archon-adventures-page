@@ -1,0 +1,37 @@
+{
+    "collection": "fslog",
+    "database": "ArchonSite",
+    "id": "602e95f55e67424d357a3447",
+    "roles": [
+        {
+            "name": "Super-User",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$eq": "super-user"
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "Authorized",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {}
+}

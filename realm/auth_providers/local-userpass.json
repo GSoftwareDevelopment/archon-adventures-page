@@ -1,0 +1,14 @@
+{
+    "id": "5fe477afde731fa789b96778",
+    "name": "local-userpass",
+    "type": "local-userpass",
+    "config": {
+        "autoConfirm": false,
+        "confirmEmailSubject": "Confirm Your registration on Archon Adventures site",
+        "emailConfirmationUrl": "http://localhost:3000/auth/confirm",
+        "resetPasswordSubject": "Account password reset on Archon Adventures site",
+        "resetPasswordUrl": "http://localhost:3000/auth/reset",
+        "runConfirmationFunction": false
+    },
+    "disabled": false
+}

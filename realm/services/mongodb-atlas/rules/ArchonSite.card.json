@@ -1,0 +1,105 @@
+{
+    "collection": "card",
+    "database": "ArchonSite",
+    "id": "5fe1147f0de6b9d5e0281519",
+    "roles": [
+        {
+            "name": "anonymous",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": false
+                }
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized-writer",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$eq": "writer"
+                },
+                "%%root.userId": {
+                    "$eq": "%%user.id"
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized-super-user",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$eq": "super-user"
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                }
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "body": {
+                "bsonType": "object",
+                "minProperties": 1,
+                "propertyNames": {
+                    "pattern": "^[a-z]{2}$"
+                }
+            },
+            "createdAt": {
+                "bsonType": "date"
+            },
+            "name": {
+                "bsonType": "string"
+            },
+            "path": {
+                "bsonType": "string"
+            },
+            "userId": {
+                "bsonType": "string",
+                "maxLength": 24,
+                "minLength": 24,
+                "pattern": "^[0-9a-f]*$"
+            }
+        },
+        "required": [
+            "body",
+            "createdAt",
+            "userId",
+            "name",
+            "path"
+        ],
+        "title": "card"
+    }
+}

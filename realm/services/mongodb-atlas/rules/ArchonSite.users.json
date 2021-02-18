@@ -1,0 +1,171 @@
+{
+    "collection": "users",
+    "database": "ArchonSite",
+    "id": "5fe70f3bffdcfbf64b48c0ec",
+    "roles": [
+        {
+            "name": "anonimous",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": false
+                }
+            },
+            "fields": {
+                "_id": {},
+                "displayName": {
+                    "read": true
+                },
+                "firstName": {},
+                "imageURL": {
+                    "read": true
+                },
+                "lastName": {},
+                "role": {},
+                "userId": {}
+            },
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data": {
+                    "userId": {
+                        "$neq": "%%user.id"
+                    },
+                    "role": {
+                        "$neq": "super-user"
+                    }
+                }
+            },
+            "fields": {
+                "_id": {},
+                "displayName": {},
+                "firstName": {},
+                "imageURL": {},
+                "lastName": {},
+                "role": {},
+                "userId": {}
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorize-owner",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.userId": {
+                    "$eq": "%%user.id"
+                }
+            },
+            "fields": {
+                "_id": {},
+                "displayName": {
+                    "write": true
+                },
+                "firstName": {
+                    "write": true
+                },
+                "imageURL": {
+                    "write": true
+                },
+                "lastName": {
+                    "write": true
+                },
+                "role": {},
+                "userId": {}
+            },
+            "read": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {
+                "write": true
+            }
+        },
+        {
+            "name": "authorize-super-user",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$in": [
+                        "super-user"
+                    ]
+                }
+            },
+            "fields": {
+                "_id": {},
+                "displayName": {
+                    "write": true
+                },
+                "firstName": {
+                    "write": true
+                },
+                "imageURL": {
+                    "write": true
+                },
+                "lastName": {
+                    "write": true
+                },
+                "role": {
+                    "write": true
+                },
+                "userId": {}
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "displayName": {
+                "bsonType": "string",
+                "maxLength": 128
+            },
+            "firstName": {
+                "bsonType": "string",
+                "maxLength": 128
+            },
+            "imageURL": {
+                "bsonType": "string",
+                "maxLength": 128
+            },
+            "lastName": {
+                "bsonType": "string",
+                "maxLength": 128
+            },
+            "userId": {
+                "bsonType": "string",
+                "maxLength": 24,
+                "minLength": 24,
+                "pattern": "^[0-9a-f]*$"
+            }
+        },
+        "required": [
+            "displayName",
+            "firstName",
+            "lastName",
+            "imageURL",
+            "extraVisibility"
+        ],
+        "title": "user"
+    }
+}

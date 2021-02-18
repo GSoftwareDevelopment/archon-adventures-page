@@ -1,0 +1,16 @@
+{
+    "collection": "comments",
+    "database": "ArchonSite",
+    "id": "60280d38b7da9ec53d1835e0",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {}
+}

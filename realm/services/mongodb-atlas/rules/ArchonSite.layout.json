@@ -1,0 +1,54 @@
+{
+    "collection": "layout",
+    "database": "ArchonSite",
+    "id": "5ff078fdffdcfbf64b808700",
+    "roles": [
+        {
+            "name": "anonymous",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": false
+                }
+            },
+            "read": true,
+            "write": false,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized-maker/super-user",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$in": [
+                        "super-user",
+                        "maker"
+                    ]
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                }
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {}
+}

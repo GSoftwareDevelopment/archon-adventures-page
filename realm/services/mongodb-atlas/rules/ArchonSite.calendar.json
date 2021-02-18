@@ -1,0 +1,85 @@
+{
+    "collection": "calendar",
+    "database": "ArchonSite",
+    "id": "5fe33047ee30e67adbfa7a7b",
+    "roles": [
+        {
+            "name": "anonymous",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": false
+                }
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized-writer",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$eq": "writer"
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized-super-user",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                },
+                "%%user.custom_data.role": {
+                    "$eq": "super-user"
+                }
+            },
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "additional_fields": {}
+        },
+        {
+            "name": "authorized",
+            "apply_when": {
+                "%%user.data.email": {
+                    "$exists": true
+                }
+            },
+            "read": true,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "cardRefTo": {
+                "bsonType": "string"
+            },
+            "date": {
+                "bsonType": "date"
+            },
+            "description": {
+                "bsonType": "string"
+            },
+            "title": {
+                "bsonType": "string"
+            }
+        },
+        "title": "calendar"
+    }
+}
