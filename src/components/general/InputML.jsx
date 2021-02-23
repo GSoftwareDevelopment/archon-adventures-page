@@ -28,10 +28,10 @@ class InputML extends Component {
 	makeLangFields() {
 		// creating content fields for non-existent languages
 		const layoutLangList = LayoutsStore.current.langs;
-		let newContent = {};
+		let newContent = this.state.contentLang || {};
 		for (const lang of layoutLangList) {
-			if (!this.state.content[lang]) newContent[lang] = "";
-			else newContent[lang] = this.state.contentLang[lang];
+			if (!newContent[lang.symbol]) newContent[lang.symbol] = "";
+			// else newContent[lang] = this.state.contentLang[lang];
 		}
 		this.setState({ contentLang: newContent });
 	}
@@ -47,6 +47,7 @@ class InputML extends Component {
 		const content = { ...this.state.content };
 		content[this.state.currentLang] = ctn;
 		this.setState({ content });
+		if (this.props.onUpdate) this.props.onUpdate(content);
 	};
 
 	langButtons(currentLang) {
