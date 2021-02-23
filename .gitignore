@@ -27,5 +27,5 @@ yarn-error.log*
 
 # private
 credentials.json
-.eslintcache
+.*
 dist
