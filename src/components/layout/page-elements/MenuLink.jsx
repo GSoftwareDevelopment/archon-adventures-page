@@ -21,6 +21,7 @@ function MenuLink({ routes, attr, ...props }) {
 			destRoute = route.path.trim();
 		} else {
 			console.log("Route ID#%o not exist", attr.id);
+			LayoutsStore.addError(attr._id, `Route ID#${attr.id} not exist.`);
 			return null;
 		}
 	}
@@ -41,10 +42,15 @@ function MenuLink({ routes, attr, ...props }) {
 			const route = routesData.find((entry) => entry.id === id);
 			if (!route) {
 				console.log("Route ID#%o not exist", id);
+				LayoutsStore.addError(attr._id, `Route ID#${id} not exist.`);
 				return null;
 			}
 			if (!route.path.trim()) {
 				console.log("Route path in ID#%o is not defined", id);
+				LayoutsStore.addError(
+					attr._id,
+					`Route path in ID#${id} is not defined.`
+				);
 				return null;
 			}
 			let _routePath = route.path;
@@ -77,6 +83,8 @@ function MenuLink({ routes, attr, ...props }) {
 		);
 		return null;
 	}
+
+	LayoutsStore.clearError(attr._id);
 
 	return (
 		<ConditionalWrapper
