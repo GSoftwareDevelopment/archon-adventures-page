@@ -19,9 +19,13 @@ import {
 	ArrowBarUp as IconMoveBefore,
 	ArrowBarDown as IconMoveAfter,
 	Trash as IconTrash,
+	ExclamationTriangleFill as IconError,
 } from "react-bootstrap-icons";
 
 import AddElement from "./windows/AddElement";
+
+import * as Messages from "../../libs/Messages";
+const msg_base = "manager.layouts.options";
 
 class TreeLayouts extends Component {
 	state = {
@@ -39,12 +43,13 @@ class TreeLayouts extends Component {
 				{
 					icon: <IconCreateLayout size={ICON_SIZE} />,
 					style: { marginRight: "auto" },
-					title: "New layout...",
-					tip: "Create new layout",
+					title: Messages.getText(`${msg_base}.newLayout`),
+					tip: Messages.getText(`${msg_base}.newLayout.tip`),
 				},
 				{
 					icon: <IconRefresh size={ICON_SIZE} />,
-					tip: "Refresh",
+					title: Messages.getText(`${msg_base}.refresh`),
+					tip: Messages.getText(`${msg_base}.refresh.tip`),
 					onClick: () => {
 						this.getLayoutData();
 					},
@@ -100,21 +105,31 @@ class TreeLayouts extends Component {
 		this.props.setOptions([
 			{
 				icon: <IconAddElement size={ICON_SIZE} />,
-				title: "Add",
-				tip: `Add new element in '${item.contentType}' node`,
+				title: Messages.getText(`${msg_base}.addElement`),
+				tip: Messages.getText(`${msg_base}.addElement.tip`),
+				// title: "Add",
+				// tip: `Add new element in '${item.contentType}' node`,
 				onClick: () => this.openElementAdd(item),
 			},
 			{
 				icon: <IconLayoutProps size={ICON_SIZE} />,
-				title: "Props...",
-				tip: `Edit '${item.contentType}' properties`,
+				title: Messages.getText(`${msg_base}.propertiesElement`),
+				tip: Messages.getText(`${msg_base}.propertiesElement.tip`),
+				// title: "Props...",
+				// tip: `Edit '${item.contentType}' properties`,
 				onClick: () => this.openElementProps(item),
+				enabled: Boolean(treeItems[item.contentType]?.elementProps),
 			},
 			{
 				icon: <IconMoveBefore size={ICON_SIZE} />,
-				tip: "Move Up",
+				title: Messages.getText(`${msg_base}.moveItemUp`),
+				tip: Messages.getText(`${msg_base}.moveItemUp.tip`),
 				onClick: () => {
-					LayoutsStore.moveItemInNode(item.parrent.toString(), itemIndex, -1);
+					LayoutsStore.moveElementInNode(
+						item.parrent.toString(),
+						itemIndex,
+						-1
+					);
 					this.doSelect(item);
 				},
 				enabled: parentNodeChilds?.length && itemIndex > 0,
@@ -122,9 +137,10 @@ class TreeLayouts extends Component {
 			},
 			{
 				icon: <IconMoveAfter size={ICON_SIZE} />,
-				tip: "Move Down",
+				title: Messages.getText(`${msg_base}.moveItemDown`),
+				tip: Messages.getText(`${msg_base}.moveItemDown.tip`),
 				onClick: () => {
-					LayoutsStore.moveItemInNode(item.parrent.toString(), itemIndex, 1);
+					LayoutsStore.moveElementInNode(item.parrent.toString(), itemIndex, 1);
 					this.doSelect(item);
 				},
 				enabled:
@@ -134,7 +150,8 @@ class TreeLayouts extends Component {
 			{
 				icon: <IconTrash size={ICON_SIZE} style={{ color: "#f00" }} />,
 				style: { marginLeft: "auto" },
-				tip: "Delete",
+				title: Messages.getText(`${msg_base}.deleteElement`),
+				tip: Messages.getText(`${msg_base}.deleteElement.tip`),
 			},
 		]);
 
@@ -142,16 +159,16 @@ class TreeLayouts extends Component {
 		return false;
 	};
 
-	handleOnDrop = (src, index, id) => {
+	handleOnDrop = async (src, index, id) => {
 		const parent = LayoutsStore.getElementById(id);
 		const parentId = index !== null ? parent.parrent.toString() : id;
 		const Src = JSON.parse(src);
 		const newElement = Src.element;
+		newElement.parrent = parentId;
+
 		if (Src.src === "add-element") {
-			newElement._id = new Date().getTime().toString();
+			await LayoutsStore.insertElement(newElement, parentId, index);
 		}
-		LayoutsStore.insert(newElement, parentId, index);
-		// console.log(JSON.parse(src), index, LayoutsStore.getElementById(parentId));
 	};
 
 	doInsertNewElement(newElement, destElementId, destChildIndex) {}
@@ -172,6 +189,21 @@ class TreeLayouts extends Component {
 			return null;
 
 		const layoutsIds = LayoutsStore.available.map((layout) => layout._id);
+		const errorElements = LayoutsStore.elements
+			.filter((element) => element._error)
+			.map(({ _id, _error }) => _id);
+		const heapError = [];
+		if (errorElements.length) {
+			while (errorElements.length > 0) {
+				const elementId = errorElements.pop();
+				const element = LayoutsStore.getElementById(elementId);
+				if (element.parrent) {
+					const parentId = element.parrent.toString();
+					heapError.push(parentId);
+					errorElements.push(parentId);
+				}
+			}
+		}
 
 		return (
 			<NodeTree id="layouts-tree" visible={this.props.visible}>
@@ -182,6 +214,7 @@ class TreeLayouts extends Component {
 					onClick={this.doSelect}
 					onDoubleClick={this.openElementProps}
 					onDrop={this.handleOnDrop}
+					heapError={heapError}
 				/>
 			</NodeTree>
 		);
@@ -191,7 +224,16 @@ class TreeLayouts extends Component {
 export default observer(TreeLayouts);
 
 const ElementsList = observer(
-	({ id, list, selected, onClick, onDoubleClick, onDrop, ...props }) => {
+	({
+		id,
+		list,
+		selected,
+		onClick,
+		onDoubleClick,
+		onDrop,
+		heapError,
+		...props
+	}) => {
 		if (!list) {
 			console.error("TreeLayouts list data is not defined.");
 			return null;
@@ -227,11 +269,22 @@ const ElementsList = observer(
 				if (ES.title) title = ES.title(element);
 			}
 
+			const errorInChilds = heapError.includes(id);
+			let _error = null;
+			if (element._error || errorInChilds) {
+				_error = (
+					<React.Fragment>
+						<IconError style={{ marginLeft: "auto", color: "#f00" }} />
+					</React.Fragment>
+				);
+			}
+
 			return (
 				<NodeItem
 					key={id}
 					icon={icon}
 					title={title}
+					extra={_error}
 					selected={selected === id}
 					onClick={() => {
 						if (onClick) return onClick(element);
@@ -257,6 +310,7 @@ const ElementsList = observer(
 							onClick={onClick}
 							onDoubleClick={onDoubleClick}
 							onDrop={onDrop}
+							heapError={heapError}
 						/>
 					)}
 				</NodeItem>

@@ -15,6 +15,9 @@ import FileSystemList from "./FileSystemList";
 import CardEdit from "./windows/CardEdit";
 import DeleteConfirmation from "./windows/DeleteConfirmation";
 
+import * as Messages from "../../libs/Messages";
+const msg_base = "manager.cards.options";
+
 class TreeCards extends Component {
 	state = {
 		selected: null,
@@ -43,19 +46,26 @@ class TreeCards extends Component {
 
 	openDeleteConfirm = (item) => {
 		const filepath = combinePathName(item.path, item.name);
-		WindowsStore.addWindow("delete-" + filepath, DeleteConfirmation, {
-			item: filepath,
-			actions: [
-				// TODO:	Niepodoba mi się ta forma definicji akcji :/
-				() => this.doDelete(item),
-			],
-		});
+		WindowsStore.addWindow(
+			"delete-" + filepath,
+			DeleteConfirmation,
+			{
+				item: filepath,
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					() => this.doDelete(item),
+				],
+			},
+			"sidebar"
+		);
 	};
 
 	async doDelete({ _id }) {
 		console.log(`Delete entry #${_id}...`);
 		try {
-			const result = await db.collection(Collections.CARDS).deleteOne({ _id });
+			const result = await db
+				.collection(Collections.CARDS)
+				.deleteOne({ _id: { $oid: _id } });
 			if (result.deletedCount === 1) {
 				FSStore.remove({ _id }, Collections.CARDS);
 				this.updateOptions({ path: Path.DELIMITER, name: null });
@@ -78,7 +88,8 @@ class TreeCards extends Component {
 		const options = [
 			{
 				icon: <Icon.JournalPlus size={ICON_SIZE} />,
-				title: "New",
+				title: Messages.getText(`${msg_base}.newCard`),
+				tip: Messages.getText(`${msg_base}.newCard.tip`),
 				onClick: () => {
 					console.log(item);
 					this.openCardNew(item);
@@ -86,7 +97,8 @@ class TreeCards extends Component {
 			},
 			{
 				icon: <Icon.PencilSquare size={ICON_SIZE} />,
-				title: "Edit",
+				title: Messages.getText(`${msg_base}.editCard`),
+				tip: Messages.getText(`${msg_base}.editCard.tip`),
 				onClick: () => {
 					this.openCardEdit(item.item);
 				},
@@ -95,7 +107,8 @@ class TreeCards extends Component {
 			{
 				icon: <Icon.Trash size={ICON_SIZE} style={{ color: "#F00" }} />,
 				style: { marginLeft: "auto" },
-				tip: "Delete",
+				title: Messages.getText(`${msg_base}.deleteCard`),
+				tip: Messages.getText(`${msg_base}.deleteCard.tip`),
 				onClick: () => {
 					this.openDeleteConfirm(item.item);
 				},
@@ -112,6 +125,9 @@ class TreeCards extends Component {
 				<div style={{ flexGrow: "2" }}>
 					<FileSystemList
 						collection={Collections.CARDS}
+						allowDrag={true}
+						allowDragDir={false}
+						allowDragFile={true}
 						selected={this.state.selected}
 						onClick={this.updateOptions}
 						onDoubleClick={this.openCardEdit}
