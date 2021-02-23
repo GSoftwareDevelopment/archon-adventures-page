@@ -1,33 +1,36 @@
 import React, { Component } from "react";
-// import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
-// import { Collections } from "../../../setup";
-// import DropTarget from "../../general/DropTarget";
 
-// import * as Messages from "../../../libs/Messages.js";
-
-import Window, { Input, ButtonsGroup } from "../../general/Window";
+import { ButtonsGroup } from "../../general/Window";
 import { Save2 as IconSave } from "react-bootstrap-icons";
 
 export default class PropsOfMenuLink extends Component {
+	constructor(props) {
+		super(props);
+
+		const { dialog } = props;
+		dialog({
+			className: " window-add-element max-height",
+			size: "panel",
+			sizeCycle: ["maximized", "panel"],
+			title: ``,
+		});
+	}
+
+	save = () => {};
+
 	render() {
 		return (
-			<Window
-				className="window max-height"
-				title={"Properties of Menu link"}
-				onClose={this.props.onClose}
-			>
-				<fieldset style={{ flexGrow: "2" }}>
-					<legend>Attributes</legend>
-				</fieldset>
+			<React.Fragment>
+				<div style={{ flexGrow: "2" }} />
 				<ButtonsGroup
 					className="group-button justify-right"
 					style={{ marginBottom: "5px" }}
-					onlyIcons={true}
+					onlyIcons={false}
 					buttons={[
 						{
-							icon: <IconSave />,
-							tip: "Save",
+							icon: <IconSave size="1.5em" />,
+							title: "Save",
 							onClick: this.save,
 							enabled:
 								LayoutsStore.currentStatus !== Status.SILENT ||
@@ -35,7 +38,7 @@ export default class PropsOfMenuLink extends Component {
 						},
 					]}
 				/>
-			</Window>
+			</React.Fragment>
 		);
 	}
 }
