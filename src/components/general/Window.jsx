@@ -1,6 +1,8 @@
 import "../../scss/window.scss";
 
 import React, { Component } from "react";
+import WindowsStore from "../../store/windows.js";
+import WindowsList from "./WindowsList";
 
 import * as Icon from "react-bootstrap-icons";
 // import CustomScrollbar from "../../layout/CustomScrollbar";
@@ -46,6 +48,11 @@ export default class Window extends Component {
 		windowSize: this.props.size || "panel",
 	};
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.size !== this.props.size)
+			this.setState({ windowSize: this.props.size });
+	}
+
 	maximize = () => {
 		const { onMaximize } = this.props;
 
@@ -87,7 +94,13 @@ export default class Window extends Component {
 		const disableMaximize = this.props.disableMaximize || false;
 		const disableMinimize = this.props.disableMinimize || false;
 		return (
-			<div className={className + windowStateClass}>
+			<div
+				className={className + (windowStateClass || "")}
+				style={{
+					...this.props.style,
+					display: windowSize === "minimized" ? "none" : "",
+				}}
+			>
 				<div className="header">
 					<span title={title}>{title}</span>
 					<WindowControl
@@ -97,7 +110,12 @@ export default class Window extends Component {
 						onClose={onClose}
 					/>
 				</div>
-				{windowSize !== "minimized" && <form>{children}</form>}
+				<form id={`form-${this.props.winId}`}>{children}</form>
+				<WindowsList
+					className="align-windows-column inner-windows"
+					windowsStore={WindowsStore}
+					group={this.props.winId}
+				/>
 			</div>
 		);
 	}
@@ -108,7 +126,8 @@ export default class Window extends Component {
  *
  * @typedef {Object} InputPropsInterface
  * @property {string} [className] - Class string definition
- * @property {React.CSSProperties} [style]
+ * @property {React.CSSProperties} [style] styles for main wrapper
+ * @property {React.CSSProperties} [inputStyle] styles for inner input tag
  * @property {string} type - Element <input type="..." /> attribute
  * @property {string} [name] - Element <input name="..." /> attribute
  * @property {string} [label] - Element label
@@ -267,3 +286,5 @@ export const SelectList = ({
 		</div>
 	);
 };
+
+//
