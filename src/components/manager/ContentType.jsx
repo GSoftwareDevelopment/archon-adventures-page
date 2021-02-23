@@ -15,6 +15,7 @@ import {
 import PropsOfLayout from "./windows/PropsOfLayout";
 import PropsOfCalendar from "./windows/PropsOfCalendar";
 import PropsOfMenuLink from "./windows/PropsOfMenuLink";
+import PropsOfCard from "./windows/PropsOfCard";
 
 const SIZE_PROP = "1.5em";
 export const treeItems = {
@@ -49,14 +50,19 @@ export const treeItems = {
 				{Path.DELIMITER + unifyPath(name)}
 			</span>
 		),
+		elementProps: PropsOfCard,
 	},
 	calendar: {
 		icon: <IconCalendar size={SIZE_PROP} />,
-		title: ({ path }) => (
-			<span style={{ fontStyle: "italic" }}>
-				{Path.DELIMITER + unifyPath(path)}
-			</span>
-		),
+		title: ({ path }) => {
+			if (path)
+				return (
+					<span style={{ fontStyle: "italic" }}>
+						{Path.DELIMITER + unifyPath(path)}
+					</span>
+				);
+			else return "Calendar element";
+		},
 		elementProps: PropsOfCalendar,
 	},
 	galery: {
