@@ -3,9 +3,12 @@ import "../../scss/sidebar-options-menu.scss";
 
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { observer } from "mobx-react";
+import WindowsStore from "../../store/windows";
 
 import CustomScrollbar from "../layout/CustomScrollbar";
 import { ButtonsGroup } from "./Window";
+import WindowsList, { WindowsManager } from "./WindowsList";
 
 //
 
@@ -48,6 +51,7 @@ class SidebarMenu extends Component {
 					className={
 						"sidebar-menu" + (this.props.isExpanded ? " isExpanded" : "")
 					}
+					style={this.props.style}
 				>
 					<CustomScrollbar>
 						<div
@@ -104,13 +108,21 @@ class SidebarMenu extends Component {
 						</div>
 					</CustomScrollbar>
 					<OptionsBar options={this.state.options} visible={true} />
+					<WindowsList
+						className="align-windows-column inner-windows"
+						windowsStore={WindowsStore}
+						group="sidebar"
+					/>
+					<WindowsManager
+						windows={WindowsStore.windows.filter((wnd) => wnd.group === null)}
+					/>
 				</div>
 			</React.Fragment>
 		);
 	}
 }
 
-export default withRouter(SidebarMenu);
+export default withRouter(observer(SidebarMenu));
 
 const OptionsBar = ({ options, visible }) => {
 	if (options?.length)
