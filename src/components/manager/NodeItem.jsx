@@ -33,7 +33,7 @@ export default class NodeItem extends Component {
 		super(props);
 
 		this.state = {
-			isCollapsed: this.props.isCollapsed || true,
+			isCollapsed: true,
 		};
 	}
 
@@ -101,6 +101,7 @@ export default class NodeItem extends Component {
 							onDoubleClick={() => {
 								if (this.props.onDoubleClick) this.props.onDoubleClick();
 							}}
+							title={this.props.tip}
 						>
 							{haveChildrens && (
 								<button className="flat noPadding" onClick={this.toggleNode}>
@@ -114,6 +115,7 @@ export default class NodeItem extends Component {
 
 							{this.props.icon}
 							<span>{this.props.title}</span>
+							{this.props.extra}
 						</div>
 					</ConditionalWrapper>
 
