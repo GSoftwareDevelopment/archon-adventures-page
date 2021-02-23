@@ -3,7 +3,7 @@ import MarkdownView from "react-showdown";
 
 export const availableLangs = ["en", "pl"];
 export const defaultLang = "en";
-const texts = {};
+export const texts = {};
 
 export function create(msgId, messageData) {
 	texts[msgId] = messageData;
@@ -27,7 +27,7 @@ export function getText(msgId, lang) {
 		});
 		if (usedLang) return msg[usedLang];
 		else {
-			console.log(`! Empty message key ${msgId}`);
+			// console.log(`! Empty message key ${msgId}`);
 			return null;
 		}
 	} else {

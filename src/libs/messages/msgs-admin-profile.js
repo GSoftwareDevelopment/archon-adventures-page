@@ -8,7 +8,7 @@ create(`${base}.title`, { en: "Profile" });
 create(`${base}.pendingData`, { en: "Need wait..." });
 
 create(`${base}.basicInfo`, { en: "Basic information" });
-
+create(`${base}.basicInfo.userRole`, { en: "Your role in system:" });
 //
 
 create(`${base}.extraFields`, { en: "Extra fields" });
