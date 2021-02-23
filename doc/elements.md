@@ -102,7 +102,7 @@ Wyświetla treść karty podanej jako argument _name_.
 
 **Atrybuty**:
 
-- [x] _name_
+- [x] _pathname_
 - [x] _options_ - ustawienia
 
   - [x] _noLangWarnings_ - flaga, odpowiedzialna za nie wyświetlanie ostrzeżenia związanego ze zmianą preferowanego języka w treści karty.
@@ -115,8 +115,6 @@ Wyświetla treść karty podanej jako argument _name_.
 
   - [ ] _allowUserComments_ - flaga, dopuszczająca możliwość komentowania przez zarejestrowanych użytkowników
   - [ ] _allowAnonimousComments_ flaga, podobnie jak _allowUserComments_ tylko dla użytkowników anonimowych
-
-- [x] _body_ - zawiera treść karty (`langObject`)
 
 ### `calendar`
 
