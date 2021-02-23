@@ -76,7 +76,13 @@ export function parseElements(parent, childen) {
 	const childrenResult = childen.map((_childId, index) => {
 		const childId = _childId.toString();
 		const element = layoutsStore.getElementById(childId);
-		// if (!element || element?._new) debugger;
+		if (!element) {
+			console.error(`Element #%s not exist.`, childId);
+			debugger;
+			return null;
+		}
+		// if (element?._new) debugger;
+
 		const { contentType, childs, ...attr } = element;
 		if (layoutElements[contentType]) {
 			attr._parentContentType = parent;
