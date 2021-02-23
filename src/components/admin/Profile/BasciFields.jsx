@@ -1,4 +1,5 @@
 import { basicFieldsDef } from "../../../libs/profileFields";
+import UsersStore from "../../../store/users";
 import * as Messages from "../../../libs/Messages.js";
 
 import { Input } from "../../general/Window";
@@ -12,6 +13,21 @@ function BasicFields({ fields, onChange }) {
 				style={{ backgroundImage: `url(${fields.imageURL})` }}
 			/>
 			<div className="fields">
+				<Input
+					style={{
+						display: "flex",
+						justifyContent: "space-between",
+						marginBottom: "10px",
+					}}
+					inputStyle={{ textAlign: "center" }}
+					key="role"
+					type="text"
+					name="role"
+					label={Messages.getText("admin.account.profile.basicInfo.userRole")}
+					noWrapLabel
+					value={UsersStore.userRole || ""}
+					readOnly
+				/>
 				{basicFieldsDef.map((field) => (
 					<Input
 						style={{ marginBottom: "10px" }}
