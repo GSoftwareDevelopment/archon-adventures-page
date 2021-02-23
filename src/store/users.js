@@ -27,7 +27,13 @@ export const userRole = {
 	GUEST: "guest",
 };
 
-const disallowFields = ["displayName", "firstName", "lastName", "imageURL"];
+const disallowFields = [
+	"displayName",
+	"firstName",
+	"lastName",
+	"imageURL",
+	"role",
+];
 
 class UsersStore {
 	status = status.INIT;
@@ -96,7 +102,21 @@ class UsersStore {
 	}
 
 	get userRole() {
-		return this.customData.role;
+		return this.customData?.role;
+	}
+
+	async getOtherUserInfo(userId) {
+		try {
+			const userBasicData = await db
+				.collection(Collections.USERS)
+				.find({ userId })
+				.first();
+
+			return userBasicData;
+		} catch (error) {
+			console.log(error);
+			return {};
+		}
 	}
 
 	async fetchUserData() {

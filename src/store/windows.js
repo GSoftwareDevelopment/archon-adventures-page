@@ -6,6 +6,7 @@ class WindowsStore {
 	constructor() {
 		makeObservable(this, {
 			windowsList: observable,
+			bringToFront: action,
 			addWindow: action,
 			setAttr: action,
 			removeWindowById: action,
@@ -13,11 +14,31 @@ class WindowsStore {
 		});
 	}
 
-	addWindow(uniqueId, component, attr) {
+	bringToFront(id) {
+		const index = this.windowsList.findIndex((w) => w.id === id);
+		let wnd = this.windowsList[index];
+		if (index !== -1) {
+			this.windowsList.splice(index, 1);
+		}
+		this.windowsList.push(wnd);
+	}
+
+	addWindow(uniqueId, Component, attr, group = null) {
+		// debugger;
+		// const dialog = <Component />;
 		const index = this.windowsList.findIndex((w) => w.id === uniqueId);
-		if (index === -1)
-			this.windowsList.push({ id: uniqueId, Win: [component], attr });
-		else this.windowsList[index] = { id: uniqueId, Win: [component], attr };
+		let sets = this.windowsList[index]?.sets;
+		if (index !== -1) {
+			this.windowsList.splice(index, 1);
+		}
+		if (sets?.restoreSize) sets.size = sets.restoreSize;
+		this.windowsList.push({
+			id: uniqueId,
+			Win: [Component],
+			attr,
+			group,
+			sets,
+		});
 	}
 
 	setAttr(windowId, newAttr) {

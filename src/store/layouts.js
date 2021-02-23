@@ -64,12 +64,16 @@ class LayoutsStore {
 			getCurrentLang: computed,
 			//
 			resetMessage: action,
+			insertElement: action,
 			updateElementAttr: action,
 			setCurrentLang: action,
 			getElementById: action,
 			getElementsByContentType: action,
-			moveItemInNode: action,
+			moveElementInNode: action,
 			fetchList: action,
+			//
+			// addError: action,
+			// clearError: action,
 		});
 	}
 
@@ -121,7 +125,7 @@ class LayoutsStore {
 		}
 	}
 
-	moveItemInNode(nodeId, itemIndex, direction) {
+	moveElementInNode(nodeId, itemIndex, direction) {
 		const nodeChilds = this.getElementById(nodeId).childs;
 
 		if (direction < 0) {
@@ -142,29 +146,82 @@ class LayoutsStore {
 	insert(element, destElementId, destChildsIndex) {
 		const destElement = this.getElementById(destElementId);
 		const destChilds = destElement.childs;
-		element.parrent = destElementId;
 		this.elements.push(element);
 		destChilds.splice(destChildsIndex, 0, element._id);
 	}
 
-	async updateElementAttr(id, updateAttr) {
-		// TODO: Live upgrade - move it to runInAtion behind when correct update in DB
-		const element = this.getElementById(id);
+	insertElement(element, destElementId, destChildsIndex) {
+		this.status = Status.SILENT;
+		const destElement = this.getElementById(destElementId);
 
-		for (const attrKey in updateAttr) {
-			element[attrKey] = updateAttr[attrKey];
+		try {
+			// create new element in DB
+
+			db.collection(Collections.LAYOUT)
+				.insertOne(element)
+				.then((result) => {
+					if (result?.insertedId) {
+						const newId = result.insertedId;
+						const childs = toJS(destElement).childs;
+						childs.splice(destChildsIndex, 0, newId);
+
+						// update childs list in parent element in DB
+						db.collection(Collections.LAYOUT)
+							.updateOne({ _id: { $oid: destElementId } }, { $set: { childs } })
+							.then((result) => {
+								if (result.modifiedCount === 1) {
+									runInAction(() => {
+										const parentElement = this.getElementById(destElementId);
+
+										// add new element & update childs list in parent element - local
+										element._id = newId.toString();
+										this.elements.push(element);
+										parentElement.childs.splice(
+											destChildsIndex,
+											0,
+											element._id
+										);
+									});
+									this.status = Status.DONE;
+									toast.success("Element is added.");
+								} else {
+									toast.error("Something went wrong");
+								}
+							});
+					}
+				});
+		} catch (error) {
+			toast.error(error.message);
+			console.error(error);
+			this.status = Status.WARN;
+			this.message = error.message;
+			return undefined;
 		}
+	}
+
+	async updateElementAttr(id, updateAttr) {
+		const updatedElement = { ...this.getElementById(id) };
+
+		for (const attrKey in updateAttr)
+			updatedElement[attrKey] = updateAttr[attrKey];
+
+		//
 
 		this.status = Status.SILENT;
-		const { _id, ...updateElement } = toJS(element);
+		const { _id, _error, ...updateElement } = toJS(updatedElement);
 
 		try {
 			const result = await db
 				.collection(Collections.LAYOUT)
 				.updateOne({ _id: { $oid: id } }, updateElement);
+
 			runInAction(() => {
 				const contentType = updateElement.contentType.toUpperCase();
 				if (result.matchedCount === 1 && result.modifiedCount === 1) {
+					let element = this.getElementById(id);
+					for (const attrKey in updateAttr)
+						element[attrKey] = updateAttr[attrKey];
+
 					this.status = Status.DONE;
 					toast.success(`${contentType} element updated.`);
 				} else {
@@ -218,6 +275,15 @@ class LayoutsStore {
 		}
 	}
 
+	addError(elementId, message) {
+		const element = this.getElementById(elementId);
+		element._error = message;
+	}
+
+	clearError(elementId) {
+		const element = this.getElementById(elementId);
+		if (element._error) delete element._error;
+	}
 	// async migrate(item, parrentId = null) {
 	// 	let { _id, scheme, elements, ___collapsed, ...elProps } = item;
 
