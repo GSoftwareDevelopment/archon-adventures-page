@@ -23,7 +23,9 @@ class SidebarUser extends Component {
 					title="Open Dashboard..."
 				>
 					<Icon.Person size={ICON_SIZE} />
-					<span>{UsersStore.userName}</span>
+					<span>
+						{UsersStore.userName} ({UsersStore.userRole})
+					</span>
 				</button>
 			</div>
 		);
