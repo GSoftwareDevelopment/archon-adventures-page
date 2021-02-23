@@ -21,10 +21,6 @@
 	cursor: default;
 	transition: 0.25s;
 
-	// &.isExpanded {
-	// 	height: 100vh;
-	// }
-
 	@include general-button;
 }
 

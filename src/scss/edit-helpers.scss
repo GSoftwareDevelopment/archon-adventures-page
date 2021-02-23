@@ -7,6 +7,13 @@
 			background-color: #fff4;
 		}
 	}
+
+	// font
+
+	.small {
+		font-size: 0.8em;
+	}
+
 	// text aligment
 	.left-align {
 		text-align: left !important;
@@ -18,6 +25,10 @@
 
 	.right-align {
 		text-align: right !important;
+	}
+
+	.no-wrap {
+		white-space: nowrap;
 	}
 
 	// flex-box
@@ -38,6 +49,9 @@
 	}
 	.justify-content-between {
 		justify-content: space-between;
+	}
+	.justify-content-around {
+		justify-content: space-around;
 	}
 	.justify-content-end {
 		justify-content: flex-end;
@@ -75,6 +89,20 @@
 		justify-content: flex-end;
 		align-items: center;
 		// margin-right: 5px;
+	}
+
+	.flex-wrap {
+		flex-wrap: wrap;
+	}
+
+	.flex-nowrap {
+		flex-wrap: nowrap;
+	}
+
+	//
+
+	.auto-width {
+		width: auto;
 	}
 
 	.full-width {

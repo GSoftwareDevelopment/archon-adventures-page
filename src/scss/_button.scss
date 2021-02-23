@@ -50,6 +50,11 @@
 			background-color: $button-bg-hover-color;
 		}
 
+		&.no-focus {
+			&:focus {
+				background: none;
+			}
+		}
 		&:disabled {
 			opacity: 0.25;
 			border: #0000 3px solid;

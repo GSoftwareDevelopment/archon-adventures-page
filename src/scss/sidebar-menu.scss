@@ -10,11 +10,20 @@
 	background-color: $sidebar-menu-color;
 	border-left: #000 solid 3px;
 	// box-shadow: -5px 0px 10px #000;
+	// backdrop-filter: grayscale(100%);
 
 	overflow: hidden;
 	transition: 0.25s;
-
+	z-index: 1;
 	&.isExpanded {
 		height: 100vh;
+	}
+
+	&:not(.isExpanded) {
+		> div.sidebar-options-menu {
+			min-height: 0px;
+			height: 0px;
+			padding: 0;
+		}
 	}
 }

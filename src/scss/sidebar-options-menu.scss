@@ -5,12 +5,11 @@
 	flex-direction: row;
 	gap: 5px;
 
-	border-top: #000 solid 3px;
-	background-color: $sidebar-menu-option-color;
+	// border-top: #000 solid 3px;
+	// background-color: $sidebar-menu-option-color;
 	justify-content: flex-end;
 	height: 0;
 	margin: 0;
-	margin-bottom: 40px;
 	padding: 0;
 	transition: 0.25s;
 	overflow: hidden;
@@ -30,7 +29,7 @@
 	&.isExpanded {
 		min-height: 53px;
 		padding: 5px;
-		padding-bottom: 15px;
+		// padding-bottom: 15px;
 		opacity: 1;
 	}
 }
