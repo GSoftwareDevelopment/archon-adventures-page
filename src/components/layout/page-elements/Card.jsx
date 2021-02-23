@@ -164,9 +164,9 @@ class Card extends Component {
 			);
 		}
 
-		if (card.options) {
+		if (this.props.attr?.options) {
 			Messages.toConsole("debug.card.render.optionsModified.open");
-			card.options.forEach((option) => {
+			this.props.attr.options.forEach((option) => {
 				if (typeof option === "string") {
 					Messages.toConsole(
 						"debud.card.render.optionsModfied.flagSet",
