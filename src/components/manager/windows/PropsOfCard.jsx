@@ -1,36 +1,37 @@
 import React, { Component } from "react";
-import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 import { Collections } from "../../../setup";
-import DropTarget from "../../general/DropTarget";
 
 import * as Messages from "../../../libs/Messages.js";
 
 import { Input, ButtonsGroup } from "../../general/Window";
-import { Save as IconSave } from "react-bootstrap-icons";
+import { Save2 as IconSave } from "react-bootstrap-icons";
+import DropTarget from "../../general/DropTarget";
+import { combinePathName } from "../../../libs/utils";
 
-const msg_base = "props.calendar";
+const msg_base = "props.card";
 
-class PropsOfCalendar extends Component {
+export default class PropsOfCard extends Component {
 	state = {
-		sourcePath: this.props.attr.path || "",
-		view: [...this.props.attr.options.view],
-		pagination: this.props.attr.options.pagination || false,
-		limit: this.props.attr.options.limit || 0,
+		sourcePath: this.props.attr.name || "",
+		options: [...this.props.attr.options],
 	};
 
-	viewFlags = ["showDate", "showTitle", "showDescription"];
+	optionsFlags = [
+		"noLangWarnings",
+		"useMarkdown",
+		"allowUserComments",
+		"allowAnonimousComments",
+	];
 
 	constructor(props) {
 		super(props);
 
 		const { dialog } = props;
-
 		dialog({
-			className: "max-height",
+			className: " window-add-element max-height",
 			size: "panel",
 			sizeCycle: ["panel", "minimized"],
-			disableMaximize: true,
 			title: Messages.getText(`${msg_base}.window.title`),
 		});
 	}
@@ -40,39 +41,30 @@ class PropsOfCalendar extends Component {
 	};
 
 	dropSourcePath = (source) => {
+		debugger;
 		try {
 			const itemData = JSON.parse(source);
 			if (
 				typeof itemData === "object" &&
 				itemData.src === "filesystem" &&
-				itemData.collection === Collections.CALENDAR
+				itemData.collection === Collections.CARDS
 			)
-				this.updateSourcePath(itemData.path);
+				this.updateSourcePath(combinePathName(itemData.path, itemData.name));
 		} catch (error) {
 			console.log("Dropped data is not in JSON format");
 		}
 	};
 
-	save = (e) => {
-		e.preventDefault();
-		LayoutsStore.updateElementAttr(this.props.attr._id, {
-			path: this.state.sourcePath,
-			options: {
-				pagination: this.state.pagination,
-				limit: this.state.limit,
-				view: this.state.view,
-			},
-		});
-	};
+	save = () => {};
 
 	render() {
-		const currentViewFlags = this.state.view;
+		const currentOptionsFlags = this.state.options;
 
 		return (
 			<React.Fragment>
 				<div>
-					<label htmlFor="source-path">
-						{Messages.getText(`${msg_base}.sourcePath`)}
+					<label htmlFor="source-filepath">
+						{Messages.getText(`${msg_base}.sourceFilePath`)}
 					</label>
 					<DropTarget onItemDropped={this.dropSourcePath} dropEffect="link">
 						<input
@@ -86,10 +78,11 @@ class PropsOfCalendar extends Component {
 						/>
 					</DropTarget>
 				</div>
+
 				<fieldset>
 					<legend>{Messages.getText(`${msg_base}.attributes`)}</legend>
-					{this.viewFlags.map((flag) => {
-						const isSet = currentViewFlags.includes(flag);
+					{this.optionsFlags.map((flag) => {
+						const isSet = currentOptionsFlags.includes(flag);
 						return (
 							<Input
 								key={flag}
@@ -101,14 +94,14 @@ class PropsOfCalendar extends Component {
 								onChange={(e) => {
 									const state = e.currentTarget.checked;
 									if (state) {
-										if (!currentViewFlags.includes(flag)) {
-											currentViewFlags.push(flag);
-											this.setState({ view: currentViewFlags });
+										if (!currentOptionsFlags.includes(flag)) {
+											currentOptionsFlags.push(flag);
+											this.setState({ options: currentOptionsFlags });
 										}
 									} else {
-										if (currentViewFlags.includes(flag)) {
+										if (currentOptionsFlags.includes(flag)) {
 											this.setState({
-												view: currentViewFlags.filter((f) => f !== flag),
+												options: currentOptionsFlags.filter((f) => f !== flag),
 											});
 										}
 									}
@@ -116,30 +109,6 @@ class PropsOfCalendar extends Component {
 							/>
 						);
 					})}
-
-					<Input
-						className="justify-between hover"
-						type="checkbox"
-						name="pagination"
-						label={Messages.getText(`${msg_base}.attributes.pagination`)}
-						checked={this.state.pagination}
-						onChange={(e) => {
-							this.setState({ pagination: e.currentTarget.checked });
-						}}
-					/>
-					<Input
-						className="justify-between hover"
-						inputStyle={{ textAlign: "right", width: "75px" }}
-						type="number"
-						name="limit"
-						min="0"
-						noWrapLabel
-						label={Messages.getText(`${msg_base}.attributes.limit`)}
-						value={this.state.limit}
-						onChange={(e) => {
-							this.setState({ limit: parseInt(e.currentTarget.value) });
-						}}
-					/>
 				</fieldset>
 
 				<ButtonsGroup
@@ -162,5 +131,3 @@ class PropsOfCalendar extends Component {
 		);
 	}
 }
-
-export default observer(PropsOfCalendar);

@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
-import LayoutsStore from "../../../store/layouts";
+import UsersStore from "../../../store/users";
+// import LayoutsStore from "../../../store/layouts";
 import FSStore from "../../../store/fs";
 import { combinePathName, pathDestructure } from "../../../libs/utils";
 
-import Window, { ButtonsGroup, Input } from "../../general/Window";
+import { ButtonsGroup } from "../../general/Window";
 import { Save as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
-// import CustomScrollbar from "../../layout/CustomScrollbar";
-// import ContentLoader from "../../layout/ContentLoader";
 import InputML from "../../general/InputML";
 
 const status = {
@@ -26,10 +25,28 @@ export default class CardEdit extends Component {
 		lang: [],
 		body: {},
 		pathfile: "",
+		_path: "",
+		_file: "",
+		prompt: "",
+		userInfo: { displayName: "..." },
 	};
 
+	constructor(props) {
+		super(props);
+
+		const { dialog } = props;
+		const { name } = props.attr;
+
+		dialog({
+			className: "max-height",
+			size: "maximized",
+			sizeCycle: ["maximized", "minimized"],
+			title: name ? "Edit card: " + name : "New card",
+		});
+	}
+
 	async componentDidMount() {
-		this.setState({ status: status.READING });
+		// this.setState({ status: status.READING });
 		const { _id, path, name } = this.props.attr;
 
 		if (_id) {
@@ -45,7 +62,12 @@ export default class CardEdit extends Component {
 					lang: cardData.lang,
 					body: cardData.body,
 					pathfile: combinePathName(path, name),
+					_path: path,
+					_name: name,
 					status: status.DONE,
+					prompt: "",
+					createdAt: cardData.createdAt,
+					userInfo: await UsersStore.getOtherUserInfo(cardData.userId),
 				});
 			} catch (error) {
 				console.error(error);
@@ -59,6 +81,7 @@ export default class CardEdit extends Component {
 				body: {},
 				lang: [],
 				createdAt: new Date(),
+				userId: UsersStore.getCurrentUser().id,
 			};
 			this.cardData = newCardData;
 
@@ -67,44 +90,16 @@ export default class CardEdit extends Component {
 				body: newCardData.body,
 				pathfile: combinePathName(path, name),
 				status: status.DONE,
+				createdAt: newCardData.createdAt,
+				userInfo: await UsersStore.getOtherUserInfo(newCardData.userId),
+				prompt: "",
 			});
 		}
 	}
 
-	changeEditLang = (e) => {
-		const newEditLang = e.currentTarget.value;
-		this.setState({ editLang: newEditLang });
-	};
-
-	getContent = (lang) => {
-		let ctn = this.state.body[lang] || "";
-
-		return ctn;
-	};
-
-	setContent = (e) => {
-		const ctn = e.currentTarget.value;
-		const body = { ...this.state.body };
-		body[this.state.editLang] = ctn;
+	updateBody = (body) => {
 		this.setState({ body });
 	};
-
-	langButtons(currentLang) {
-		const layoutLangList = LayoutsStore.current.langs;
-		return layoutLangList.map((lang) => {
-			const isUsed = this.getContent(lang.symbol).trim() !== "";
-			return {
-				icon: lang.symbol,
-				title: lang.name,
-				className: lang.symbol === currentLang ? "active" : "",
-				style: { fontWeight: isUsed ? "bold" : "normal" },
-				onClick: (e) => {
-					this.setState({ editLang: lang.symbol });
-				},
-				enabled: this.state.status === status.DONE,
-			};
-		});
-	}
 
 	cancelSaveCard = () => {
 		this.setState({ status: status.DONE });
@@ -125,14 +120,18 @@ export default class CardEdit extends Component {
 				this.cardData.name = name;
 
 				let result;
-				if (this.cardData._id)
+				if (this.cardData._id) {
+					// Update card
+
 					result = await db
 						.collection(Collections.CARDS)
 						.updateOne({ _id: this.cardData._id }, this.cardData);
-				else
+				} else {
+					// Create new card
 					result = await db
 						.collection(Collections.CARDS)
 						.insertOne(this.cardData);
+				}
 
 				if (result.modifiedCount === 1) {
 					FSStore.updateCollectionFS(Collections.CARDS);
@@ -141,6 +140,16 @@ export default class CardEdit extends Component {
 						status: status.DONE,
 						message: "Card correctly saved",
 					});
+
+					// // update fslog
+					// const logData={
+					// 	type:"modify",
+					// 	fsId: this.cardData._id,
+					// 	userId: this.cardData.userId,
+					// 	timestamp: new Date()
+					// };
+
+					// await db.collection(Collections.FSLOG).insertOne(logData);
 				} else if (result.insertedId) {
 					FSStore.add(this.cardData, Collections.CARDS);
 					toast.success("Card was created.");
@@ -160,57 +169,112 @@ export default class CardEdit extends Component {
 			}
 		} else {
 			// show filepath
-			this.setState({ status: status.SAVEPROMPT });
+			this.setState({ status: status.SAVEPROMPT, prompt: "name" });
 		}
 	};
 
 	render() {
 		const isEnabled = this.state.status === status.DONE;
-		const { name } = this.props.attr;
+		const displayName = this.state.userInfo?.displayName;
 
 		return (
-			<Window
-				className="window max-height"
-				size="maximized"
-				sizeCycle={["maximized", "minimized"]}
-				title={name ? "Edit card: " + name : "New card"}
-				onClose={this.props.onClose}
-			>
+			<React.Fragment>
 				<InputML
 					name="card-body"
 					label="Content body"
 					currentLang="en"
 					langContent={this.state.body}
 					disabled={!isEnabled}
+					onUpdate={this.updateBody}
 				>
 					<textarea style={{ minHeight: "200px", height: "100%" }} />
 				</InputML>
+				{this.state.status !== status.INIT && (
+					<div
+						className="d-flex small"
+						style={{ margin: "0 10px", gap: "5px" }}
+					>
+						<span>{`Created by: ${displayName}`}</span>
+						<span>
+							{"at "}
+							{this.state.createdAt?.toLocaleString()}
+						</span>
+					</div>
+				)}
 				<ButtonsGroup
 					className="window-footer group-button"
 					style={{ marginBottom: "5px" }}
-					onlyIcons={true}
+					onlyIcons={false}
 					buttons={[
 						{
 							component: (
-								<Input
-									className="justify-between"
-									type="text"
-									name="filepath"
-									label="Save&nbsp;as:"
-									value={this.state.pathfile}
-									autoFocus
-									onChange={(e) => {
-										this.setState({ pathfile: e.currentTarget.value });
-									}}
-								/>
+								<React.Fragment>
+									<div className="d-flex align-items-center">
+										<span className="no-wrap">Save as:</span>
+										<button
+											style={{ marginRight: "5px" }}
+											onClick={(e) => {
+												e.preventDefault();
+												this.setState({ prompt: "path" });
+											}}
+										>
+											{this.state._path}
+										</button>
+										<input
+											className="justify-between"
+											type="text"
+											name="filepath"
+											value={this.state._name}
+											autoFocus
+											onChange={(e) => {
+												this.setState({ _name: e.currentTarget.value });
+											}}
+										/>
+									</div>
+								</React.Fragment>
 							),
 							className: "full-width",
-							tip: "File name with Full path",
-							visible: this.state.status === status.SAVEPROMPT,
+							tip: "File name",
+							visible:
+								this.state.status === status.SAVEPROMPT &&
+								this.state.prompt === "name",
+						},
+						{
+							component: (
+								<React.Fragment>
+									<div className="d-flex align-items-center">
+										<span className="no-wrap">Save as:</span>
+										<input
+											style={{ marginLeft: "5px" }}
+											className="justify-between"
+											type="text"
+											name="filepath"
+											value={this.state._path}
+											autoFocus
+											onChange={(e) => {
+												this.setState({ _path: e.currentTarget.value });
+											}}
+										/>
+										<button
+											onClick={(e) => {
+												e.preventDefault();
+												this.setState({ prompt: "name" });
+											}}
+										>
+											{this.state._name}
+										</button>
+									</div>
+								</React.Fragment>
+							),
+							className: "full-width",
+							tip: "File name",
+							visible:
+								this.state.status === status.SAVEPROMPT &&
+								this.state.prompt === "path",
 						},
 						{
 							icon: <IconSave size="1.5em" />,
-							tip: "Save",
+							title: "Save",
 							onClick: this.switchToSavePropmt,
 							enabled: isEnabled || this.state.status === status.SAVEPROMPT,
 						},
@@ -221,7 +285,7 @@ export default class CardEdit extends Component {
 						},
 					]}
 				/>
-			</Window>
+			</React.Fragment>
 		);
 	}
 }

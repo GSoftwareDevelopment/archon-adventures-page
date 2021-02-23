@@ -3,18 +3,25 @@ import React, { Component } from "react";
 import * as Messages from "../../../libs/Messages";
 import * as Icon from "react-bootstrap-icons";
 
-import Window, { ButtonsGroup } from "../../general/Window";
+import { ButtonsGroup } from "../../general/Window";
 
 export default class DeleteConfirmation extends Component {
+	constructor(props) {
+		super(props);
+
+		const { dialog } = props;
+
+		dialog({
+			size: "panel",
+			sizeCycle: ["panel"],
+			title: Messages.getText("filesystem.deleteConfirm.window.title"),
+			disableMaximize: true,
+			disableMinimize: true,
+		});
+	}
 	render() {
 		return (
-			<Window
-				className="window"
-				title={Messages.getText("filesystem.deleteConfirm.window.title")}
-				onClose={this.props.onClose}
-				disableMaximize={true}
-				disableMinimize={true}
-			>
+			<React.Fragment>
 				<div className="d-flex flex-row">
 					<Icon.Trash size="32px" style={{ margin: "5px" }} />
 					<div className="align-center">
@@ -28,7 +35,7 @@ export default class DeleteConfirmation extends Component {
 					{this.props.attr.item}
 				</div>
 				<ButtonsGroup
-					className="group-button justify-between"
+					className="group-button justify-content-around"
 					style={{ marginBottom: "5px" }}
 					buttons={[
 						{
@@ -37,8 +44,8 @@ export default class DeleteConfirmation extends Component {
 								"filesystem.deleteConfirm.buttons.delete"
 							),
 							onClick: () => {
-								const result = this.props.actions[0](); // TODO:	Niepodoba mi się ta forma wywołania akcji :/
-								if (result) this.props.onClose();
+								const result = this.props.attr.actions[0](); // TODO:	Niepodoba mi się ta forma wywołania akcji :/
+								if (result) this.props.close();
 							},
 						},
 						{
@@ -46,11 +53,11 @@ export default class DeleteConfirmation extends Component {
 							title: Messages.getText(
 								"filesystem.deleteConfirm.buttons.cancel"
 							),
-							onClick: this.props.onClose,
+							onClick: this.props.close,
 						},
 					]}
 				/>
-			</Window>
+			</React.Fragment>
 		);
 	}
 }

@@ -4,40 +4,48 @@ import React, { Component, useState } from "react";
 import * as Messages from "../../../libs/Messages.js";
 import { ContentTypes } from "../../../store/layouts";
 
-import Window, { ButtonsGroup, SelectList } from "../../general/Window";
+import { SelectList } from "../../general/Window";
 import * as Icon from "react-bootstrap-icons";
 import Drag from "../../general/Drag";
 import MarkdownView from "react-showdown";
 import CustomScrollbar from "../../layout/CustomScrollbar";
+
+const msg_base = "window.newElement";
 
 export default class AddElement extends Component {
 	state = {
 		choicedElement: "",
 	};
 
+	constructor(props) {
+		super(props);
+		// const attr = this.props.attr;
+		// const nodeName = attr.contentType.toUpperCase();
+
+		const { dialog } = props;
+
+		dialog({
+			className: " window-add-element max-height",
+			size: "panel",
+			sizeCycle: ["maximized", "panel"],
+			title: Messages.getText(`${msg_base}.window.title`),
+		});
+	}
+
 	onChoiceElement = (choicedElement) => {
 		this.setState({ choicedElement });
 	};
 
 	render() {
-		const attr = this.props.attr;
-		const nodeName = attr.contentType.toUpperCase();
 		return (
-			<Window
-				className="window window-add-element max-height"
-				size="panel"
-				sizeCycle={["maximized", "panel"]}
-				title={`Add element '${nodeName}'`}
-				onClose={this.props.onClose}
-			>
+			<React.Fragment>
 				<MarkdownView
 					className="info"
-					markdown={Messages.getText("window.newElement.info")}
+					markdown={Messages.getText(`${msg_base}.info`)}
 				/>
 				<div style={{ flexGrow: "2", minHeight: "200px" }}>
 					<CustomScrollbar>
 						<ElementsList
-							title="Elements"
 							items={[...blockElements, ...contentElements]}
 							choiced={this.state.choicedElement}
 							onChoice={this.onChoiceElement}
@@ -53,6 +61,7 @@ export default class AddElement extends Component {
 						alignItems: "center",
 					}}
 				>
+					{/*
 					<ButtonsGroup
 						className="group-button"
 						onlyIcons={true}
@@ -75,8 +84,9 @@ export default class AddElement extends Component {
 							},
 						]}
 					/>
+					*/}
 				</fieldset>
-			</Window>
+			</React.Fragment>
 		);
 	}
 }
@@ -127,9 +137,12 @@ function ElementsList({ title, items, choiced = "", onChoice }) {
 
 //
 
+const msg_block = Messages.getText(`${msg_base}.groupsNames.block`);
+const msg_content = Messages.getText(`${msg_base}.groupsNames.content`);
+
 const blockElements = [
 	{
-		group: "Block elements",
+		group: msg_block,
 		name: ContentTypes.HEADER,
 		title: "Header",
 		icon: <Icon.Window size="64px" />,
@@ -138,7 +151,7 @@ const blockElements = [
 		},
 	},
 	{
-		group: "Block elements",
+		group: msg_block,
 		name: ContentTypes.MENUROUTER,
 		title: "Menu router",
 		icon: <Icon.MenuApp size="64px" />,
@@ -147,7 +160,7 @@ const blockElements = [
 		},
 	},
 	{
-		group: "Block elements",
+		group: msg_block,
 		name: ContentTypes.ROUTERCONTENT,
 		title: "Route content",
 		icon: <Icon.Link45deg size="64px" />,
@@ -162,7 +175,7 @@ const blockElements = [
 		},
 	},
 	{
-		group: "Block elements",
+		group: msg_block,
 		name: ContentTypes.ROW,
 		title: "Row",
 		icon: <Icon.ViewList size="64px" />,
@@ -171,7 +184,7 @@ const blockElements = [
 		},
 	},
 	{
-		group: "Block elements",
+		group: msg_block,
 		name: ContentTypes.FOOTER,
 		title: "Footer",
 		icon: <Icon.WindowDock size="64px" />,
@@ -183,7 +196,7 @@ const blockElements = [
 
 const contentElements = [
 	{
-		group: "Content elements",
+		group: msg_content,
 		name: ContentTypes.MENULINK,
 		title: "Menu item",
 		icon: <Icon.Link size="64px" />,
@@ -193,27 +206,24 @@ const contentElements = [
 		},
 	},
 	{
-		group: "Content elements",
+		group: msg_content,
 		name: ContentTypes.LANGSELECTOR,
 		title: "Menu Language selector",
 		icon: <Icon.List size="64px" />,
 	},
 	{
-		group: "Content elements",
+		group: msg_content,
 		name: ContentTypes.CARD,
 		title: "Card",
 		icon: <Icon.JournalRichtext size="64px" />,
 		defaultNew: {
 			name: "",
-			options: {
-				noLangWarnings: true,
-				useMarkdown: true,
-			},
+			options: ["noLangWarnings", "useMarkdown"],
 			childs: [],
 		},
 	},
 	{
-		group: "Content elements",
+		group: msg_content,
 		name: ContentTypes.GALERY,
 		title: "Gallery",
 		icon: <Icon.JournalAlbum size="64px" />,
@@ -222,7 +232,7 @@ const contentElements = [
 		},
 	},
 	{
-		group: "Content elements",
+		group: msg_content,
 		name: ContentTypes.CALENDAR,
 		title: "Calendar (Blog)",
 		icon: <Icon.Calendar3 size="64px" />,
@@ -237,7 +247,7 @@ const contentElements = [
 		},
 	},
 	{
-		group: "Content elements",
+		group: msg_content,
 		name: ContentTypes.COMMENTS,
 		title: "Comments",
 		icon: <Icon.ChatRight size="64px" />,

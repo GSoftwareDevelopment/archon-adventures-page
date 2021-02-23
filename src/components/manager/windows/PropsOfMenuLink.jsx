@@ -1,14 +1,14 @@
 import "../scss/poprsOfMenuLink.scss";
 import React, { Component } from "react";
 import LayoutsStore, { Status } from "../../../store/layouts";
-// import { Collections } from "../../../setup";
-// import DropTarget from "../../general/DropTarget";
 
-// import * as Messages from "../../../libs/Messages.js";
-
-import Window, { ButtonsGroup } from "../../general/Window";
+import { ButtonsGroup } from "../../general/Window";
 import { Save as IconSave } from "react-bootstrap-icons";
 import InputML from "../../general/InputML";
+
+import * as Messages from "../../../libs/Messages";
+
+const msg_base = "props.menuLink";
 
 class PropsOfMenuLink extends Component {
 	state = {
@@ -16,9 +16,27 @@ class PropsOfMenuLink extends Component {
 		title: this.props.attr.title || {},
 	};
 
+	constructor(props) {
+		super(props);
+
+		const { dialog } = props;
+
+		dialog({
+			className: "window-menulink max-height",
+			size: "panel",
+			sizeCycle: ["panel", "minimized"],
+			disableMaximize: true,
+			title: Messages.getText(`${msg_base}.window.title`),
+		});
+	}
+
 	updateDestRoute(destRoute) {
 		this.setState({ destRoute });
 	}
+
+	updateTitle = (title) => {
+		this.setState({ title });
+	};
 
 	handleRenderItem = (item, attr) => {
 		return {
@@ -32,15 +50,21 @@ class PropsOfMenuLink extends Component {
 		};
 	};
 
+	save = (e) => {
+		e.preventDefault();
+		LayoutsStore.updateElementAttr(this.props.attr._id, {
+			destRoute: this.state.destRoute,
+			title: this.state.title,
+		});
+	};
+
 	render() {
 		return (
-			<Window
-				className="window window-menulink max-height"
-				title={"Properties of Menu link"}
-				onClose={this.props.onClose}
-			>
+			<React.Fragment>
 				<div>
-					<label htmlFor="source-path">Destination route:</label>
+					<label htmlFor="source-path">
+						{Messages.getText(`${msg_base}.destRoute`)}
+					</label>
 					<input
 						className="hover"
 						type="text"
@@ -53,23 +77,24 @@ class PropsOfMenuLink extends Component {
 				</div>
 
 				<InputML
-					name="title"
-					label="Link title"
+					name="link-title"
+					label={Messages.getText(`${msg_base}.linkTitle`)}
 					currentLang="en"
 					langContent={this.state.title}
+					onUpdate={this.updateTitle}
 				>
 					<input autoComplete="Off" />
 				</InputML>
 
-				<div style={{ flexGrow: "2" }} />
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px" }}
-					onlyIcons={true}
+					style={{ marginBottom: "5px", marginTop: "auto" }}
+					onlyIcons={false}
 					buttons={[
 						{
 							icon: <IconSave size="1.5em" />,
-							tip: "Save",
+							title: Messages.getText(`props.save`),
+							tip: Messages.getText(`props.save.tip`),
 							onClick: this.save,
 							enabled:
 								LayoutsStore.currentStatus !== Status.SILENT ||
@@ -77,7 +102,7 @@ class PropsOfMenuLink extends Component {
 						},
 					]}
 				/>
-			</Window>
+			</React.Fragment>
 		);
 	}
 }

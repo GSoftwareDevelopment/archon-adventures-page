@@ -1,12 +1,19 @@
+import "../scss/select-list.scss";
+
 import React, { Component, useState } from "react";
 import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
-import "../scss/select-list.scss";
+import WindowsStore from "../../../store/windows";
 
-import Window, { Input, ButtonsGroup, SelectList } from "../../general/Window";
+import { Input, ButtonsGroup, SelectList } from "../../general/Window";
 import * as Icon from "react-bootstrap-icons";
 import { Save as IconSave } from "react-bootstrap-icons";
-import Alert from "../../layout/Alert";
+
+import * as Messages from "../../../libs/Messages";
+
+import DeleteConfirmation from "./DeleteConfirmation";
+
+const msg_base = "props.layout";
 
 class PropsOfLayout extends Component {
 	constructor(props) {
@@ -21,6 +28,16 @@ class PropsOfLayout extends Component {
 				name: entry.name,
 			})),
 		};
+
+		const { dialog } = props;
+
+		dialog({
+			className: "max-height",
+			size: "panel",
+			sizeCycle: ["panel", "minimized"],
+			disableMaximize: true,
+			title: Messages.getText(`${msg_base}.window.title`),
+		});
 	}
 
 	onAddLang = (newEntry) => {
@@ -52,49 +69,45 @@ class PropsOfLayout extends Component {
 
 	render() {
 		return (
-			<Window
-				className="window max-height"
-				title="Property of layout"
-				onClose={this.props.onClose}
-			>
+			<React.Fragment>
 				<Input
 					className="justify-between hover"
 					type="text"
 					name="name"
-					label="Name:"
+					label={Messages.getText(`${msg_base}.name`)}
+					tip={Messages.getText(`${msg_base}.name.tip`)}
 					value={this.state.name}
 					onChange={(e) => {
 						this.setState({ name: e.currentTarget.value });
 					}}
 				/>
-				<Input
-					className="justify-between hover"
-					type="checkbox"
-					name="default"
-					label="is default layout:"
-					checked={this.state.default}
-					onChange={(e) => {
-						this.setState({ default: e.currentTarget.checked });
-					}}
-				/>
 				<fieldset style={{ minHeight: "200px" }}>
-					<legend>Languages:</legend>
+					<legend>{Messages.getText(`${msg_base}.languageList.title`)}</legend>
 					<ManageLangs
 						langs={this.state.langs}
 						default={this.state.defaultLang}
 						onAdd={this.onAddLang}
 						onDelete={this.onDeleteLang}
+						dialogId={this.props.attr._id}
 					/>
 				</fieldset>
-				<div style={{ flexGrow: "2" }} />
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px" }}
-					onlyIcons={true}
+					style={{ marginBottom: "5px", marginTop: "auto" }}
+					onlyIcons={false}
 					buttons={[
 						{
+							style: { marginRight: "auto" },
+							title: Messages.getText(`${msg_base}.button.setAsDefault`),
+							tip: Messages.getText(`${msg_base}.button.setAsDefault.tip`),
+							onClick: (e) => {
+								this.setState({ default: e.currentTarget.checked });
+							},
+						},
+						{
 							icon: <IconSave size="1.5em" />,
-							tip: "Save",
+							title: Messages.getText(`props.save`),
+							tip: Messages.getText(`props.save.tip`),
 							onClick: this.save,
 							enabled:
 								LayoutsStore.currentStatus !== Status.SILENT ||
@@ -102,7 +115,7 @@ class PropsOfLayout extends Component {
 						},
 					]}
 				/>
-			</Window>
+			</React.Fragment>
 		);
 	}
 }
@@ -125,7 +138,27 @@ export class ManageLangs extends Component {
 
 	activeDelLang = (e) => {
 		if (e) e.preventDefault();
-		this.setState({ visibleControls: "del-confirm" });
+		// this.setState({ visibleControls: "del-confirm" });
+
+		const lang = this.state.choiced;
+		const language = this.props.langs.find((l) => l.symbol === lang);
+		WindowsStore.addWindow(
+			"delete-language",
+			DeleteConfirmation,
+			{
+				item: language.name,
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					() => {
+						this.props.onDelete(lang);
+						return true;
+					},
+				],
+			},
+			this.props.dialogId
+		);
+		// if (this.props.onDelete) this.props.onDelete(this.state.choiced);
+		// this.activeLangButtons(e);
 	};
 
 	activeLangButtons = (e) => {
@@ -142,10 +175,7 @@ export class ManageLangs extends Component {
 		this.activeLangButtons();
 	};
 
-	onDelLang = (e) => {
-		if (this.props.onDelete) this.props.onDelete(this.state.choiced);
-		this.activeLangButtons(e);
-	};
+	onDelLang = (e) => {};
 
 	validateNewLang = (newLangSymbol, newLangName) => {
 		const symbol = newLangSymbol.trim().toLowerCase();
@@ -173,21 +203,15 @@ export class ManageLangs extends Component {
 				</React.Fragment>
 			),
 			after:
-				this.state.visibleControls === "del-confirm"
-					? isChoiced && (
-							<DelConfirm
-								onConfirm={this.onDelLang}
-								onCancel={this.activeLangButtons}
-							/>
-					  )
-					: this.state.visibleControls === "add-lang" &&
-					  lastItem && (
+				this.state.visibleControls === "add-lang"
+					? lastItem && (
 							<NewItem
 								onOK={this.onAddLang}
 								onCancel={this.activeLangButtons}
 								onValidate={this.validateNewLang}
 							/>
-					  ),
+					  )
+					: null,
 		};
 	};
 
@@ -198,19 +222,24 @@ export class ManageLangs extends Component {
 		const buttons = [
 			{
 				icon: <Icon.PlusCircle />,
-				title: "Add",
+				title: Messages.getText(`${msg_base}.languageList.button.add`),
+				tip: Messages.getText(`${msg_base}.languageList.button.add.tip`),
 				onClick: this.activeAddLang,
 				enabled: true,
 			},
 			{
 				icon: <Icon.Trash />,
-				title: "Delete",
+				title: Messages.getText(`${msg_base}.languageList.button.delete`),
+				tip: Messages.getText(`${msg_base}.languageList.button.delete.tip`),
 				onClick: this.activeDelLang,
 				enabled: isChoiced,
 			},
 			{
 				icon: <Icon.Asterisk />,
-				title: "Set Default",
+				title: Messages.getText(`${msg_base}.languageList.button.setAsDefault`),
+				tip: Messages.getText(
+					`${msg_base}.languageList.button.setAsDefault.tip`
+				),
 				onClick: this.activeSetDefult,
 				enabled: isChoiced && !isChoicedAreDefault,
 			},
@@ -229,13 +258,11 @@ export class ManageLangs extends Component {
 						});
 					}}
 				/>
-				{this.state.visibleControls === "main-buttons" && (
-					<ButtonsGroup
-						className="group-button group-vertical"
-						onlyIcons={true}
-						buttons={buttons}
-					/>
-				)}
+				<ButtonsGroup
+					className="group-button group-vertical"
+					onlyIcons={true}
+					buttons={buttons}
+				/>
 			</div>
 		);
 	}
@@ -250,7 +277,13 @@ const NewItem = ({ onOK, onCancel, onValidate, props }) => {
 			<Input
 				name="symbol"
 				type="text"
-				maxLength="6"
+				title={Messages.getText(
+					`${msg_base}.languageList.newEntry.field.symbol`
+				)}
+				tip={Messages.getText(
+					`${msg_base}.languageList.newEntry.field.symbol.tip`
+				)}
+				maxLength="2"
 				style={{ width: "40px", textAlign: "center" }}
 				autoFocus
 				value={newLangSymbol}
@@ -261,6 +294,12 @@ const NewItem = ({ onOK, onCancel, onValidate, props }) => {
 			<Input
 				name="name"
 				type="text"
+				title={Messages.getText(
+					`${msg_base}.languageList.newEntry.field.country`
+				)}
+				tip={Messages.getText(
+					`${msg_base}.languageList.newEntry.field.country.tip`
+				)}
 				maxLength="32"
 				value={newLangName}
 				onChange={(e) => {
@@ -270,6 +309,9 @@ const NewItem = ({ onOK, onCancel, onValidate, props }) => {
 			<button
 				className="green"
 				disabled={!onValidate(newLangSymbol, newLangName)}
+				title={Messages.getText(
+					`${msg_base}.languageList.newEntry.button.accept.tip`
+				)}
 				onClick={(e) => {
 					e.preventDefault();
 					if (onOK)
@@ -280,46 +322,21 @@ const NewItem = ({ onOK, onCancel, onValidate, props }) => {
 				}}
 			>
 				<Icon.Check2 />
+				{Messages.getText(`${msg_base}.languageList.newEntry.button.accept`)}
 			</button>
 			<button
 				className="red"
+				title={Messages.getText(
+					`${msg_base}.languageList.newEntry.button.cancel.tip`
+				)}
 				onClick={(e) => {
 					e.preventDefault();
 					if (onCancel) onCancel();
 				}}
 			>
 				<Icon.X />
+				{Messages.getText(`${msg_base}.languageList.newEntry.button.cancel`)}
 			</button>
 		</div>
 	);
 };
-
-const DelConfirm = ({ onConfirm, onCancel, ...props }) => (
-	<div className="list-row">
-		<Alert
-			className="info info-noBtn full-width"
-			variant="error align-center"
-			icon="Trash"
-		>
-			Confirm language removal?
-			<div className="justify-between">
-				<button
-					className="red"
-					onClick={(e) => {
-						e.preventDefault();
-						if (onConfirm) onConfirm(e);
-					}}
-				>
-					Delete
-				</button>
-				<button
-					onClick={(e) => {
-						if (onCancel) onCancel(e);
-					}}
-				>
-					Cancel
-				</button>
-			</div>
-		</Alert>
-	</div>
-);
