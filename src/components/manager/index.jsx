@@ -20,7 +20,11 @@ export default class SiteManager extends Component {
 					}}
 				>
 					<WindowsList windowsStore={WindowsStore} />
-					<SidebarMenu items={menu} isExpanded={this.state.isExpanded} />
+					<SidebarMenu
+						style={{ paddingBottom: "50px" }}
+						items={menu}
+						isExpanded={this.state.isExpanded}
+					/>
 					<SidebarUser />
 				</Sidebar>
 			</React.Fragment>

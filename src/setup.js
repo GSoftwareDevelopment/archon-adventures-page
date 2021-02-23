@@ -11,6 +11,7 @@ export const Collections = {
 	GALLERIES: "galery",
 	USERS: "users",
 	COMMENTS: "comments",
+	FSLOG: "fslog",
 };
 
 // Internal path identyficators
