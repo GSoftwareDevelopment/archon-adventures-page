@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import FSStore from "../../store/fs.js";
+// import UsersStore from "../../store/users.js";
 
 import { Path } from "../../setup";
 import { unifyPath } from "../../libs/utils";
@@ -23,7 +24,7 @@ class FileSystemList extends Component {
 		}
 
 		const filesList = FSStore.fileList(this.props.collection);
-
+		
 		return (
 			<PathTree
 				{...this.props}
@@ -117,7 +118,7 @@ class PathTree extends Component {
 				name: this.props.selected.name,
 			};
 		}
-
+		
 		return (
 			<React.Fragment>
 				{this.subPaths(this.props.path)}
