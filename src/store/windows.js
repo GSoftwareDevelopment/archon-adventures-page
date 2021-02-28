@@ -50,7 +50,14 @@ class WindowsStore {
 
 	removeWindowById(wndId) {
 		const wndIndex = this.windowsList.findIndex((wnd) => wnd.id === wndId);
-		if (wndIndex > -1) this.windowsList.splice(wndIndex, 1);
+		if (wndIndex > -1) {
+			this.windowsList.splice(wndIndex, 1);
+			this.windowsList
+				.filter((wnd) => wnd.group === wndId)
+				.forEach((wnd) => {
+					this.removeWindowById(wnd.id);
+				});
+		}
 	}
 
 	get windows() {
