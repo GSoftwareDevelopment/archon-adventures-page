@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
-import LayoutsStore from "../../store/layouts";
+import LayoutsStore from "../../../store/layouts";
 
-import { ButtonsGroup } from "./Window";
+import ButtonsGroup from "./ButtonsGroup";
 
 class InputML extends Component {
 	constructor(props) {
