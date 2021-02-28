@@ -36,12 +36,12 @@ Aktualny postęp:
   - [x] wylogowanie
   - [x] podział na role użytkowników
     - Dostępne role
-      - Super-User - nieograniczony dostęp do zasobów
-      - Maker - Administrator strony
-      - Writer - Administrator treści
-      - Mod - Moderator treści
-      - User - może przeglądać treści oraz je komentować
-      - Guest - przeglądanie treści
+      - **Super-User** - nieograniczony dostęp do zasobów
+      - **Maker** - Administrator strony
+      - **Writer** - Administrator treści
+      - **Mod** - Moderator treści
+      - **User** - może przeglądać treści oraz je komentować
+      - **Guest** - przeglądanie treści
     - Implementacja ról po stronie bazy danych.
 
 - Profile użytkowników
@@ -58,7 +58,7 @@ Aktualny postęp:
     - [x] zapis właściwości szablonu
   - [ ] usuwanie
   - Operacje na elementach
-    - [ ] tworzenie nowych elementów
+    - [x] tworzenie nowych elementów
     - [x] edycja
     - [ ] usuwanie
   - Elementy
@@ -68,18 +68,18 @@ Aktualny postęp:
     Zastosowałem oznaczenia "CRUD" (od Create/Read/Update/Delete, gdzie Read należy czytać jako Wyświetlenie :) ) _Występowanie symbolu jest równoważne z implementacją._
 
     - [x] - elementy blokowe
-      - [x] - Header `[-R--]`
-      - [x] - Router-Menu `[-R--]`
-      - [x] - Router-Content `[-R--]`
-      - [x] - Footer `[-R--]`
-      - [x] - Row `[-R--]`
+      - [x] - Header `[CR--]`
+      - [x] - Router-Menu `[CRU-]`
+      - [x] - Router-Content `[CRU-]`
+      - [x] - Footer `[CR--]`
+      - [x] - Row `[CR--]`
     - [x] - elementy kontekstowe
-      - [x] - Menu-Item `[-R--]`
-      - [x] - Lang-Selector `[-R--]
+      - [x] - Menu-Item `[CRU-]`
+      - [x] - Lang-Selector `[CR--]
       - [x] - Card `[CRUD]`
-      - [x] - Calendar (odpowiednik bloga) `[-RU-]`
-      - [ ] - Galery `[----]`
-      - [ ] - Comments `[----]`
+      - [x] - Calendar (odpowiednik bloga) `[CRU-]`
+      - [x] - Galery `[C---]`
+      - [x] - Comments `[C---]`
 
   - [ ] - Style elementów `[----]`
 

@@ -76,7 +76,7 @@ export function parseElements(parent, childen) {
 		const element = layoutsStore.getElementById(childId);
 		if (!element) {
 			console.error(`Element #%s not exist.`, childId);
-			debugger;
+			// debugger;
 			return null;
 		}
 		// if (element?._new) debugger;
