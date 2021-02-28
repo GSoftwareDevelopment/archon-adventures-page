@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import WindowsStore from "../../store/windows";
 
-import Sidebar from "../general/Sidebar";
+import { DialogManager } from "../general/Window";
 import { menu } from "./sidebar";
+import Sidebar from "../general/Sidebar";
 import SidebarMenu from "../general/SidebarMenu";
-import WindowsList from "../general/WindowsList";
 import SidebarUser from "../general/SidebarUser";
 
 export default class SiteManager extends Component {
@@ -19,7 +19,7 @@ export default class SiteManager extends Component {
 						this.setState({ isExpanded: state });
 					}}
 				>
-					<WindowsList windowsStore={WindowsStore} />
+					<DialogManager windowsStore={WindowsStore} />
 					<SidebarMenu
 						style={{ paddingBottom: "50px" }}
 						items={menu}

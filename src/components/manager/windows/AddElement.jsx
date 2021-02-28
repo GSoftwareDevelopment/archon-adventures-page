@@ -178,7 +178,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.ROW,
 		title: "Row",
-		icon: <Icon.ViewList size="64px" />,
+		icon: <Icon.DistributeVertical size="64px" />,
 		defaultNew: {
 			childs: [],
 		},

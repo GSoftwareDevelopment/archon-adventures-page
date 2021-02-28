@@ -6,10 +6,9 @@ import UsersStore from "../../../store/users";
 import FSStore from "../../../store/fs";
 import { combinePathName, pathDestructure } from "../../../libs/utils";
 
-import { ButtonsGroup } from "../../general/Window";
+import { InputML, ButtonsGroup } from "../../general/Window";
 import { Save as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
-import InputML from "../../general/InputML";
 
 const status = {
 	INIT: "init",
@@ -203,7 +202,6 @@ export default class CardEdit extends Component {
 				)}
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px" }}
 					onlyIcons={false}
 					buttons={[
 						{

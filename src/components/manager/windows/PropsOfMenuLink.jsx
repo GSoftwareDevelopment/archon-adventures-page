@@ -2,9 +2,8 @@ import "../scss/poprsOfMenuLink.scss";
 import React, { Component } from "react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 
-import { ButtonsGroup } from "../../general/Window";
+import { InputML, ButtonsGroup } from "../../general/Window";
 import { Save as IconSave } from "react-bootstrap-icons";
-import InputML from "../../general/InputML";
 
 import * as Messages from "../../../libs/Messages";
 
@@ -38,18 +37,6 @@ class PropsOfMenuLink extends Component {
 		this.setState({ title });
 	};
 
-	handleRenderItem = (item, attr) => {
-		return {
-			isChoiced: false,
-			item: (
-				<React.Fragment>
-					<div className="id">{item.id}</div>
-					<div className="route">{item.path}</div>
-				</React.Fragment>
-			),
-		};
-	};
-
 	save = (e) => {
 		e.preventDefault();
 		LayoutsStore.updateElementAttr(this.props.attr._id, {
@@ -66,7 +53,6 @@ class PropsOfMenuLink extends Component {
 						{Messages.getText(`${msg_base}.destRoute`)}
 					</label>
 					<input
-						className="hover"
 						type="text"
 						name="dest-route"
 						value={this.state.destRoute}
@@ -88,7 +74,6 @@ class PropsOfMenuLink extends Component {
 
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px", marginTop: "auto" }}
 					onlyIcons={false}
 					buttons={[
 						{

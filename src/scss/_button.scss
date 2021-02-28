@@ -5,6 +5,20 @@
 		flex-direction: row;
 		align-items: center;
 
+		span {
+			margin-left: 5px;
+			margin-right: 0;
+		}
+
+		&.button-align-right {
+			justify-content: flex-end;
+
+			span {
+				margin-left: 0;
+				margin-right: 5px;
+			}
+		}
+
 		background-color: $button-bg-color;
 		border: $button-border;
 		padding: 5px;
@@ -14,10 +28,6 @@
 		transition: 0.25s;
 
 		cursor: pointer;
-
-		span {
-			margin-left: 5px;
-		}
 
 		&.no-bg {
 			background: transparent;

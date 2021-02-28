@@ -8,16 +8,21 @@ create(`${base}.window.title`, { en: `Property of Menu link` });
 
 create(`${base}.destRoute.tip`, {
 	en: `
-Enter the path to the route. You may use the identifiers used in the 'content-route' elements by prefixing them with a '#' (hash).
-You can use the Drag & Drop method by moving the route destination from the 'Layouts' directory.
+Enter the path to the route. You may use the identifiers used in the *content-route* elements by prefixing them with a '#' (hash).
+
+You can use the Drag & Drop method by moving the route destination from the **Layouts** directory.
 `,
 });
 
+create(`${base}.destRoute.field`, { en: "Destination route" });
 create(`${base}.destRoute`, {
 	en: (
 		<span>
-			Destination route:
-			<Tip title={getText(`${base}.destRoute.tip`)} />
+			{getText(`${base}.destRoute.field`)}
+			<Tip
+				title={getText(`${base}.destRoute.field`)}
+				content={getText(`${base}.destRoute.tip`)}
+			/>
 		</span>
 	),
 });

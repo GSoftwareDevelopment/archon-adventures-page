@@ -16,13 +16,13 @@ create(`${base}.button.setAsDefault.tip`, { en: "Set as default Layout" });
 
 create(`${base}.languageList.title`, { en: `Languages:` });
 
-create(`${base}.languageList.button.add`, { en: `` });
+create(`${base}.languageList.button.add`, { en: `Add...` });
 create(`${base}.languageList.button.add.tip`, { en: `Add language` });
 
-create(`${base}.languageList.button.delete`, { en: `` });
+create(`${base}.languageList.button.delete`, { en: `Delete` });
 create(`${base}.languageList.button.delete.tip`, { en: `Delete language` });
 
-create(`${base}.languageList.button.setAsDefault`, { en: `` });
+create(`${base}.languageList.button.setAsDefault`, { en: `Set Default` });
 create(`${base}.languageList.button.setAsDefault.tip`, {
 	en: `Set as default language`,
 });

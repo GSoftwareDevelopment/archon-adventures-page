@@ -2,8 +2,8 @@ $hover: #fff4;
 
 $window-background: linear-gradient(
 	130deg,
-	rgba(37, 0, 68, 1) 0%,
-	rgba(81, 0, 149, 1) 100%
+	rgba(37, 0, 68, 0.85) 0%,
+	rgba(81, 0, 149, 0.85) 100%
 );
 $window-control-button-bg: #fff1;
 $window-control-button-hover: $hover;
@@ -20,7 +20,7 @@ $panel-width: 360px;
 $sidebar-width: 300px;
 $sidebar-menu-toggler: rgb(92, 63, 0);
 $sidebar-menu-toggler-hover: rgb(141, 96, 0);
-$sidebar-menu-color: rgba(37, 0, 68, 0.867);
+$sidebar-menu-color: $window-background; // rgba(37, 0, 68, 0.867);
 $sidebar-menu-option-color: rgba(37, 0, 68, 0.867);
 $sidebar-user-color: rgba(92, 63, 0, 0.867);
 

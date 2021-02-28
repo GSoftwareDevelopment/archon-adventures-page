@@ -4,10 +4,29 @@ import MarkdownView from "react-showdown";
 export const availableLangs = ["en", "pl"];
 export const defaultLang = "en";
 export const texts = {};
+export const messagesTree = {};
 
 export function create(msgId, messageData) {
 	texts[msgId] = messageData;
+
+	// console.log(msgId);
+	// const path = msgId.split(".");
+	// let source = messagesTree;
+
+	// debugger;
+	// while (path.length > 0) {
+	// 	const field = path.shift();
+	// 	if (source[field]) {
+	// 		source[field] = { ...source[field], [field]: {} };
+	// 	} else {
+	// 		source[field] = {};
+	// 	}
+	// 	source = source[field];
+	// }
+	// source = { ...messageData };
+	// console.log(messagesTree, messageData);
 }
+
 /**
  * Multi-language text selector.
  * If the specified language `lang` is not found, the function automatically searches for a matching language by rules: 1. default language, 2. first available language.

@@ -1,4 +1,49 @@
-.tip {
+.tip-button {
 	margin-left: 5px;
 	cursor: help;
+}
+
+.rc-tooltip {
+	position: fixed;
+	width: 360px;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+	font-size: 16px !important;
+	.rc-tooltip-content {
+		box-shadow: 0 0 5px #0008;
+	}
+}
+
+.tip {
+	display: block;
+	width: 100%;
+
+	.tip-header {
+		display: flex;
+	}
+
+	.tip-title {
+		margin-left: 5px;
+		width: 100%;
+		font-weight: bold;
+		padding-bottom: 5px;
+		margin-bottom: 10px;
+		border-bottom: #fff8 solid 1px;
+	}
+
+	.tip-content {
+		p {
+			margin: 0;
+			padding: 0;
+			text-align: justify;
+		}
+	}
+
+	.tip-footer {
+		margin-top: 10px;
+		padding-top: 5px;
+		border-top: #fff8 solid 1px;
+		text-align: center;
+		font-weight: bold;
+	}
 }

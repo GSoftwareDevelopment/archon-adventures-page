@@ -3,22 +3,25 @@
 import { getText, create } from "../Messages";
 import Tip from "../../components/general/Tip";
 
-// General FileSystem delete confirmation
-
 const base = "props.card";
 create(`${base}.window.title`, { en: `Property of Card` });
 
 create(`${base}.sourceFilePath.tip`, {
 	en: `
 Enter the full path and name to the Card that will be displayed.
-You can also drag a file from the "Cards" directory`,
+
+You can also drag a file from the **Cards** directory`,
 });
 
+create(`${base}.sourceFilePath.field`, { en: "Card file" });
 create(`${base}.sourceFilePath`, {
 	en: (
 		<span>
-			Card file:
-			<Tip title={getText(`${base}.sourceFilePath.tip`)} />
+			{getText(`${base}.sourceFilePath.field`)}
+			<Tip
+				title={getText(`${base}.sourceFilePath.field`)}
+				content={getText(`${base}.sourceFilePath.tip`)}
+			/>
 		</span>
 	),
 });

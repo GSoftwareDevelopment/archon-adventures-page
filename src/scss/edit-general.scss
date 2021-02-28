@@ -7,6 +7,10 @@
 	flex-direction: column;
 
 	width: $panel-width;
+	backdrop-filter: brightness(25%) grayscale(100%);
+	@media (prefers-reduced-transparency: reduce) {
+		backdrop-filter: unset;
+	}
 
 	// height: 100vh;
 
@@ -24,8 +28,6 @@
 
 	background: $window-background;
 	border-left: #000 solid 3px;
-	// border-top: #000 solid 3px;
-	// box-shadow: -5px 0px 10px #000, -5px -5px 10px #000, 0 -10px 10px #000;
 
 	text-shadow: none;
 
@@ -35,13 +37,11 @@
 		left: 0px;
 
 		width: calc(100% - 300px);
-		// height: 100%;
 		border-left: none;
 	}
 
 	&.minimized {
-		width: $panel-width;
-		height: 40px;
+		display: none;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -87,13 +87,14 @@
 	align-items: center;
 
 	width: 100%;
-	height: 40px;
+	min-height: 50px;
 
 	margin: 0px;
 	padding: 5px;
 	// z-index: 1;
 
 	font-weight: bold;
+	background: #0004;
 
 	span {
 		overflow: hidden;
@@ -149,6 +150,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+		margin-top: 5px;
+
 		// width: 100%;
 		// height: 100%;
 
@@ -215,7 +218,53 @@
 			}
 		}
 
-		input[type="checkbox"],
+		input[type="checkbox"] {
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			-webkit-tap-highlight-color: transparent;
+
+			background: none; // linear-gradient(180deg, #2d2f39 0%, #1f2027 100%);
+			border: 2px solid #fff4;
+
+			cursor: pointer;
+			&:active,
+			&:focus {
+				border: 2px solid #fff4;
+				background: none; // linear-gradient(180deg, #2d2f39 0%, #1f2027 100%);
+				outline: 0;
+			}
+		}
+
+		.checkbox-toggle {
+			height: 24px;
+			width: 44px;
+			border-radius: 16px;
+			display: inline-block;
+			position: relative;
+			margin: 0;
+			transition: all 0.1s ease;
+			&:after {
+				content: "";
+				position: absolute;
+				top: 2px;
+				left: 22px;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				background: #800;
+				box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
+				transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
+			}
+			&:checked {
+				border-color: #fff4;
+				&:after {
+					background: #080;
+					transform: translatex(-20px);
+				}
+			}
+		}
+
 		input[type="radio"] {
 			width: unset;
 			cursor: inherit;
@@ -234,7 +283,8 @@
 
 			transition: 0.25s;
 
-			option {
+			option,
+			optgroup {
 				background-color: $form-control-bg-color-normal;
 				color: #000;
 
@@ -326,9 +376,13 @@
 
 @mixin generalEdit-footer {
 	.window-footer {
-		border-top: #000 solid 3px;
-		padding: 10px;
+		// border-top: #000 solid 3px;
+		background: #0004;
+		padding: 5px;
+		margin-top: auto;
+		margin-bottom: 0;
 		justify-content: flex-end;
 		align-items: center;
+		min-height: 50px;
 	}
 }

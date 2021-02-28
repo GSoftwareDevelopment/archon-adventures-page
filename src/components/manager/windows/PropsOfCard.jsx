@@ -4,7 +4,7 @@ import { Collections } from "../../../setup";
 
 import * as Messages from "../../../libs/Messages.js";
 
-import { Input, ButtonsGroup } from "../../general/Window";
+import { Checkbox, ButtonsGroup } from "../../general/Window";
 import { Save2 as IconSave } from "react-bootstrap-icons";
 import DropTarget from "../../general/DropTarget";
 import { combinePathName } from "../../../libs/utils";
@@ -14,7 +14,7 @@ const msg_base = "props.card";
 export default class PropsOfCard extends Component {
 	state = {
 		sourcePath: this.props.attr.name || "",
-		options: [...this.props.attr.options],
+		options: this.props.attr.options ? [...this.props.attr.options] : [],
 	};
 
 	optionsFlags = [
@@ -55,7 +55,12 @@ export default class PropsOfCard extends Component {
 		}
 	};
 
-	save = () => {};
+	save = () => {
+		LayoutsStore.updateElementAttr(this.props.attr._id, {
+			name: this.state.sourcePath,
+			options: this.state.options,
+		});
+	};
 
 	render() {
 		const currentOptionsFlags = this.state.options;
@@ -84,10 +89,9 @@ export default class PropsOfCard extends Component {
 					{this.optionsFlags.map((flag) => {
 						const isSet = currentOptionsFlags.includes(flag);
 						return (
-							<Input
+							<Checkbox
 								key={flag}
 								className="justify-between hover"
-								type="checkbox"
 								name={flag}
 								label={Messages.getText(`${msg_base}.attributes.${flag}`)}
 								checked={isSet}
@@ -113,7 +117,6 @@ export default class PropsOfCard extends Component {
 
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px", marginTop: "auto" }}
 					onlyIcons={false}
 					buttons={[
 						{

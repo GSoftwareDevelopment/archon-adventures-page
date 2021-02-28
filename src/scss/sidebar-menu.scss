@@ -7,13 +7,23 @@
 	padding: 0px;
 	width: $sidebar-width;
 	height: 0;
-	background-color: $sidebar-menu-color;
+	background: $sidebar-menu-color;
 	border-left: #000 solid 3px;
 	// box-shadow: -5px 0px 10px #000;
-	// backdrop-filter: grayscale(100%);
+
+	backdrop-filter: brightness(25%) grayscale(100%);
+	// backdrop-filter: blur(5px);
+	@media (prefers-reduced-transparency: reduce) {
+		backdrop-filter: unset;
+	}
+
+	transition: 0.25s;
+
+	@media (prefers-reduced-motion) {
+		transition: unset;
+	}
 
 	overflow: hidden;
-	transition: 0.25s;
 	z-index: 1;
 	&.isExpanded {
 		height: 100vh;

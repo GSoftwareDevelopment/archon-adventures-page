@@ -35,8 +35,7 @@ export default class DeleteConfirmation extends Component {
 					{this.props.attr.item}
 				</div>
 				<ButtonsGroup
-					className="group-button justify-content-around"
-					style={{ marginBottom: "5px" }}
+					className="window-footer group-button"
 					buttons={[
 						{
 							icon: <Icon.Check2 size="1.5em" />,

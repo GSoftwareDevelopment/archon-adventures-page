@@ -17,12 +17,15 @@ button.sidebar-toggler {
 	// box-shadow: 0px 0px 20px #000;
 
 	z-index: 102;
+	transition: 0.25s;
 
 	&:hover {
 		background-color: $sidebar-menu-toggler-hover;
+		transform: scale(1.1);
 	}
 
-	&:active {
+	&:active,
+	&:focus {
 		outline: none;
 	}
 }

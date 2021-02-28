@@ -7,8 +7,7 @@ import { observer } from "mobx-react";
 import WindowsStore from "../../store/windows";
 
 import CustomScrollbar from "../layout/CustomScrollbar";
-import { ButtonsGroup } from "./Window";
-import WindowsList, { WindowsManager } from "./WindowsList";
+import { DialogManager, DialogSelector, ButtonsGroup } from "./Window";
 
 //
 
@@ -108,12 +107,12 @@ class SidebarMenu extends Component {
 						</div>
 					</CustomScrollbar>
 					<OptionsBar options={this.state.options} visible={true} />
-					<WindowsList
-						className="align-windows-column inner-windows"
+					<DialogManager
+						className="windows-wrapper align-windows-column inner-windows"
 						windowsStore={WindowsStore}
 						group="sidebar"
 					/>
-					<WindowsManager
+					<DialogSelector
 						windows={WindowsStore.windows.filter((wnd) => wnd.group === null)}
 					/>
 				</div>

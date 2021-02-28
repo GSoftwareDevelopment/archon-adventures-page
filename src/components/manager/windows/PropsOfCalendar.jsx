@@ -6,7 +6,7 @@ import DropTarget from "../../general/DropTarget";
 
 import * as Messages from "../../../libs/Messages.js";
 
-import { Input, ButtonsGroup } from "../../general/Window";
+import { Input, ButtonsGroup, Checkbox } from "../../general/Window";
 import { Save as IconSave } from "react-bootstrap-icons";
 
 const msg_base = "props.calendar";
@@ -87,16 +87,19 @@ class PropsOfCalendar extends Component {
 					</DropTarget>
 				</div>
 				<fieldset>
-					<legend>{Messages.getText(`${msg_base}.attributes`)}</legend>
+					<legend>
+						{Messages.getText(`${msg_base}.attributes.visibleContent`)}
+					</legend>
 					{this.viewFlags.map((flag) => {
 						const isSet = currentViewFlags.includes(flag);
 						return (
-							<Input
+							<Checkbox
 								key={flag}
 								className="justify-between hover"
-								type="checkbox"
 								name={flag}
-								label={Messages.getText(`${msg_base}.attributes.${flag}`)}
+								label={Messages.getText(
+									`${msg_base}.attributes.visibleContent.${flag}`
+								)}
 								checked={isSet}
 								onChange={(e) => {
 									const state = e.currentTarget.checked;
@@ -116,10 +119,12 @@ class PropsOfCalendar extends Component {
 							/>
 						);
 					})}
+				</fieldset>
+				<fieldset>
+					<legend>{Messages.getText(`${msg_base}.attributes`)}</legend>
 
-					<Input
+					<Checkbox
 						className="justify-between hover"
-						type="checkbox"
 						name="pagination"
 						label={Messages.getText(`${msg_base}.attributes.pagination`)}
 						checked={this.state.pagination}
@@ -144,7 +149,6 @@ class PropsOfCalendar extends Component {
 
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px", marginTop: "auto" }}
 					onlyIcons={false}
 					buttons={[
 						{
