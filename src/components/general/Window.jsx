@@ -2,10 +2,28 @@ import "../../scss/window.scss";
 
 import React, { Component } from "react";
 import WindowsStore from "../../store/windows.js";
-import WindowsList from "./WindowsList";
+import DialogManager from "./WindowComponents/DialogManager";
+import DialogSelector from "./WindowComponents/DialogSelector";
 
 import * as Icon from "react-bootstrap-icons";
-// import CustomScrollbar from "../../layout/CustomScrollbar";
+
+import Input from "./WindowComponents/Input";
+import InputML from "./WindowComponents/InputML";
+import Checkbox from "./WindowComponents/Checkbox";
+import ButtonsGroup from "./WindowComponents/ButtonsGroup";
+import SelectList from "./WindowComponents/SelectList";
+
+export {
+	DialogManager,
+	DialogSelector,
+	Input,
+	InputML,
+	Checkbox,
+	ButtonsGroup,
+	SelectList,
+};
+
+//
 
 export class WindowButton extends Component {
 	render() {
@@ -39,7 +57,7 @@ export class WindowControl extends Component {
 	}
 }
 
-export default class Window extends Component {
+export class Window extends Component {
 	static defaultProps = {
 		sizeCycle: ["maximized", "panel", "minimized"],
 	};
@@ -98,7 +116,7 @@ export default class Window extends Component {
 				className={className + (windowStateClass || "")}
 				style={{
 					...this.props.style,
-					display: windowSize === "minimized" ? "none" : "",
+					// display: windowSize === "minimized" ? "none" : "",
 				}}
 			>
 				<div className="header">
@@ -111,7 +129,7 @@ export default class Window extends Component {
 					/>
 				</div>
 				<form id={`form-${this.props.winId}`}>{children}</form>
-				<WindowsList
+				<DialogManager
 					className="align-windows-column inner-windows"
 					windowsStore={WindowsStore}
 					group={this.props.winId}
@@ -120,171 +138,3 @@ export default class Window extends Component {
 		);
 	}
 }
-
-//
-/**
- *
- * @typedef {Object} InputPropsInterface
- * @property {string} [className] - Class string definition
- * @property {React.CSSProperties} [style] styles for main wrapper
- * @property {React.CSSProperties} [inputStyle] styles for inner input tag
- * @property {string} type - Element <input type="..." /> attribute
- * @property {string} [name] - Element <input name="..." /> attribute
- * @property {string} [label] - Element label
- * @property {boolean} [noWrapLabel] - if set, the label text will not wrap
- * @property {string} [tip] - Tooltip message
- * @property {object} [props] - Props for <input> element
- */
-/**
- * Show input element with associated label (if exists)
- * @param {InputPropsInterface} param0 Component props
- */
-export function Input({
-	className,
-	style,
-	inputStyle,
-	type,
-	name,
-	label,
-	noWrapLabel,
-	tip,
-	...props
-}) {
-	return label ? (
-		<div className={className} style={style} title={tip}>
-			<label
-				htmlFor={name}
-				style={{ whiteSpace: noWrapLabel ? "nowrap" : "normal" }}
-			>
-				{label}
-			</label>
-			<input
-				name={name}
-				id={name}
-				type={type}
-				autoComplete="off"
-				style={inputStyle}
-				{...props}
-			/>
-		</div>
-	) : (
-		<input
-			className={className}
-			style={style}
-			name={name}
-			id={name}
-			type={type}
-			autoComplete="off"
-			{...props}
-		/>
-	);
-}
-
-//
-/**
- * Interface of element for array of button or components list in ButtonsGroupInterface
- * @typedef {object} ButtonsInterface
- * @property {JSX.Element} [component] Component to display in group (have priority if defined)
- * @property {JSX.Element} [icon] Icon component to display in left side of button
- * @property {string} [className] Class string definition
- * @property {React.CSSProperties} [style]
- * @property {string} [title] Button title
- * @property {string} [tip] Tooltip for button or component
- * @property {boolean} [enabled=true] Activity of element in group
- * @property {boolean} [visible=true] Visibility of element in group
- * @property {function} [onClick] Event function on mouse click
- */
-/**
- * Interface of ButtonsGroup component props
- * @typedef {object} ButtonsGroupPropsInterface
- * @property {string} [className] Class string definition
- * @property {React.CSSProperties} [style]
- * @property {boolean} [onlyIcons] Show only icons (if available)
- * @property {...ButtonsInterface} buttons Array of buttons or components list
- */
-/**
- * Show buttons or components in group
- * @param {ButtonsGroupPropsInterface} param0 Component props
- */
-export const ButtonsGroup = ({ className, style, onlyIcons, buttons }) => (
-	<div className={className} style={style}>
-		{buttons.map((btn: ButtonsInterface, index) => {
-			if (typeof btn.visible === "boolean" && !btn.visible) return null;
-			let title = undefined;
-			if (typeof btn.title === "string") {
-				title = btn.title.trim();
-			}
-			if (btn.component) {
-				return (
-					<div
-						key={index}
-						className={btn.className}
-						style={btn.style}
-						disabled={typeof btn.enabled === "boolean" ? !btn.enabled : false}
-						title={btn.tip || title}
-					>
-						{btn.component}
-					</div>
-				);
-			} else
-				return (
-					<button
-						key={index}
-						onClick={(e) => {
-							e.preventDefault();
-							if (btn.onClick) btn.onClick(e);
-						}}
-						disabled={typeof btn.enabled === "boolean" ? !btn.enabled : false}
-						className={btn.className}
-						style={btn.style}
-						title={Boolean(onlyIcons) ? btn.tip || title : btn.tip}
-					>
-						{btn.icon}
-						{!Boolean(onlyIcons) && Boolean(title) && (
-							<span style={{ marginLeft: "5px" }}>{title}</span>
-						)}
-					</button>
-				);
-		})}
-	</div>
-);
-
-//
-
-export const SelectList = ({
-	className,
-	list,
-	onItemRender,
-	onChoice,
-	...props
-}) => {
-	const totalItems = list.length;
-	return (
-		<div className={"select-list " + className}>
-			{list.map((listItem, index) => {
-				const { isChoiced, before, item, after } = onItemRender(listItem, {
-					index,
-					firstItem: index === 0,
-					lastItem: index === totalItems - 1,
-				});
-
-				return (
-					<React.Fragment key={index}>
-						{before}
-						<div
-							className={"list-row selectable" + (isChoiced ? " choiced" : "")}
-							onClick={() => {
-								if (onChoice) onChoice(listItem);
-							}}
-						>
-							{item}
-						</div>
-						{after}
-					</React.Fragment>
-				);
-			})}
-		</div>
-	);
-};
-
-//
