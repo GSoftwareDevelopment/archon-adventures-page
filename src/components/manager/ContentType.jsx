@@ -16,6 +16,7 @@ import PropsOfLayout from "./windows/PropsOfLayout";
 import PropsOfCalendar from "./windows/PropsOfCalendar";
 import PropsOfMenuLink from "./windows/PropsOfMenuLink";
 import PropsOfCard from "./windows/PropsOfCard";
+import PropsOfRouterContent from "./windows/PropsOfRouterContent";
 
 const SIZE_PROP = "1.5em";
 export const treeItems = {
@@ -42,6 +43,7 @@ export const treeItems = {
 	"router-content": {
 		icon: <IconRouterContent size={SIZE_PROP} />,
 		title: ({ id }) => <span style={{ fontStyle: "italic" }}>{id}</span>,
+		elementProps: PropsOfRouterContent,
 	},
 	card: {
 		icon: <IconCard size={SIZE_PROP} />,
