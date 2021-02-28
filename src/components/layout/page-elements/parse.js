@@ -1,5 +1,3 @@
-import "./scss/row.scss";
-
 import * as BlockElement from "./block";
 import * as ContentElement from "./content";
 import layoutsStore from "../../../store/layouts";
@@ -34,9 +32,9 @@ const layoutElements = {
 	},
 
 	row: (index, attr, elements) => (
-		<div key={"content-row-" + index} className="content-row">
+		<BlockElement.Row key={index} attr={attr} elements={elements}>
 			{parseElements("row", elements)}
-		</div>
+		</BlockElement.Row>
 	),
 
 	// menu context
