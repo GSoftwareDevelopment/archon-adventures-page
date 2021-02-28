@@ -1,6 +1,6 @@
 import "../scss/select-list.scss";
 
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 import WindowsStore from "../../../store/windows";
@@ -11,6 +11,7 @@ import { Save as IconSave } from "react-bootstrap-icons";
 
 import * as Messages from "../../../libs/Messages";
 
+import AddLanguage from "./PropsOfLayout-AddLanguage";
 import DeleteConfirmation from "./DeleteConfirmation";
 
 const msg_base = "props.layout";
@@ -56,6 +57,15 @@ class PropsOfLayout extends Component {
 		this.setState({ langs: newLangs });
 	};
 
+	onSetDefault = (langSymbol) => {
+		if (
+			this.state.langs.findIndex(({ symbol }) => symbol === langSymbol) === -1
+		) {
+			return;
+		}
+		this.setState({ defaultLang: langSymbol });
+	};
+
 	save = (e) => {
 		e.preventDefault();
 
@@ -88,12 +98,12 @@ class PropsOfLayout extends Component {
 						default={this.state.defaultLang}
 						onAdd={this.onAddLang}
 						onDelete={this.onDeleteLang}
+						onSetDefault={this.onSetDefault}
 						dialogId={this.props.attr._id}
 					/>
 				</fieldset>
 				<ButtonsGroup
 					className="window-footer group-button"
-					style={{ marginBottom: "5px", marginTop: "auto" }}
 					onlyIcons={false}
 					buttons={[
 						{
@@ -128,19 +138,30 @@ export class ManageLangs extends Component {
 		choiced: "",
 	};
 
-	activeAddLang = (e) => {
+	onAddLang = (e) => {
 		if (e) e.preventDefault();
 		this.setState({
 			choiced: "",
-			visibleControls: "add-lang",
 		});
+		WindowsStore.addWindow(
+			"add-language",
+			AddLanguage,
+			{
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					(newLang) => {
+						if (this.props.onAdd) this.props.onAdd(newLang);
+					},
+				],
+			},
+			this.props.dialogId
+		);
 	};
 
-	activeDelLang = (e) => {
+	onDelLang = (e) => {
 		if (e) e.preventDefault();
-		// this.setState({ visibleControls: "del-confirm" });
 
-		const lang = this.state.choiced;
+		const lang = this.state.choiced.trim();
 		const language = this.props.langs.find((l) => l.symbol === lang);
 		WindowsStore.addWindow(
 			"delete-language",
@@ -150,40 +171,18 @@ export class ManageLangs extends Component {
 				actions: [
 					// TODO:	Niepodoba mi się ta forma definicji akcji :/
 					() => {
-						this.props.onDelete(lang);
+						this.setState({ choiced: "" });
+						if (this.props.onDelete) this.props.onDelete(lang);
 						return true;
 					},
 				],
 			},
 			this.props.dialogId
 		);
-		// if (this.props.onDelete) this.props.onDelete(this.state.choiced);
-		// this.activeLangButtons(e);
 	};
 
-	activeLangButtons = (e) => {
-		if (e) e.preventDefault();
-		this.setState({
-			choiced: "",
-			visibleControls: "main-buttons",
-		});
-	};
-
-	onAddLang = (newLang) => {
-		const { symbol, name } = newLang;
-		if (this.props.onAdd) this.props.onAdd({ symbol, name });
-		this.activeLangButtons();
-	};
-
-	onDelLang = (e) => {};
-
-	validateNewLang = (newLangSymbol, newLangName) => {
-		const symbol = newLangSymbol.trim().toLowerCase();
-		const name = newLangName.trim();
-
-		const isUnique =
-			this.props.langs.find((entry) => entry.symbol === symbol) === undefined;
-		return symbol !== "" && name !== "" && isUnique;
+	onSetDefault = (e) => {
+		if (this.props.onSetDefault) this.props.onSetDefault(this.state.choiced);
 	};
 
 	onRenderListItem = ({ symbol, name }, { lastItem }) => {
@@ -202,16 +201,6 @@ export class ManageLangs extends Component {
 					</span>
 				</React.Fragment>
 			),
-			after:
-				this.state.visibleControls === "add-lang"
-					? lastItem && (
-							<NewItem
-								onOK={this.onAddLang}
-								onCancel={this.activeLangButtons}
-								onValidate={this.validateNewLang}
-							/>
-					  )
-					: null,
 		};
 	};
 
@@ -224,14 +213,14 @@ export class ManageLangs extends Component {
 				icon: <Icon.PlusCircle />,
 				title: Messages.getText(`${msg_base}.languageList.button.add`),
 				tip: Messages.getText(`${msg_base}.languageList.button.add.tip`),
-				onClick: this.activeAddLang,
+				onClick: this.onAddLang,
 				enabled: true,
 			},
 			{
 				icon: <Icon.Trash />,
 				title: Messages.getText(`${msg_base}.languageList.button.delete`),
 				tip: Messages.getText(`${msg_base}.languageList.button.delete.tip`),
-				onClick: this.activeDelLang,
+				onClick: this.onDelLang,
 				enabled: isChoiced,
 			},
 			{
@@ -240,7 +229,7 @@ export class ManageLangs extends Component {
 				tip: Messages.getText(
 					`${msg_base}.languageList.button.setAsDefault.tip`
 				),
-				onClick: this.activeSetDefult,
+				onClick: this.onSetDefault,
 				enabled: isChoiced && !isChoicedAreDefault,
 			},
 		];
@@ -252,91 +241,16 @@ export class ManageLangs extends Component {
 					list={this.props.langs}
 					onItemRender={this.onRenderListItem}
 					onChoice={(item) => {
-						this.setState({
-							choiced: item.symbol,
-							visibleControls: "main-buttons",
-						});
+						this.setState({ choiced: item.symbol });
 					}}
 				/>
 				<ButtonsGroup
 					className="group-button group-vertical"
-					onlyIcons={true}
+					onlyIcons={false}
+					iconAlign="right"
 					buttons={buttons}
 				/>
 			</div>
 		);
 	}
 }
-
-const NewItem = ({ onOK, onCancel, onValidate, props }) => {
-	const [newLangSymbol, setNewLangSymbol] = useState("");
-	const [newLangName, setNewLangName] = useState("");
-
-	return (
-		<div className="list-row">
-			<Input
-				name="symbol"
-				type="text"
-				title={Messages.getText(
-					`${msg_base}.languageList.newEntry.field.symbol`
-				)}
-				tip={Messages.getText(
-					`${msg_base}.languageList.newEntry.field.symbol.tip`
-				)}
-				maxLength="2"
-				style={{ width: "40px", textAlign: "center" }}
-				autoFocus
-				value={newLangSymbol}
-				onChange={(e) => {
-					setNewLangSymbol(e.currentTarget.value);
-				}}
-			/>
-			<Input
-				name="name"
-				type="text"
-				title={Messages.getText(
-					`${msg_base}.languageList.newEntry.field.country`
-				)}
-				tip={Messages.getText(
-					`${msg_base}.languageList.newEntry.field.country.tip`
-				)}
-				maxLength="32"
-				value={newLangName}
-				onChange={(e) => {
-					setNewLangName(e.currentTarget.value);
-				}}
-			/>
-			<button
-				className="green"
-				disabled={!onValidate(newLangSymbol, newLangName)}
-				title={Messages.getText(
-					`${msg_base}.languageList.newEntry.button.accept.tip`
-				)}
-				onClick={(e) => {
-					e.preventDefault();
-					if (onOK)
-						onOK({
-							symbol: newLangSymbol.trim().toLowerCase(),
-							name: newLangName.trim(),
-						});
-				}}
-			>
-				<Icon.Check2 />
-				{Messages.getText(`${msg_base}.languageList.newEntry.button.accept`)}
-			</button>
-			<button
-				className="red"
-				title={Messages.getText(
-					`${msg_base}.languageList.newEntry.button.cancel.tip`
-				)}
-				onClick={(e) => {
-					e.preventDefault();
-					if (onCancel) onCancel();
-				}}
-			>
-				<Icon.X />
-				{Messages.getText(`${msg_base}.languageList.newEntry.button.cancel`)}
-			</button>
-		</div>
-	);
-};
