@@ -176,12 +176,13 @@ class Card extends Component {
 						case "noLangWarnings":
 							langChange = false;
 							break;
+						case "useMarkdown":
+							break;
 						default:
 							Messages.toConsole(
 								"debug.card.render.optionsModified.badOption",
 								option
 							);
-							console.log(`Option '${option}' is not recognized`);
 					}
 					return;
 				}
