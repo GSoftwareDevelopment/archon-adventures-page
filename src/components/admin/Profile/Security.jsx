@@ -1,6 +1,7 @@
 import UsersStore from "../../../store/users";
 import { getProviderClient } from "../../../libs/db";
 import * as Messages from "../../../libs/Messages.js";
+import { toast } from "react-toastify";
 
 function Security() {
 	// const [];
@@ -8,8 +9,14 @@ function Security() {
 		e.preventDefault();
 		const user = UsersStore.getCurrentUser();
 		const email = user.profile.data?.email;
-		console.log(email);
-		getProviderClient().sendResetPasswordEmail(email);
+
+		getProviderClient()
+			.sendResetPasswordEmail(email)
+			.then((result) => {
+				toast.info(
+					`A message with a link to reset the password has been sent to the e-mail ${email}`
+				);
+			});
 	};
 
 	return (
