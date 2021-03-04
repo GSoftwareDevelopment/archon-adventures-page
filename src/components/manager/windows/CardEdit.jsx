@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
-// import LayoutsStore from "../../../store/layouts";
 import FSStore from "../../../store/fs";
-import { combinePathName, pathDestructure } from "../../../libs/utils";
 
 import { InputML, ButtonsGroup } from "../../general/Window";
 import { Save as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
