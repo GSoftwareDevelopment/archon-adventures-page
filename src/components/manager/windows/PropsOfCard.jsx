@@ -41,7 +41,6 @@ export default class PropsOfCard extends Component {
 	};
 
 	dropSourcePath = (source) => {
-		debugger;
 		try {
 			const itemData = JSON.parse(source);
 			if (
