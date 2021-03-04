@@ -58,7 +58,7 @@
 			}
 		}
 
-		> div.node-item:before {
+		div.node-item:before {
 			position: relative;
 			top: -0.6em;
 			height: 1em;
@@ -73,7 +73,7 @@
 		&:last-child {
 			border-left: 1px solid rgba(0, 0, 0, 0);
 
-			> .node-item:before {
+			.node-item:before {
 				border-left: 1px solid $tree-line-color;
 			}
 		}
