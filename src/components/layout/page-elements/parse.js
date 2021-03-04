@@ -49,7 +49,11 @@ const layoutElements = {
 	// page context
 
 	card: (index, attr) => (
-		<ContentElement.Card key={index} name={attr.name} attr={attr} />
+		<ContentElement.Card
+			key={index + new Date().toString()}
+			name={attr.name}
+			attr={attr}
+		/>
 	),
 
 	calendar: (index, attr) => (
