@@ -1,24 +1,32 @@
 .authorize-form {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 16px;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-	height: 270px;
+	gap: 3px;
+	// height: 270px;
+	border: #fff4 solid 3px;
 	background-color: #400;
-	padding: 20px;
-	font-size: 24px;
 
-	h1,
-	h2 {
-		margin-bottom: 25px;
-	}
-
-	div {
-		margin-bottom: 10px;
+	div.header,
+	div.content,
+	div.footer {
+		// width: 100%;
+		padding: 10px;
+		text-align: center;
+		> div {
+			margin: 5px;
+		}
 	}
 
 	label {
-		padding: 5px;
+		display: inline-block;
+		padding: 15px;
+		width: 100px;
+		text-align: right;
 	}
 
 	input {
@@ -35,10 +43,10 @@
 	button {
 		display: flex;
 		align-items: center;
-		margin-top: 15px;
 		padding: 10px;
 		background: #fff2;
-		border: #000 solid 3px;
+		// border: #000 solid 3px;
+		border: none;
 		color: #fff;
 		transition: 0.25s;
 

@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 
+import { Input } from "../general/Window";
 import ContentLoader from "../layout/ContentLoader";
 import { getProviderClient } from "../../libs/db";
 import { toast } from "react-toastify";
@@ -52,12 +53,13 @@ class ResetPassword extends Component {
 
 		return (
 			<form className="authorize-form" autoComplete="off">
-				<h1>Password reset request</h1>
-
-				<div>
-					<label htmlFor="new-password">Password:</label>
-					<input
-						id="new-password"
+				<div className="header">
+					<h1>Password reset request</h1>
+				</div>
+				<div className="content">
+					<Input
+						label="Password"
+						name="password"
 						type="password"
 						autoComplete="new-password"
 						disabled={disable}
@@ -67,11 +69,13 @@ class ResetPassword extends Component {
 						}}
 					/>
 				</div>
-				<ContentLoader busy={disable}>
-					<button disabled={disable} type="submit" onClick={this.submit}>
-						<span>Save</span>
-					</button>
-				</ContentLoader>
+				<div className="footer">
+					<ContentLoader busy={disable}>
+						<button disabled={disable} type="submit" onClick={this.submit}>
+							<span>Save</span>
+						</button>
+					</ContentLoader>
+				</div>
 				{Boolean(this.state.redirect) && <Redirect to="/auth/login" />}
 			</form>
 		);

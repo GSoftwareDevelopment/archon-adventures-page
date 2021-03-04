@@ -5,6 +5,7 @@ import UsersStore from "../../store/users";
 import { observer } from "mobx-react";
 
 import ContentLoader from "../layout/ContentLoader";
+import { Input } from "../general/Window";
 
 import { BoxArrowInRight as IconLogin } from "react-bootstrap-icons";
 import { Redirect } from "react-router-dom";
@@ -33,11 +34,13 @@ class Login extends Component {
 
 		return (
 			<form className="authorize-form">
-				<h1>Authenticate access</h1>
-				<div>
-					<label htmlFor="username">Username:</label>
-					<input
-						id="username"
+				<div className="header">
+					<h1>Access authorization</h1>
+				</div>
+				<div className="content">
+					<Input
+						label="Username"
+						name="username"
 						type="text"
 						disabled={disable}
 						autoFocus
@@ -46,11 +49,9 @@ class Login extends Component {
 							this.setState({ username: e.target.value });
 						}}
 					/>
-				</div>
-				<div>
-					<label htmlFor="password">Password:</label>
-					<input
-						id="password"
+					<Input
+						label="Password"
+						name="password"
 						type="password"
 						disabled={disable}
 						value={this.state.password}
@@ -59,12 +60,14 @@ class Login extends Component {
 						}}
 					/>
 				</div>
-				<ContentLoader busy={disable}>
-					<button disabled={disable} type="submit" onClick={this.submit}>
-						<IconLogin size="20px" />
-						<span>Login</span>
-					</button>
-				</ContentLoader>
+				<div className="footer">
+					<ContentLoader busy={disable}>
+						<button disabled={disable} type="submit" onClick={this.submit}>
+							<IconLogin size="20px" />
+							<span>Login</span>
+						</button>
+					</ContentLoader>
+				</div>
 				{Boolean(this.state.user) && <Redirect to="/admin/dashboard" />}
 			</form>
 		);
