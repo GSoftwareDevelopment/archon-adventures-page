@@ -57,38 +57,41 @@ export default class NodeItem extends Component {
 
 		return (
 			<div className="node-collection">
+				{this.props.onItemDropped && this.props.dropBefore && (
+					<DropTarget
+						onItemDropped={(src) => {
+							this.handleDropItem(src, "before");
+						}}
+						dropEffect="copy"
+					>
+						<div className="dropArea"></div>
+					</DropTarget>
+				)}
+
 				<ConditionalWrapper
-					condition={
-						Boolean(this.props.allowDrag) && Boolean(this.props.dragData)
-					}
+					condition={this.props.dropOnItem}
 					wrapper={(children) => (
-						<Drag dataItem={this.props.dragData || undefined} dropEffect="link">
-							{children}
-						</Drag>
-					)}
-				>
-					{this.props.onItemDropped && this.props.dropBefore && (
 						<DropTarget
 							onItemDropped={(src) => {
 								this.handleDropItem(src, "before");
 							}}
 							dropEffect="copy"
 						>
-							<div className="dropArea"></div>
+							{children}
 						</DropTarget>
 					)}
-
+				>
 					<ConditionalWrapper
-						condition={this.props.dropOnItem}
+						condition={
+							Boolean(this.props.allowDrag) && Boolean(this.props.dragData)
+						}
 						wrapper={(children) => (
-							<DropTarget
-								onItemDropped={(src) => {
-									this.handleDropItem(src, "before");
-								}}
-								dropEffect="copy"
+							<Drag
+								dataItem={this.props.dragData || undefined}
+								dropEffect="link"
 							>
 								{children}
-							</DropTarget>
+							</Drag>
 						)}
 					>
 						<div
@@ -118,18 +121,18 @@ export default class NodeItem extends Component {
 							{this.props.extra}
 						</div>
 					</ConditionalWrapper>
-
-					{this.props.onItemDropped && this.props.dropAfter && (
-						<DropTarget
-							onItemDropped={(src) => {
-								this.handleDropItem(src, "after");
-							}}
-							dropEffect="copy"
-						>
-							<div className="dropArea"></div>
-						</DropTarget>
-					)}
 				</ConditionalWrapper>
+
+				{this.props.onItemDropped && this.props.dropAfter && (
+					<DropTarget
+						onItemDropped={(src) => {
+							this.handleDropItem(src, "after");
+						}}
+						dropEffect="copy"
+					>
+						<div className="dropArea"></div>
+					</DropTarget>
+				)}
 				{!isCollapsed && this.props.children}
 			</div>
 		);
