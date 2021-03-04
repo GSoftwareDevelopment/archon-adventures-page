@@ -1,151 +1,6 @@
 @import "./var";
 
-@import "edit-helpers";
-
-@mixin generalEdit {
-	display: flex;
-	flex-direction: column;
-
-	width: $panel-width;
-	backdrop-filter: brightness(25%) grayscale(100%);
-	@media (prefers-reduced-transparency: reduce) {
-		backdrop-filter: unset;
-	}
-
-	// height: 100vh;
-
-	&.max-height {
-		height: 100vh;
-
-		form {
-			height: 100%;
-		}
-
-		@media screen and (max-width: 768px) {
-			height: calc(100vh - 50px);
-		}
-	}
-
-	background: $window-background;
-	border-left: #000 solid 3px;
-
-	text-shadow: none;
-
-	&.maximized {
-		position: fixed;
-		top: 0px;
-		left: 0px;
-
-		width: calc(100% - 300px);
-		border-left: none;
-	}
-
-	&.minimized {
-		display: none;
-	}
-
-	@media screen and (max-width: 768px) {
-		top: 0px;
-		width: $panel-width;
-		z-index: 150;
-		&.maximized {
-			width: 100%;
-		}
-		&.minimized {
-			width: $panel-width;
-			height: 40px;
-		}
-	}
-
-	@include editHelpers;
-
-	.thumb-vertical {
-		box-sizing: border-box;
-		padding: 0;
-		margin: 0;
-		cursor: pointer;
-		border-radius: inherit;
-		background-color: rgba(255, 255, 255, 0.2);
-	}
-
-	.thumb-horizontal {
-		box-sizing: border-box;
-		padding: 0;
-		margin: 0;
-		cursor: pointer;
-		border-radius: inherit;
-		background-color: rgba(255, 255, 255, 0.2);
-	}
-}
-
-//
-
-@mixin generalEdit-header {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-
-	width: 100%;
-	min-height: 50px;
-
-	margin: 0px;
-	padding: 5px;
-	// z-index: 1;
-
-	font-weight: bold;
-	background: #0004;
-
-	span {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		padding-right: 10px;
-	}
-
-	div {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-end;
-		align-items: center;
-
-		> button {
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
-			width: 24px;
-			height: 24px;
-			font-size: 16px;
-			border-radius: 50%;
-			padding: 0;
-			margin: 0;
-			border: 0;
-			margin-left: 5px;
-
-			background-color: $window-control-button-bg;
-			color: #fff;
-			transition: 0.25s;
-
-			svg {
-				margin: 0;
-				padding: 0;
-			}
-
-			&:focus {
-				outline: none;
-			}
-
-			&:not(:disabled) {
-				&:hover {
-					background-color: $window-control-button-hover;
-				}
-			}
-		}
-	}
-}
-
-@mixin generalEdit-form {
+@mixin window-content {
 	form {
 		display: flex;
 		flex-direction: column;
@@ -239,7 +94,7 @@
 		.checkbox-toggle {
 			height: 24px;
 			width: 44px;
-			border-radius: 16px;
+			// border-radius: 16px;
 			display: inline-block;
 			position: relative;
 			margin: 0;
@@ -251,7 +106,7 @@
 				left: 22px;
 				width: 16px;
 				height: 16px;
-				border-radius: 50%;
+				// border-radius: 50%;
 				background: #800;
 				box-shadow: 0 1px 2px rgba(44, 44, 44, 0.2);
 				transition: all 0.2s cubic-bezier(0.5, 0.1, 0.75, 1.35);
@@ -371,18 +226,5 @@
 				}
 			}
 		}
-	}
-}
-
-@mixin generalEdit-footer {
-	.window-footer {
-		// border-top: #000 solid 3px;
-		background: #0004;
-		padding: 5px;
-		margin-top: auto;
-		margin-bottom: 0;
-		justify-content: flex-end;
-		align-items: center;
-		min-height: 50px;
 	}
 }

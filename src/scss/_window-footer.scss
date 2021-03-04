@@ -1,0 +1,16 @@
+@import "./var";
+
+//
+
+@mixin window-footer {
+	.window-footer {
+		// border-top: #000 solid 3px;
+		background: #0004;
+		padding: 5px;
+		margin-top: auto;
+		margin-bottom: 0;
+		justify-content: flex-end;
+		align-items: center;
+		min-height: 50px;
+	}
+}

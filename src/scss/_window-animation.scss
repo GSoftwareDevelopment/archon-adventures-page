@@ -1,0 +1,43 @@
+@keyframes open_panel_window {
+	from {
+		width: 0px;
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+		width: $panel-width;
+	}
+}
+
+@keyframes open_inner_window {
+	from {
+		opacity: 0;
+		height: 0px;
+	}
+	to {
+		opacity: 1;
+		height: 100%;
+	}
+}
+
+@keyframes open_fullscreen_window {
+	from {
+		opacity: 0;
+		width: 0px;
+	}
+	to {
+		opacity: 1;
+		width: calc(100vw - 300px);
+	}
+}
+
+@keyframes minimize-window {
+	0% {
+		opacity: 1;
+	}
+	to {
+		visibility: hidden;
+		opacity: 0;
+		width: 0px;
+	}
+}

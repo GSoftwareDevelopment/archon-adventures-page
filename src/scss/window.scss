@@ -1,4 +1,7 @@
-@import "./edit-general";
+@import "window-general";
+@import "window-header";
+@import "window-content";
+@import "window-footer";
 
 .windows-wrapper {
 	flex-grow: 2;
@@ -7,6 +10,7 @@
 	&.align-windows-column {
 		flex-direction: column;
 		justify-content: flex-end;
+		align-items: flex-end;
 	}
 
 	&:not(.inner-windows) {
@@ -23,26 +27,31 @@
 
 	&.inner-windows {
 		.window {
-			width: unset;
+			width: 100%;
 			border-left: none;
 			border-top: #000 solid 3px;
+
+			animation: open_inner_window 0.25s;
+			@media (prefers-reduced-motion: reduce) {
+				animation: unset;
+			}
 		}
 	}
 
 	> .window-header {
 		border-top: #000 solid 1px;
-		@include generalEdit-header;
+		@include window-header;
 	}
 }
 
 .window {
-	@include generalEdit;
+	@include window-general;
 
 	.header {
-		@include generalEdit-header;
+		@include window-header;
 	}
 
-	@include generalEdit-form;
+	@include window-content;
 
-	@include generalEdit-footer;
+	@include window-footer;
 }

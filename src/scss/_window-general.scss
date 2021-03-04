@@ -1,0 +1,98 @@
+@import "./var";
+@import "window-animation";
+@import "edit-helpers";
+
+@mixin window-general {
+	display: flex;
+	flex-direction: column;
+
+	width: $panel-width;
+
+	backdrop-filter: brightness(25%) grayscale(100%);
+	@media (prefers-reduced-transparency: reduce) {
+		backdrop-filter: unset;
+	}
+
+	// height: 100vh;
+
+	&.max-height {
+		height: 100vh;
+
+		form {
+			height: 100%;
+		}
+
+		@media screen and (max-width: 768px) {
+			height: calc(100vh - 50px);
+		}
+	}
+
+	background: $window-background;
+	border-left: #000 solid 3px;
+
+	text-shadow: none;
+
+	&:not(.maximized) {
+		animation: open_panel_window 0.25s;
+		@media (prefers-reduced-motion: reduce) {
+			animation: unset;
+		}
+	}
+
+	&.maximized {
+		position: fixed;
+		top: 0px;
+		right: 300px;
+
+		width: calc(100% - 300px);
+		border-left: none;
+
+		animation: open_fullscreen_window 0.25s;
+		@media (prefers-reduced-motion: reduce) {
+			animation: unset;
+		}
+	}
+
+	&.minimized {
+		// display: none;
+
+		animation: minimize-window 0.25s forwards;
+		@media (prefers-reduced-motion: reduce) {
+			animation: unset;
+			display: none;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		top: 0px;
+		width: $panel-width;
+		z-index: 150;
+		&.maximized {
+			width: 100%;
+		}
+		&.minimized {
+			width: $panel-width;
+			height: 40px;
+		}
+	}
+
+	@include editHelpers;
+
+	.thumb-vertical {
+		box-sizing: border-box;
+		padding: 0;
+		margin: 0;
+		cursor: pointer;
+		border-radius: inherit;
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+
+	.thumb-horizontal {
+		box-sizing: border-box;
+		padding: 0;
+		margin: 0;
+		cursor: pointer;
+		border-radius: inherit;
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+}

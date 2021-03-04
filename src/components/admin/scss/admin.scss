@@ -1,5 +1,5 @@
 @import "../../../scss/var";
-@import "../../../scss/edit-general";
+@import "../../../scss/window-content";
 @import "../../../scss/edit-helpers";
 @import "../../../scss/button";
 
@@ -18,7 +18,7 @@
 		rgba(81, 0, 149, 1) 100%
 	);
 
-	@include generalEdit-form;
+	@include window-content;
 	@include general-button;
 
 	> .header {
@@ -71,6 +71,4 @@
 			margin-right: 0;
 		}
 	}
-
-	@include generalEdit-form;
 }
