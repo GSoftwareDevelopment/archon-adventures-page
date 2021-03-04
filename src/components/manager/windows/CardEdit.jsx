@@ -23,7 +23,6 @@ export default class CardEdit extends Component {
 		status: status.INIT,
 		lang: [],
 		body: {},
-		pathfile: "",
 		_path: "",
 		_file: "",
 		prompt: "",
@@ -47,8 +46,10 @@ export default class CardEdit extends Component {
 	async componentDidMount() {
 		// this.setState({ status: status.READING });
 		const { _id, path, name } = this.props.attr;
+		console.log(this.props.attr);
 
 		if (_id) {
+			// get card data from DB
 			try {
 				const cardData = await db
 					.collection(Collections.CARDS)
@@ -60,7 +61,6 @@ export default class CardEdit extends Component {
 				this.setState({
 					lang: cardData.lang,
 					body: cardData.body,
-					pathfile: combinePathName(path, name),
 					_path: path,
 					_name: name,
 					status: status.DONE,
@@ -74,6 +74,7 @@ export default class CardEdit extends Component {
 				this.setState({ status: status.ERROR });
 			}
 		} else {
+			// create card
 			const newCardData = {
 				path,
 				name,
@@ -87,7 +88,8 @@ export default class CardEdit extends Component {
 			this.setState({
 				lang: newCardData.lang,
 				body: newCardData.body,
-				pathfile: combinePathName(path, name),
+				_path: path,
+				_name: name,
 				status: status.DONE,
 				createdAt: newCardData.createdAt,
 				userInfo: await UsersStore.getOtherUserInfo(newCardData.userId),
@@ -109,7 +111,8 @@ export default class CardEdit extends Component {
 			// save current card
 
 			try {
-				const { path, name } = pathDestructure(this.state.pathfile);
+				const path = this.state._path;
+				const name = this.state._name.trim();
 
 				if (name === "") throw new Error(`Card name can't be empty!`);
 
@@ -221,7 +224,7 @@ export default class CardEdit extends Component {
 										<input
 											className="justify-between"
 											type="text"
-											name="filepath"
+											name="file-name"
 											value={this.state._name}
 											autoFocus
 											onChange={(e) => {
@@ -232,7 +235,6 @@ export default class CardEdit extends Component {
 								</React.Fragment>
 							),
 							className: "full-width",
-							tip: "File name",
 							visible:
 								this.state.status === status.SAVEPROMPT &&
 								this.state.prompt === "name",
@@ -246,7 +248,7 @@ export default class CardEdit extends Component {
 											style={{ marginLeft: "5px" }}
 											className="justify-between"
 											type="text"
-											name="filepath"
+											name="file-path"
 											value={this.state._path}
 											autoFocus
 											onChange={(e) => {
@@ -265,7 +267,6 @@ export default class CardEdit extends Component {
 								</React.Fragment>
 							),
 							className: "full-width",
-							tip: "File name",
 							visible:
 								this.state.status === status.SAVEPROMPT &&
 								this.state.prompt === "path",
