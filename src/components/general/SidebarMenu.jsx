@@ -108,7 +108,7 @@ class SidebarMenu extends Component {
 					</CustomScrollbar>
 					<OptionsBar options={this.state.options} visible={true} />
 					<DialogManager
-						className="windows-wrapper align-windows-column inner-windows"
+						className="align-windows-column inner-windows"
 						windowsStore={WindowsStore}
 						group="sidebar"
 					/>

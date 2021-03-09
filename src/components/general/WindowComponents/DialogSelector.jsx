@@ -6,7 +6,7 @@ import { X as IconClose } from "react-bootstrap-icons";
 export default function DialogSelector({ windows }) {
 	const winList = windows;
 	return (
-		<div className="windows-wrapper inner-windows align-windows-column">
+		<div className="windows-wrapper align-windows-column inner-windows">
 			{winList
 				.map((wnd, index) => {
 					if (!wnd.sets) return null;

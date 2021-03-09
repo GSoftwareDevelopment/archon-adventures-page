@@ -30,10 +30,19 @@
 	}
 
 	&:not(.isExpanded) {
-		> div.sidebar-options-menu {
+		> div {
 			min-height: 0px;
 			height: 0px;
 			padding: 0;
+		}
+		> div.windows-wrapper {
+			.window-header {
+				min-height: 0;
+				height: 0;
+				padding: 0;
+				margin: 0;
+			}
+			// display: none;
 		}
 	}
 }

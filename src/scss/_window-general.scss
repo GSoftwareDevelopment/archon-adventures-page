@@ -13,8 +13,12 @@
 		backdrop-filter: unset;
 	}
 
-	// height: 100vh;
+	background: $window-background;
+	border-left: #000 solid 3px;
 
+	text-shadow: none;
+
+	// windows size switches
 	&.max-height {
 		height: 100vh;
 
@@ -27,39 +31,44 @@
 		}
 	}
 
-	background: $window-background;
-	border-left: #000 solid 3px;
-
-	text-shadow: none;
-
-	&:not(.maximized) {
+	&:not(.full-screen) {
 		animation: open_panel_window 0.25s;
 		@media (prefers-reduced-motion: reduce) {
 			animation: unset;
 		}
+
+		&.minimized {
+			animation: minimize-window 0.25s forwards;
+			@media (prefers-reduced-motion: reduce) {
+				animation: unset;
+				display: none;
+			}
+		}
 	}
 
-	&.maximized {
+	&.full-screen {
 		position: fixed;
 		top: 0px;
 		right: 300px;
 
 		width: calc(100% - 300px);
+		height: 100vh;
 		border-left: none;
 
+		form {
+			height: 100%;
+		}
 		animation: open_fullscreen_window 0.25s;
 		@media (prefers-reduced-motion: reduce) {
 			animation: unset;
 		}
-	}
 
-	&.minimized {
-		// display: none;
-
-		animation: minimize-window 0.25s forwards;
-		@media (prefers-reduced-motion: reduce) {
-			animation: unset;
-			display: none;
+		&.minimized {
+			animation: minimize-window 0.25s forwards;
+			@media (prefers-reduced-motion: reduce) {
+				animation: unset;
+				display: none;
+			}
 		}
 	}
 
@@ -67,8 +76,10 @@
 		top: 0px;
 		width: $panel-width;
 		z-index: 150;
-		&.maximized {
-			width: 100%;
+		&.full-screen {
+			width: 100vw;
+			height: calc(100vh - 50px);
+			right: 0;
 		}
 		&.minimized {
 			width: $panel-width;

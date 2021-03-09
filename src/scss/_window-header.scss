@@ -11,10 +11,12 @@
 
 	margin: 0px;
 	padding: 5px;
-	// z-index: 1;
 
 	font-weight: bold;
 	background: #0004;
+
+	overflow: hidden;
+	transition: 0.25s;
 
 	span {
 		overflow: hidden;

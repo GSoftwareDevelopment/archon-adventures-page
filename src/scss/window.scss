@@ -6,11 +6,11 @@
 .windows-wrapper {
 	flex-grow: 2;
 	display: flex;
+	justify-content: flex-end;
+	align-items: flex-end;
 
 	&.align-windows-column {
 		flex-direction: column;
-		justify-content: flex-end;
-		align-items: flex-end;
 	}
 
 	&:not(.inner-windows) {

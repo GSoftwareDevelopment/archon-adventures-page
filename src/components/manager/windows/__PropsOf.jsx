@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 
 import { ButtonsGroup } from "../../general/Window";
 import { Save2 as IconSave } from "react-bootstrap-icons";
 
-export default class PropsOfMenuLink extends Component {
+class PropsOf extends Component {
 	constructor(props) {
 		super(props);
 
@@ -42,3 +43,5 @@ export default class PropsOfMenuLink extends Component {
 		);
 	}
 }
+
+export default observer(PropsOf);

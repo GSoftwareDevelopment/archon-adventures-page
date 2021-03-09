@@ -1,14 +1,3 @@
-@keyframes open_panel_window {
-	from {
-		width: 0px;
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-		width: $panel-width;
-	}
-}
-
 @keyframes open_inner_window {
 	from {
 		opacity: 0;
@@ -17,6 +6,17 @@
 	to {
 		opacity: 1;
 		height: 100%;
+	}
+}
+
+@keyframes open_panel_window {
+	from {
+		width: 0px;
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+		width: $panel-width;
 	}
 }
 
@@ -34,10 +34,16 @@
 @keyframes minimize-window {
 	0% {
 		opacity: 1;
+		border: none;
+	}
+	99% {
+		opacity: 0;
+		height: 100vh;
 	}
 	to {
 		visibility: hidden;
-		opacity: 0;
+		border: none;
+		height: 0px;
 		width: 0px;
 	}
 }

@@ -27,7 +27,9 @@ export default class AddElement extends Component {
 		dialog({
 			className: " window-add-element max-height",
 			size: "panel",
-			sizeCycle: ["maximized", "panel"],
+			sizeCycle: ["panel"],
+			disableMinimize: true,
+			disableMaximize: true,
 			title: Messages.getText(`${msg_base}.window.title`),
 		});
 	}
