@@ -1,5 +1,5 @@
-import "../scss/poprsOfMenuLink.scss";
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 
 import { ButtonsGroup, Input, Checkbox } from "../../general/Window";
@@ -25,7 +25,7 @@ class PropsOfRouterContent extends Component {
 		const { dialog } = props;
 
 		dialog({
-			className: "window-menulink max-height",
+			className: "max-height",
 			size: "panel",
 			sizeCycle: ["panel", "minimized"],
 			disableMaximize: true,
@@ -34,10 +34,13 @@ class PropsOfRouterContent extends Component {
 	}
 
 	updatePath(path) {
+		path = path.replace(/(\/)\1/, "/").replace(/[^0-9a-zA-Z-_/]+/g, "-");
 		this.setState({ path });
 	}
 
 	updateId = (id) => {
+		if (id.length === 0) id = "/";
+		id = id.replace(/[^0-9a-zA-Z-_]+/g, "-");
 		this.setState({ id });
 	};
 
@@ -71,12 +74,12 @@ class PropsOfRouterContent extends Component {
 					onChange={(e) => this.updateId(e.currentTarget.value)}
 					noWrapLabel
 				/>
-				<div>
+				<div className="hover">
 					<label htmlFor="source-path">
 						{Messages.getText(`${msg_base}.path`)}
 					</label>
 					<Input
-						className="hover justify-between"
+						className="justify-between"
 						inputStyle={{ minWidth: "200px" }}
 						type="text"
 						name="path"
@@ -137,4 +140,4 @@ class PropsOfRouterContent extends Component {
 	}
 }
 
-export default PropsOfRouterContent;
+export default observer(PropsOfRouterContent);

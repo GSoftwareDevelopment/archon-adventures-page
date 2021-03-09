@@ -1,5 +1,5 @@
-import "../scss/poprsOfMenuLink.scss";
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 
 import { InputML, ButtonsGroup } from "../../general/Window";
@@ -21,7 +21,7 @@ class PropsOfMenuLink extends Component {
 		const { dialog } = props;
 
 		dialog({
-			className: "window-menulink max-height",
+			className: "max-height",
 			size: "panel",
 			sizeCycle: ["panel", "minimized"],
 			disableMaximize: true,
@@ -30,6 +30,9 @@ class PropsOfMenuLink extends Component {
 	}
 
 	updateDestRoute(destRoute) {
+		destRoute = destRoute
+			.replace(/(\/)\1/, "/")
+			.replace(/[^0-9a-zA-Z-_/#]+/g, "-");
 		this.setState({ destRoute });
 	}
 
@@ -48,7 +51,7 @@ class PropsOfMenuLink extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<div>
+				<div className="hover" style={{ margin: "0 5px" }}>
 					<label htmlFor="source-path">
 						{Messages.getText(`${msg_base}.destRoute`)}
 					</label>
@@ -68,6 +71,7 @@ class PropsOfMenuLink extends Component {
 					currentLang="en"
 					langContent={this.state.title}
 					onUpdate={this.updateTitle}
+					cloneChild
 				>
 					<input autoComplete="Off" />
 				</InputML>
@@ -92,4 +96,4 @@ class PropsOfMenuLink extends Component {
 	}
 }
 
-export default PropsOfMenuLink;
+export default observer(PropsOfMenuLink);

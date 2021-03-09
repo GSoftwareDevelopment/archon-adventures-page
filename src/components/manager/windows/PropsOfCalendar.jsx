@@ -8,6 +8,7 @@ import * as Messages from "../../../libs/Messages.js";
 
 import { Input, ButtonsGroup, Checkbox } from "../../general/Window";
 import { Save as IconSave } from "react-bootstrap-icons";
+import { correctPathChar } from "../../../libs/utils";
 
 const msg_base = "props.calendar";
 
@@ -36,7 +37,7 @@ class PropsOfCalendar extends Component {
 	}
 
 	updateSourcePath = (newPath) => {
-		this.setState({ sourcePath: newPath });
+		this.setState({ sourcePath: correctPathChar(newPath) });
 	};
 
 	dropSourcePath = (source) => {
@@ -70,13 +71,12 @@ class PropsOfCalendar extends Component {
 
 		return (
 			<React.Fragment>
-				<div>
+				<div className="hover" style={{ margin: "0 5px" }}>
 					<label htmlFor="source-path">
 						{Messages.getText(`${msg_base}.sourcePath`)}
 					</label>
 					<DropTarget onItemDropped={this.dropSourcePath} dropEffect="link">
 						<input
-							className="hover"
 							type="text"
 							name="source-path"
 							value={this.state.sourcePath}

@@ -34,6 +34,11 @@ export default class AddLanguage extends Component {
 	};
 
 	onAdd = (e) => {
+		this.props.attr.actions[0](this.state); // TODO:	Niepodoba mi się ta forma wywołania akcji :/
+		this.props.close();
+	};
+
+	isValid() {
 		const { symbol, name } = this.state;
 		if (
 			symbol.trim() === "" ||
@@ -41,12 +46,12 @@ export default class AddLanguage extends Component {
 			name.trim() === "" ||
 			name.length < 3
 		) {
-			this.setState({ error: true });
+			// this.setState({ error: true });
+			return false;
 		}
 
-		this.props.attr.actions[0](this.state); // TODO:	Niepodoba mi się ta forma wywołania akcji :/
-		this.props.close();
-	};
+		return true;
+	}
 
 	render() {
 		return (
@@ -70,12 +75,13 @@ export default class AddLanguage extends Component {
 					onChange={this.setName}
 				/>
 				<ButtonsGroup
-					className="group-button justify-content-end"
+					className="window-footer group-button justify-content-end"
 					buttons={[
 						{
 							icon: <Icon.Check2 size="1.5em" />,
 							title: "Add",
 							onClick: this.onAdd,
+							enabled: this.isValid(),
 						},
 						{
 							icon: <Icon.X size="1.5em" />,

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 import LayoutsStore, { Status } from "../../../store/layouts";
 import { Collections } from "../../../setup";
 
@@ -7,11 +8,11 @@ import * as Messages from "../../../libs/Messages.js";
 import { Checkbox, ButtonsGroup } from "../../general/Window";
 import { Save2 as IconSave } from "react-bootstrap-icons";
 import DropTarget from "../../general/DropTarget";
-import { combinePathName } from "../../../libs/utils";
+import { combinePathName, correctPathChar } from "../../../libs/utils";
 
 const msg_base = "props.card";
 
-export default class PropsOfCard extends Component {
+class PropsOfCard extends Component {
 	state = {
 		sourcePath: this.props.attr.name || "",
 		options: this.props.attr.options ? [...this.props.attr.options] : [],
@@ -32,12 +33,13 @@ export default class PropsOfCard extends Component {
 			className: " window-add-element max-height",
 			size: "panel",
 			sizeCycle: ["panel", "minimized"],
+			disableMaximize: true,
 			title: Messages.getText(`${msg_base}.window.title`),
 		});
 	}
 
 	updateSourcePath = (newPath) => {
-		this.setState({ sourcePath: newPath });
+		this.setState({ sourcePath: correctPathChar(newPath) });
 	};
 
 	dropSourcePath = (source) => {
@@ -54,7 +56,8 @@ export default class PropsOfCard extends Component {
 		}
 	};
 
-	save = () => {
+	save = (e) => {
+		e.preventDefault();
 		LayoutsStore.updateElementAttr(this.props.attr._id, {
 			name: this.state.sourcePath,
 			options: this.state.options,
@@ -66,13 +69,12 @@ export default class PropsOfCard extends Component {
 
 		return (
 			<React.Fragment>
-				<div>
+				<div className="hover">
 					<label htmlFor="source-filepath">
 						{Messages.getText(`${msg_base}.sourceFilePath`)}
 					</label>
 					<DropTarget onItemDropped={this.dropSourcePath} dropEffect="link">
 						<input
-							className="hover"
 							type="text"
 							name="source-path"
 							value={this.state.sourcePath}
@@ -133,3 +135,5 @@ export default class PropsOfCard extends Component {
 		);
 	}
 }
+
+export default observer(PropsOfCard);
