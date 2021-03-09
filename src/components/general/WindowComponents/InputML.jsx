@@ -11,7 +11,7 @@ class InputML extends Component {
 
 		this.state = {
 			currentLang: props.currentLang || "en",
-			contentLang: {},
+			contentLang: props.langContent,
 		};
 
 		this.makeLangFields();
@@ -27,9 +27,10 @@ class InputML extends Component {
 	}
 
 	makeLangFields() {
+		// debugger;
 		// creating content fields for non-existent languages
 		const layoutLangList = LayoutsStore.current.langs;
-		let newContent = this.props.langContent || {};
+		let newContent = { ...this.props.langContent };
 		for (const lang of layoutLangList) {
 			if (!newContent[lang.symbol]) newContent[lang.symbol] = "";
 			// else newContent[lang] = this.state.contentLang[lang];
@@ -43,10 +44,10 @@ class InputML extends Component {
 		return ctn;
 	};
 
-	setContent = (e) => {
+	setContent = (e, lang) => {
 		const ctn = e.currentTarget.value;
 		const contentLang = { ...this.state.contentLang };
-		contentLang[this.state.currentLang] = ctn;
+		contentLang[lang] = ctn;
 		this.setState({ contentLang });
 		if (this.props.onUpdate) this.props.onUpdate(contentLang);
 	};
@@ -56,69 +57,112 @@ class InputML extends Component {
 
 		// add (if exists) language button from contentLang
 		for (const cntLang in this.state.contentLang) {
-			console.log(cntLang);
 			if (layoutLangList.findIndex(({ symbol }) => symbol === cntLang) === -1)
 				layoutLangList.push({ symbol: cntLang });
 		}
 
 		return layoutLangList.map(({ symbol, name }) => {
 			const isUsed = this.getContent(symbol).trim() !== "";
-			let title = "";
+			let icon,
+				title = "";
 			if (name) {
+				icon = symbol;
 				title = name;
 			} else {
-				title = "This language is not defined in Layout";
-				symbol = (
+				title =
+					"This language will not be displayed because it is not defined in the Layout.";
+				icon = (
 					<React.Fragment>
 						{symbol}
 						<IconLangError color="#f00" style={{ marginLeft: "5px" }} />
 					</React.Fragment>
 				);
 			}
+
 			return {
-				icon: symbol,
+				icon,
 				title,
 				className: symbol === currentLang ? "active" : "",
 				style: { fontWeight: isUsed ? "bold" : "normal" },
 				onClick: (e) => {
 					this.setState({ currentLang: symbol });
+					this.handleLangChange(symbol);
 				},
 				enabled: !this.props.disabled,
 			};
 		});
 	}
 
+	handleLangChange = (lang) => {
+		if (this.props.onLangChange) {
+			this.props.onLangChange(lang);
+		}
+	};
+
 	render() {
 		const { name, label, disabled } = this.props;
 		const { currentLang } = this.state;
 
-		const updateChildrenWithProps = React.Children.map(
-			this.props.children,
-			(child, i) => {
+		const ChildrenWithProps = (lang) => {
+			return React.Children.map(this.props.children, (child, i) => {
 				if (child)
 					return React.cloneElement(child, {
 						//this properties are available as a props in child components
 						id: name,
 						disabled: disabled,
-						value: this.getContent(currentLang),
-						onChange: this.setContent,
+						value: this.getContent(lang),
+						onChange: (e) => {
+							this.setContent(e, lang);
+						},
+						onFocus: (e) => {
+							this.handleLangChange(lang);
+						},
 					});
 				else return null;
-			}
-		);
+			});
+		};
 
 		return (
 			<React.Fragment>
-				<div className="d-flex flex-row justify-content-between align-items-center full-width">
-					<label htmlFor={name}>{label}</label>
-					<ButtonsGroup
-						className="group-button"
-						style={{ marginLeft: "auto" }}
-						onlyIcons={true}
-						buttons={this.langButtons(currentLang)}
-					/>
-				</div>
-				{updateChildrenWithProps}
+				{this.props.cloneChild ? (
+					<React.Fragment>
+						<div
+							className="d-flex flex-column"
+							style={{ gap: "5px", margin: "0 5px" }}
+						>
+							<label htmlFor={name}>{label}</label>
+							{LayoutsStore.current.langs.map(({ symbol, name }) => (
+								<div key={symbol} className="hover d-flex flex-row">
+									<label
+										htmlFor={`${name}-${symbol}`}
+										style={{ width: "20px", textAlign: "right" }}
+									>
+										{symbol}
+									</label>
+									{ChildrenWithProps(symbol)}
+								</div>
+							))}
+						</div>
+					</React.Fragment>
+				) : (
+					<React.Fragment>
+						<div style={this.props.style}>
+							<div
+								className="d-flex flex-row justify-content-between align-items-center full-width"
+								style={{ margin: "0 5px" }}
+							>
+								<label htmlFor={name}>{label}</label>
+								<ButtonsGroup
+									className="group-button"
+									style={{ marginLeft: "auto" }}
+									onlyIcons={true}
+									buttons={this.langButtons(currentLang)}
+								/>
+							</div>
+							{ChildrenWithProps(this.state.currentLang)}
+						</div>
+					</React.Fragment>
+				)}
 			</React.Fragment>
 		);
 	}
