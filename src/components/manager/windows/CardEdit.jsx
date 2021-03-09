@@ -4,10 +4,9 @@ import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
 import FSStore from "../../../store/fs";
-import { correctNameChar, correctPathChar } from "../../../libs/utils";
 
 import ContentLoader from "../../layout/ContentLoader";
-import { Input, InputML, ButtonsGroup } from "../../general/Window";
+import { InputPathName, InputML, ButtonsGroup } from "../../general/Window";
 import {
 	PersonFill as IconUser,
 	CalendarEventFill as IconTime,
@@ -114,74 +113,77 @@ class CardEdit extends Component {
 		this.setState({ status: status.DONE });
 	};
 
-	switchToSavePropmt = async () => {
+	switchToSavePropmt = () => {
 		if (this.state.status === status.SAVEPROMPT) {
 			// save current card
-
-			try {
-				const path = this.state._path;
-				const name = this.state._name.trim();
-
-				if (name === "") throw new Error(`Card name can't be empty!`);
-
-				this.cardData.body = this.state.body;
-				this.cardData.lang = this.state.lang;
-				this.cardData.path = path;
-				this.cardData.name = name;
-
-				let result;
-				if (this.cardData._id) {
-					// Update card
-
-					result = await db
-						.collection(Collections.CARDS)
-						.updateOne({ _id: this.cardData._id }, this.cardData);
-				} else {
-					// Create new card
-					result = await db
-						.collection(Collections.CARDS)
-						.insertOne(this.cardData);
-				}
-
-				if (result.modifiedCount === 1) {
-					FSStore.updateCollectionFS(Collections.CARDS);
-					toast.success("Card correctly saved.");
-					this.setState({
-						status: status.DONE,
-						message: "Card correctly saved",
-					});
-
-					// // update fslog
-					// const logData={
-					// 	type:"modify",
-					// 	fsId: this.cardData._id,
-					// 	userId: this.cardData.userId,
-					// 	timestamp: new Date()
-					// };
-
-					// await db.collection(Collections.FSLOG).insertOne(logData);
-				} else if (result.insertedId) {
-					FSStore.add(this.cardData, Collections.CARDS);
-					toast.success("Card was created.");
-					this.setState({
-						status: status.DONE,
-					});
-				} else {
-					toast.error("Something went wrong");
-					this.setState({
-						status: status.ERROR,
-					});
-				}
-			} catch (error) {
-				toast.error(error.message);
-				console.error(error);
-				this.setState({ status: status.ERROR });
-			}
+			this.save();
 		} else {
 			// show filepath
 			this.setState({ status: status.SAVEPROMPT });
 		}
 	};
+
+	async save() {
+		try {
+			const path = this.state._path;
+			const name = this.state._name.trim();
+
+			if (name === "") throw new Error(`Card name can't be empty!`);
+
+			this.cardData.body = this.state.body;
+			this.cardData.lang = this.state.lang;
+			this.cardData.path = path;
+			this.cardData.name = name;
+
+			let result;
+			if (this.cardData._id) {
+				// Update card
+
+				result = await db
+					.collection(Collections.CARDS)
+					.updateOne({ _id: this.cardData._id }, this.cardData);
+			} else {
+				// Create new card
+				result = await db
+					.collection(Collections.CARDS)
+					.insertOne(this.cardData);
+			}
+
+			if (result.modifiedCount === 1) {
+				FSStore.updateCollectionFS(Collections.CARDS);
+				toast.success("Card correctly saved.");
+				this.setState({
+					status: status.DONE,
+					message: "Card correctly saved",
+				});
+
+				// // update fslog
+				// const logData={
+				// 	type:"modify",
+				// 	fsId: this.cardData._id,
+				// 	userId: this.cardData.userId,
+				// 	timestamp: new Date()
+				// };
+
+				// await db.collection(Collections.FSLOG).insertOne(logData);
+			} else if (result.insertedId) {
+				FSStore.add(this.cardData, Collections.CARDS);
+				toast.success("Card was created.");
+				this.setState({
+					status: status.DONE,
+				});
+			} else {
+				toast.error("Something went wrong");
+				this.setState({
+					status: status.ERROR,
+				});
+			}
+		} catch (error) {
+			toast.error(error.message);
+			console.error(error);
+			this.setState({ status: status.ERROR });
+		}
+	}
 
 	render() {
 		const isEnabled = this.state.status === status.DONE;
@@ -253,7 +255,6 @@ class CardEdit extends Component {
 									className="d-flex align-items-center"
 									style={{ gap: "5px" }}
 								>
-									<span className="no-wrap">Save as:</span>
 									<InputPathName
 										path={this.state._path}
 										name={this.state._name}
@@ -287,57 +288,6 @@ class CardEdit extends Component {
 export default observer(CardEdit);
 
 //
-
-function InputPathName({ path, name, onChange, ...props }) {
-	const [pathValue, setPathValue] = useState(path);
-	const [nameValue, setNameValue] = useState(name);
-	const [prompt, setPrompt] = useState("name");
-
-	const switch2PathPrompt = (e) => {
-		e.preventDefault();
-		setPrompt("path");
-	};
-	const switch2NamePrompt = (e) => {
-		e.preventDefault();
-		setPrompt("name");
-	};
-
-	return (
-		<React.Fragment>
-			<Input
-				className={"hover" + (prompt === "path" ? " full-width" : "")}
-				label="Path:"
-				type="text"
-				name="path-name"
-				value={pathValue}
-				onChange={(e) => {
-					let { value } = e.currentTarget;
-					value = correctPathChar(value);
-
-					setPathValue(value);
-					if (onChange) onChange({ path: value, name: nameValue });
-				}}
-				onFocus={switch2PathPrompt}
-			/>
-			<Input
-				className={"hover" + (prompt === "name" ? " full-width" : "")}
-				label="Name:"
-				type="text"
-				name="file-name"
-				value={nameValue}
-				autoFocus
-				onChange={(e) => {
-					let { value } = e.currentTarget;
-					value = correctNameChar(value);
-
-					setNameValue(value);
-					if (onChange) onChange({ path: pathValue, name: value });
-				}}
-				onFocus={switch2NamePrompt}
-			/>
-		</React.Fragment>
-	);
-}
 
 //
 

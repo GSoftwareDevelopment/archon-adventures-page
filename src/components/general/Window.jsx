@@ -9,6 +9,7 @@ import * as Icon from "react-bootstrap-icons";
 
 import Input from "./WindowComponents/Input";
 import InputML from "./WindowComponents/InputML";
+import InputPathName from "./WindowComponents/InputPathName";
 import Checkbox from "./WindowComponents/Checkbox";
 import ButtonsGroup from "./WindowComponents/ButtonsGroup";
 import SelectList from "./WindowComponents/SelectList";
@@ -18,6 +19,7 @@ export {
 	DialogSelector,
 	Input,
 	InputML,
+	InputPathName,
 	Checkbox,
 	ButtonsGroup,
 	SelectList,
