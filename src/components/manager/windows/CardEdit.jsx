@@ -371,7 +371,7 @@ function CartStats({ content, currentLang, ...props }) {
 				.replace(/\n /, "\n");
 			setContentWords(cnt.split(" ").length);
 		}
-	});
+	}, [content, currentLang, contentWeight, contentWords]);
 
 	return (
 		<div className="d-flex align-items-center small" style={{ gap: "5px" }}>
