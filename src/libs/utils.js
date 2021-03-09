@@ -56,4 +56,21 @@ function languageCheck(currentLang, defaultLang, availableLangs, callback) {
 	return undefined;
 }
 
-export { unifyPath, pathDestructure, combinePathName, languageCheck };
+function correctNameChar(value) {
+	return value.replace(/[^0-9a-zA-Z-_]+/g, "-");
+}
+
+function correctPathChar(value) {
+	if (value.length === 0) value = Path.DELIMITER;
+	value = value.replace("/", Path.DELIMITER);
+	return value.replace(/(\\)\1/, "\\").replace(/[^0-9a-zA-Z-_\\]+/g, "-");
+}
+
+export {
+	unifyPath,
+	pathDestructure,
+	combinePathName,
+	languageCheck,
+	correctNameChar,
+	correctPathChar,
+};
