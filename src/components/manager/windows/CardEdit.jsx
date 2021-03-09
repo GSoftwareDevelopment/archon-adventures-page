@@ -1,11 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
+import { observer } from "mobx-react";
 import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
 import FSStore from "../../../store/fs";
+import { correctNameChar, correctPathChar } from "../../../libs/utils";
 
-import { InputML, ButtonsGroup } from "../../general/Window";
-import { Save as IconSave, X as IconCancelSave } from "react-bootstrap-icons";
+import ContentLoader from "../../layout/ContentLoader";
+import { Input, InputML, ButtonsGroup } from "../../general/Window";
+import {
+	PersonFill as IconUser,
+	CalendarEventFill as IconTime,
+	Speedometer2 as IconStats,
+	Save as IconSave,
+	X as IconCancelSave,
+} from "react-bootstrap-icons";
 import { toast } from "react-toastify";
 
 const status = {
@@ -16,14 +25,14 @@ const status = {
 	ERROR: "error",
 };
 
-export default class CardEdit extends Component {
+class CardEdit extends Component {
 	state = {
 		status: status.INIT,
 		lang: [],
 		body: {},
 		_path: "",
 		_file: "",
-		prompt: "",
+		currentLang: "en",
 		userInfo: { displayName: "..." },
 	};
 
@@ -34,7 +43,7 @@ export default class CardEdit extends Component {
 		const { name } = props.attr;
 
 		dialog({
-			className: "max-height",
+			className: "full-screen",
 			size: "maximized",
 			sizeCycle: ["maximized", "minimized"],
 			title: name ? "Edit card: " + name : "New card",
@@ -44,7 +53,6 @@ export default class CardEdit extends Component {
 	async componentDidMount() {
 		// this.setState({ status: status.READING });
 		const { _id, path, name } = this.props.attr;
-		console.log(this.props.attr);
 
 		if (_id) {
 			// get card data from DB
@@ -62,7 +70,6 @@ export default class CardEdit extends Component {
 					_path: path,
 					_name: name,
 					status: status.DONE,
-					prompt: "",
 					createdAt: cardData.createdAt,
 					userInfo: await UsersStore.getOtherUserInfo(cardData.userId),
 				});
@@ -91,13 +98,16 @@ export default class CardEdit extends Component {
 				status: status.DONE,
 				createdAt: newCardData.createdAt,
 				userInfo: await UsersStore.getOtherUserInfo(newCardData.userId),
-				prompt: "",
 			});
 		}
 	}
 
 	updateBody = (body) => {
 		this.setState({ body });
+	};
+
+	setCurrentLang = (lang) => {
+		this.setState({ currentLang: lang });
 	};
 
 	cancelSaveCard = () => {
@@ -169,7 +179,7 @@ export default class CardEdit extends Component {
 			}
 		} else {
 			// show filepath
-			this.setState({ status: status.SAVEPROMPT, prompt: "name" });
+			this.setState({ status: status.SAVEPROMPT });
 		}
 	};
 
@@ -179,95 +189,82 @@ export default class CardEdit extends Component {
 
 		return (
 			<React.Fragment>
-				<InputML
-					name="card-body"
-					label="Content body"
-					currentLang="en"
-					langContent={this.state.body}
-					disabled={!isEnabled}
-					onUpdate={this.updateBody}
+				<div
+					style={{
+						// flexGrow: "2",
+						display: "flex",
+						flexDirection: "column",
+
+						// width: "100%",
+						height: "100%",
+						margin: "0 5px",
+					}}
 				>
-					<textarea style={{ minHeight: "200px", height: "100%" }} />
-				</InputML>
-				{this.state.status !== status.INIT && (
-					<div
-						className="d-flex small"
-						style={{ margin: "0 10px", gap: "5px" }}
-					>
-						<span>{`Created by: ${displayName}`}</span>
-						<span>
-							{"at "}
-							{this.state.createdAt?.toLocaleString()}
-						</span>
-					</div>
-				)}
+					<ContentLoader busy={this.state.status === status.INIT}>
+						<InputML
+							style={{
+								minHeight: "200px",
+								height: "100%",
+								paddingBottom: "35px",
+							}}
+							name="card-body"
+							label="Content body"
+							currentLang={this.state.currentLang}
+							langContent={this.state.body}
+							disabled={!isEnabled}
+							onUpdate={this.updateBody}
+							onLangChange={this.setCurrentLang}
+						>
+							<textarea />
+						</InputML>
+					</ContentLoader>
+				</div>
 				<ButtonsGroup
-					className="window-footer group-button"
+					className="group-button"
+					style={{ gap: "5px" }}
 					onlyIcons={false}
 					buttons={[
 						{
 							component: (
-								<React.Fragment>
-									<div className="d-flex align-items-center">
-										<span className="no-wrap">Save as:</span>
-										<button
-											style={{ marginRight: "5px" }}
-											onClick={(e) => {
-												e.preventDefault();
-												this.setState({ prompt: "path" });
-											}}
-										>
-											{this.state._path}
-										</button>
-										<input
-											className="justify-between"
-											type="text"
-											name="file-name"
-											value={this.state._name}
-											autoFocus
-											onChange={(e) => {
-												this.setState({ _name: e.currentTarget.value });
-											}}
-										/>
-									</div>
-								</React.Fragment>
+								<UserInfo name={displayName} time={this.state.createdAt} />
 							),
-							className: "full-width",
-							visible:
-								this.state.status === status.SAVEPROMPT &&
-								this.state.prompt === "name",
+							visible: this.state.status !== status.INIT,
 						},
 						{
 							component: (
-								<React.Fragment>
-									<div className="d-flex align-items-center">
-										<span className="no-wrap">Save as:</span>
-										<input
-											style={{ marginLeft: "5px" }}
-											className="justify-between"
-											type="text"
-											name="file-path"
-											value={this.state._path}
-											autoFocus
-											onChange={(e) => {
-												this.setState({ _path: e.currentTarget.value });
-											}}
-										/>
-										<button
-											onClick={(e) => {
-												e.preventDefault();
-												this.setState({ prompt: "name" });
-											}}
-										>
-											{this.state._name}
-										</button>
-									</div>
-								</React.Fragment>
+								<CartStats
+									content={this.state.body}
+									currentLang={this.state.currentLang}
+								/>
+							),
+							visible: this.state.status !== status.INIT,
+						},
+					]}
+				/>
+
+				<ButtonsGroup
+					className="window-footer group-button"
+					style={{ alignItems: "flex-end", gap: "5px" }}
+					onlyIcons={false}
+					buttons={[
+						{
+							component: (
+								<div
+									className="d-flex align-items-center"
+									style={{ gap: "5px" }}
+								>
+									<span className="no-wrap">Save as:</span>
+									<InputPathName
+										path={this.state._path}
+										name={this.state._name}
+										onChange={({ path, name }) => {
+											this.setState({ _path: path, _name: name });
+										}}
+									/>
+								</div>
 							),
 							className: "full-width",
-							visible:
-								this.state.status === status.SAVEPROMPT &&
-								this.state.prompt === "path",
+							visible: this.state.status === status.SAVEPROMPT,
 						},
 						{
 							icon: <IconSave size="1.5em" />,
@@ -285,4 +282,102 @@ export default class CardEdit extends Component {
 			</React.Fragment>
 		);
 	}
+}
+
+export default observer(CardEdit);
+
+//
+
+function InputPathName({ path, name, onChange, ...props }) {
+	const [pathValue, setPathValue] = useState(path);
+	const [nameValue, setNameValue] = useState(name);
+	const [prompt, setPrompt] = useState("name");
+
+	const switch2PathPrompt = (e) => {
+		e.preventDefault();
+		setPrompt("path");
+	};
+	const switch2NamePrompt = (e) => {
+		e.preventDefault();
+		setPrompt("name");
+	};
+
+	return (
+		<React.Fragment>
+			<Input
+				className={"hover" + (prompt === "path" ? " full-width" : "")}
+				label="Path:"
+				type="text"
+				name="path-name"
+				value={pathValue}
+				onChange={(e) => {
+					let { value } = e.currentTarget;
+					value = correctPathChar(value);
+
+					setPathValue(value);
+					if (onChange) onChange({ path: value, name: nameValue });
+				}}
+				onFocus={switch2PathPrompt}
+			/>
+			<Input
+				className={"hover" + (prompt === "name" ? " full-width" : "")}
+				label="Name:"
+				type="text"
+				name="file-name"
+				value={nameValue}
+				autoFocus
+				onChange={(e) => {
+					let { value } = e.currentTarget;
+					value = correctNameChar(value);
+
+					setNameValue(value);
+					if (onChange) onChange({ path: pathValue, name: value });
+				}}
+				onFocus={switch2NamePrompt}
+			/>
+		</React.Fragment>
+	);
+}
+
+//
+
+function UserInfo({ name, time }) {
+	return (
+		<div
+			className="d-flex align-items-center small"
+			style={{ margin: "0 10px", gap: "5px" }}
+		>
+			<IconUser />
+			<span>{name}</span>
+			<IconTime />
+			<span>{time?.toLocaleString()}</span>
+		</div>
+	);
+}
+
+//
+
+function CartStats({ content, currentLang, ...props }) {
+	const [contentWeight, setContentWeight] = useState(0);
+	const [contentWords, setContentWords] = useState(0);
+
+	useEffect(() => {
+		if (content && content[currentLang]) {
+			let cnt = content[currentLang];
+			setContentWeight(cnt.length);
+			cnt = cnt
+				.replace(/(^\s*)|(\s*$)/gi, "")
+				.replace(/[ ]{2,}/gi, " ")
+				.replace(/\n /, "\n");
+			setContentWords(cnt.split(" ").length);
+		}
+	});
+
+	return (
+		<div className="d-flex align-items-center small" style={{ gap: "5px" }}>
+			<IconStats />
+			<div>{contentWeight} char(s),</div>
+			<div>{contentWords} word(s)</div>
+		</div>
+	);
 }
