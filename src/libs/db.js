@@ -5,12 +5,11 @@ import {
 	RemoteMongoClient,
 	UserPasswordAuthProviderClient,
 } from "mongodb-stitch-browser-sdk";
-import { APP_ID, DB_NAME } from "../setup";
 
 // Initialize the App Client
-const client = Stitch.hasAppClient(APP_ID)
-	? Stitch.getAppClient(APP_ID)
-	: Stitch.initializeDefaultAppClient(APP_ID);
+const client = Stitch.hasAppClient(process.env.REACT_APP_REALM_APP_ID)
+	? Stitch.getAppClient(process.env.REACT_APP_REALM_APP_ID)
+	: Stitch.initializeDefaultAppClient(process.env.REACT_APP_REALM_APP_ID);
 
 // Get a MongoDB Service Client
 // This is used for logging in and communicating with Stitch
@@ -20,7 +19,7 @@ const mongodb = client.getServiceClient(
 );
 
 // Get a reference to the database
-const db = mongodb.db(DB_NAME);
+const db = mongodb.db(process.env.REACT_APP_REALM_DB_NAME);
 
 const authorizeDB = async (credentials) => {
 	if (credentials)
