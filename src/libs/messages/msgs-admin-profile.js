@@ -8,7 +8,7 @@ create(`${base}.title`, { en: "Profile" });
 create(`${base}.pendingData`, { en: "Need wait..." });
 
 create(`${base}.basicInfo`, { en: "Basic information" });
-create(`${base}.basicInfo.userRole`, { en: "Your role in system:" });
+create(`${base}.basicInfo.userRole`, { en: "Your role in system" });
 //
 
 create(`${base}.extraFields`, { en: "Extra fields" });
@@ -26,13 +26,6 @@ create(`${base}.extraFields.button.visibility.tip`, {
 	en: "Toggle field visibility",
 });
 create(`${base}.extraFields.button.delete.tip`, { en: "Delete field..." });
-
-create(`${base}.extraFields.footerInfo`, {
-	en: `
-Information You provide is __not available__ to people who are **not logged in**.
-`,
-});
-create(`${base}.extraFields.button.privacyPolicy`, { en: "Privacy Policy..." });
 
 create(`${base}.extraFields.toast.fieldCreated`, {
 	en: `
@@ -68,6 +61,14 @@ create(`${base}.newExtraField.input.defaultPlaceholder`, {
 //
 
 create(`${base}.security`, { en: "Security" });
+
+create(`${base}.security.privacyPolicy`, {
+	en: `
+The information provided in the __Extra Fields__ section is __not available__ to persons who are not logged in.
+`,
+});
+create(`${base}.security.button.privacyPolicy`, { en: "Privacy Policy..." });
+
 create(`${base}.security.info`, { en: "" });
 create(`${base}.security.button.resetPassword`, { en: "Reset password..." });
 
