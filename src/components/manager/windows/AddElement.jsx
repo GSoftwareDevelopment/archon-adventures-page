@@ -154,6 +154,15 @@ const blockElements = [
 	},
 	{
 		group: msg_block,
+		name: ContentTypes.FOOTER,
+		title: "Footer",
+		icon: <Icon.WindowDock size="64px" />,
+		defaultNew: {
+			childs: [],
+		},
+	},
+	{
+		group: msg_block,
 		name: ContentTypes.MENUROUTER,
 		title: "Menu router",
 		icon: <Icon.MenuApp size="64px" />,
@@ -187,9 +196,9 @@ const blockElements = [
 	},
 	{
 		group: msg_block,
-		name: ContentTypes.FOOTER,
-		title: "Footer",
-		icon: <Icon.WindowDock size="64px" />,
+		name: ContentTypes.COLUMN,
+		title: "Column",
+		icon: <Icon.DistributeHorizontal size="64px" />,
 		defaultNew: {
 			childs: [],
 		},
@@ -221,7 +230,6 @@ const contentElements = [
 		defaultNew: {
 			name: "",
 			options: ["noLangWarnings", "useMarkdown"],
-			childs: [],
 		},
 	},
 	{
@@ -229,9 +237,7 @@ const contentElements = [
 		name: ContentTypes.GALERY,
 		title: "Gallery",
 		icon: <Icon.JournalAlbum size="64px" />,
-		defaultNew: {
-			childs: [],
-		},
+		defaultNew: {},
 	},
 	{
 		group: msg_content,
@@ -245,7 +251,6 @@ const contentElements = [
 				limit: 0,
 				view: ["showTitle", "showDescription", "showDate"],
 			},
-			childs: [],
 		},
 	},
 	{
