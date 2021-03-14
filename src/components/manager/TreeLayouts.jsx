@@ -23,6 +23,7 @@ import {
 } from "react-bootstrap-icons";
 
 import AddElement from "./windows/AddElement";
+import DeleteConfirmation from "./windows/DeleteConfirmation";
 
 import * as Messages from "../../libs/Messages";
 const msg_base = "manager.layouts.options";
@@ -107,16 +108,12 @@ class TreeLayouts extends Component {
 				icon: <IconAddElement size={ICON_SIZE} />,
 				title: Messages.getText(`${msg_base}.addElement`),
 				tip: Messages.getText(`${msg_base}.addElement.tip`),
-				// title: "Add",
-				// tip: `Add new element in '${item.contentType}' node`,
 				onClick: () => this.openElementAdd(item),
 			},
 			{
 				icon: <IconLayoutProps size={ICON_SIZE} />,
 				title: Messages.getText(`${msg_base}.propertiesElement`),
 				tip: Messages.getText(`${msg_base}.propertiesElement.tip`),
-				// title: "Props...",
-				// tip: `Edit '${item.contentType}' properties`,
 				onClick: () => this.openElementProps(item),
 				enabled: Boolean(treeItems[item.contentType]?.elementProps),
 			},
@@ -152,6 +149,9 @@ class TreeLayouts extends Component {
 				style: { marginLeft: "auto" },
 				title: Messages.getText(`${msg_base}.deleteElement`),
 				tip: Messages.getText(`${msg_base}.deleteElement.tip`),
+				onClick: () => {
+					this.handleDeleteElementConfirm(item);
+				},
 			},
 		]);
 
@@ -172,6 +172,34 @@ class TreeLayouts extends Component {
 	};
 
 	doInsertNewElement(newElement, destElementId, destChildIndex) {}
+
+	doDeleteElement(item) {
+		LayoutsStore.deleteElement(item._id.toString());
+		return true;
+	}
+
+	handleDeleteElementConfirm(item) {
+		const { _id, contentType, childs, parrent, ...attr } = item;
+		let message = contentType.toUpperCase();
+
+		const ES = treeItems[contentType];
+		if (ES?.title) message = ES.title(item);
+
+		console.log(message);
+
+		WindowsStore.addWindow(
+			"delete-element",
+			DeleteConfirmation,
+			{
+				item: message,
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					() => this.doDeleteElement(item),
+				],
+			},
+			"sidebar"
+		);
+	}
 
 	render() {
 		const _status = LayoutsStore.currentStatus;
@@ -223,6 +251,8 @@ class TreeLayouts extends Component {
 
 export default observer(TreeLayouts);
 
+const SIZE_PROP = "1.5em";
+
 const ElementsList = observer(
 	({
 		id,
@@ -265,7 +295,7 @@ const ElementsList = observer(
 
 			const ES = treeItems[element.contentType];
 			if (ES) {
-				if (ES.icon) icon = ES.icon;
+				if (ES.icon) icon = <ES.icon className="icon-overlay" />;
 				if (ES.title) title = ES.title(element);
 			}
 
