@@ -6,9 +6,18 @@ import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 
 import { PeopleFill as IconUsers } from "react-bootstrap-icons";
+import ContentLoader from "../../layout/ContentLoader";
+
+//
+
+const Status = {
+	INIT: "init",
+	DONE: "done",
+};
 
 export default class index extends Component {
 	state = {
+		status: Status.INIT,
 		users: [],
 	};
 
@@ -16,7 +25,7 @@ export default class index extends Component {
 
 	async componentDidMount() {
 		const usersList = await db.collection(Collections.USERS).find({}).asArray();
-		this.setState({ users: usersList });
+		this.setState({ users: usersList, status: Status.DONE });
 	}
 
 	render() {
@@ -28,14 +37,18 @@ export default class index extends Component {
 					Users Management
 				</div>
 				<div className="content">
-					<UsersList columns={this.columns} data={this.state.users} />
+					<UsersListHeader columns={this.columns}>
+						<ContentLoader busy={this.state.status === Status.INIT}>
+							<UsersList columns={this.columns} data={this.state.users} />
+						</ContentLoader>
+					</UsersListHeader>
 				</div>
 			</React.Fragment>
 		);
 	}
 }
 
-function UsersList({ columns, data }) {
+function UsersListHeader({ columns, children }) {
 	return (
 		<div className="users-list">
 			<div className="row header">
@@ -47,19 +60,23 @@ function UsersList({ columns, data }) {
 					);
 				})}
 			</div>
-			{data.map((user) => {
-				return (
-					<div key={user._id} className="row selectable">
-						{columns.map((columnId) => {
-							return (
-								<div key={columnId} className={`col ${columnId}`}>
-									{user[columnId]}
-								</div>
-							);
-						})}
-					</div>
-				);
-			})}
+			{children}
 		</div>
 	);
+}
+
+function UsersList({ columns, data }) {
+	return data.map((user) => {
+		return (
+			<div key={user._id} className="row selectable">
+				{columns.map((columnId) => {
+					return (
+						<div key={columnId} className={`col ${columnId}`}>
+							{user[columnId]}
+						</div>
+					);
+				})}
+			</div>
+		);
+	});
 }
