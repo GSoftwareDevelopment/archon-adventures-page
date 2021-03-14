@@ -15,6 +15,7 @@ import * as Messages from "../../../libs/Messages";
 
 import MarkdownView from "react-showdown";
 import { JournalX as IconJournalX } from "react-bootstrap-icons";
+import ErrorMessage from "./ErrorMessage";
 
 //
 
@@ -70,31 +71,16 @@ class Calendar extends Component {
 			return <ContentLoader busy={true} />;
 
 		if (this.state.status === status.ERROR)
-			return (
-				<div className="warning">
-					<IconJournalX size="32" />
-					<MarkdownView markdown={Messages.getText("fetchingError")} />
-				</div>
-			);
+			return <ErrorMessage message={Messages.getText("fetchingError")} />;
 
 		return (
 			<React.Fragment>
-				<Switch>
-					<Route path={`${this.props.match.path}/:cardName`}>
-						<CalendarCard
-							attr={{ path: this.props.attr.path }}
-							matchUrl={this.props.match.url}
-						/>
-					</Route>
-					<Route exact path={this.props.match.path}>
-						<CalendarCardsList
-							cardList={this.state.calendar}
-							options={this.props.attr.options}
-							matchUrl={this.props.match.url}
-							onChoice={this.setCard}
-						/>
-					</Route>
-				</Switch>
+				<CalendarCardsList
+					cardList={this.state.calendar}
+					options={this.props.attr.options}
+					matchUrl={this.props.match.url}
+					onChoice={this.setCard}
+				/>
 			</React.Fragment>
 		);
 	}
