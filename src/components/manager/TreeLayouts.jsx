@@ -291,7 +291,7 @@ const ElementsList = observer(
 
 			const ES = treeItems[element.contentType];
 			if (ES) {
-				if (ES.icon) icon = <ES.Icon className="icon-overlay" />;
+				if (ES.Icon) icon = <ES.Icon className="icon-overlay" />;
 				if (ES.title) title = ES.title(element);
 			}
 
