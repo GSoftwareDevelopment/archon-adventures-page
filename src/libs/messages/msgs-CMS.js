@@ -7,6 +7,7 @@ create("manager.sidebar.menutree.cards", { en: "Cards" });
 create("manager.sidebar.menutree.calendars", { en: "Calendars" });
 create("manager.sidebar.menutree.galleries", { en: "Galleries" });
 create("manager.sidebar.menutree.comments", { en: "Comments" });
+create("manager.sidebar.menutree.assets", { en: "Assets" });
 
 //
 
