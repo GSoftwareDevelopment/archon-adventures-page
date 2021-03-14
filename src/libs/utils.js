@@ -22,6 +22,27 @@ function combinePathName(path, name) {
 	return pathname;
 }
 
+function getParamsNames(pathname) {
+	// get (if exists) parameters name from path
+	const regex = /(?=:)(.*?)(?=\/|$)/g;
+	let paramsNames = [],
+		m;
+	while ((m = regex.exec(pathname)) !== null) {
+		paramsNames.push(m[0]);
+	}
+	return paramsNames;
+}
+
+function replaceParams(pathname, paramsNames, paramsValues) {
+	// replace (if exists) name by value
+	paramsNames.forEach((paramName) => {
+		const paramValue = paramsValues[paramName.slice(1)];
+		if (paramValue) {
+			pathname = pathname.replace(paramName, paramValue);
+		}
+	});
+	return pathname;
+}
 //
 
 function languageCheck(currentLang, defaultLang, availableLangs, callback) {
@@ -63,13 +84,15 @@ function correctNameChar(value) {
 function correctPathChar(value) {
 	if (value.length === 0) value = Path.DELIMITER;
 	value = value.replace("/", Path.DELIMITER);
-	return value.replace(/(\\)\1/, "\\").replace(/[^0-9a-zA-Z-_\\]+/g, "-");
+	return value.replace(/(\\)\1/, "\\").replace(/[^0-9a-zA-Z-:_\\]+/g, "-");
 }
 
 export {
 	unifyPath,
 	pathDestructure,
 	combinePathName,
+	getParamsNames,
+	replaceParams,
 	languageCheck,
 	correctNameChar,
 	correctPathChar,

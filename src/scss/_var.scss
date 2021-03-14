@@ -17,11 +17,12 @@ $button-bg-hover-color: $hover;
 $button-border: #0000 solid 3px;
 
 $panel-width: 360px;
-$sidebar-width: 300px;
+$sidebar-width: 360px;
+$sidebar-menu-toggler-size: 60px;
 $sidebar-menu-toggler: rgb(92, 63, 0);
 $sidebar-menu-toggler-hover: rgb(141, 96, 0);
 $sidebar-menu-color: $window-background; // rgba(37, 0, 68, 0.867);
-$sidebar-menu-option-color: rgba(37, 0, 68, 0.867);
+$sidebar-menu-option-background: #0006; // rgba(37, 0, 68, 0.867);
 $sidebar-user-color: rgba(92, 63, 0, 0.867);
 
 $select-list-hover-item: $hover;

@@ -42,15 +42,25 @@
 			&.selected {
 				background: $tree-choiced-item;
 				border-left: #ffff solid 2px;
+
+				position: relative;
+				left: -2px;
 			}
 
 			svg {
 				margin-right: 5px;
+				width: 2em;
+				height: 2em;
 			}
 
 			span {
 				// white-space: nowrap;
 				padding: 3px 0;
+			}
+
+			.icon-overlay {
+				width: 1.5em;
+				height: 1.5em;
 			}
 
 			&:hover {

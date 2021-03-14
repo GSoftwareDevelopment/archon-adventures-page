@@ -30,6 +30,8 @@
 	}
 
 	&:not(.isExpanded) {
+		width: 0px;
+
 		> div {
 			min-height: 0px;
 			height: 0px;

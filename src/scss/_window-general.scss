@@ -3,6 +3,9 @@
 @import "edit-helpers";
 
 @mixin window-general {
+	// position: relative;
+	// left: 3px;
+
 	display: flex;
 	flex-direction: column;
 
@@ -15,6 +18,7 @@
 
 	background: $window-background;
 	border-left: #000 solid 3px;
+	// border-right: #000 solid 3px;
 
 	text-shadow: none;
 
@@ -49,11 +53,12 @@
 	&.full-screen {
 		position: fixed;
 		top: 0px;
-		right: 300px;
+		right: $sidebar-width;
 
-		width: calc(100% - 300px);
+		width: calc(100% - var(--sidebar-width));
+		// width: calc(100% - 360px);
 		height: 100vh;
-		border-left: none;
+		// border: none;
 
 		form {
 			height: 100%;
