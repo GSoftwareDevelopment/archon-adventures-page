@@ -41,4 +41,10 @@ export const menu = [
 		name: Messages.getText(`${msg_base}.comments`),
 		Component: null,
 	},
+	{
+		id: "assets",
+		icon: <Icon.Server size={ICON_SIZE} />,
+		name: Messages.getText(`${msg_base}.assets`),
+		Component: null,
+	},
 ];
