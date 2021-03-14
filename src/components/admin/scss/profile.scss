@@ -34,49 +34,25 @@
 
 			width: 630px;
 			gap: 20px;
-
-			div.info,
-			div.footer {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				gap: 20px;
-
-				p {
-					padding: 0;
-					margin: 0;
-				}
-			}
-
-			> div.footer-info {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				gap: 20px;
-
-				border-top: #000 solid 1px;
-				padding: 15px;
-				width: 100%;
-
-				p {
-					padding: 0;
-					margin: 0;
-				}
-			}
 		}
 
 		.extra-field {
 			display: flex;
 			flex-direction: column;
 			width: 583px;
+			transition: 0.25s;
+
+			&:hover {
+				background: #fff2;
+			}
 
 			div.control-buttons {
 				display: flex;
 				flex-direction: row;
 				justify-content: flex-end;
-				border-bottom: #fff2 solid 3px;
+				background: #0004;
+
+				// border-bottom: #fff2 solid 3px;
 			}
 
 			div.row {
@@ -124,6 +100,7 @@
 
 			border-top: #fff2 solid 1px;
 			border-bottom: #fff2 solid 1px;
+			padding: 5px 5px;
 
 			div.label {
 				width: 182px;
@@ -171,32 +148,38 @@
 
 			width: 630px;
 			gap: 20px;
-
-			> div {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				width: 100%;
-
-				p {
-					padding: 0;
-					margin: 0;
-				}
-
-				.text {
-					width: 100%;
-				}
-			}
 		}
 
-		.footer {
+		div.info {
 			display: flex;
 			flex-direction: row;
 			justify-content: flex-end;
 			align-items: center;
-
-			width: 630px;
 			gap: 20px;
+
+			width: 100%;
+			border-bottom: #0004 solid 1px;
+			padding-bottom: 10px;
+
+			p {
+				padding: 0;
+				margin: 0;
+				width: 100%;
+				text-align: justify;
+			}
+		}
+
+		div.info:last-child {
+			padding-bottom: unset;
+			border-bottom: unset;
+		}
+
+		div.footer {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			align-items: center;
+			width: 630px;
 		}
 	}
 
@@ -224,17 +207,6 @@
 			.extra-fieldset {
 				flex-direction: column;
 				width: 100%;
-
-				div.info {
-					flex-direction: column;
-					justify-content: center;
-				}
-
-				div.footer-info {
-					flex-direction: column;
-					justify-content: center;
-					padding-bottom: 0;
-				}
 			}
 
 			.extra-field {
@@ -295,25 +267,24 @@
 
 			.security {
 				width: 100%;
+			}
 
-				> div {
-					flex-direction: column;
-					justify-content: center;
-					align-items: center;
+			div.info {
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				border-bottom: #0004 solid 1px;
+
+				p {
+					padding: 0;
+					margin: 0;
 					width: 100%;
-
-					p {
-						padding: 0;
-						margin: 0;
-						width: 100%;
-					}
 				}
 			}
 
-			.footer {
-				flex-direction: column;
-				align-items: center;
-
+			div.footer {
+				justify-content: center;
 				width: 100%;
 			}
 		}
