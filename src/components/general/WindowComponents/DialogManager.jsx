@@ -4,12 +4,15 @@ import WindowsStore from "../../../store/windows.js";
 
 import { Window } from "../Window";
 
-function DialogManager({ className, windowsStore, group = null }) {
+function DialogManager({ className, style, windowsStore, group = null }) {
 	const winList = windowsStore.windows.filter((wnd) => wnd.group === group);
 	if (winList.length === 0) return null;
 
 	return (
-		<div className={"windows-wrapper" + (className ? " " + className : "")}>
+		<div
+			className={"windows-wrapper" + (className ? " " + className : "")}
+			style={{ style }}
+		>
 			{winList.map((wnd, index) => {
 				// const dialog = toJS(wnd);
 				const DialogClass = wnd.Win[0];
