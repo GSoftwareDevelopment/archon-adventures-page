@@ -1,20 +1,18 @@
 import React, { Component } from "react";
-import { useParams, withRouter } from "react-router";
+import { withRouter } from "react-router";
 import LayoutsStore from "../../../store/layouts";
 import { languageCheck } from "../../../libs/utils";
-import { Path, Collections } from "../../../setup";
+import { Collections } from "../../../setup";
 import { db } from "../../../libs/db";
 import "./scss/calendar.scss";
 
-import { Switch, Route, Link } from "react-router-dom";
-import Card from "./Card";
+import { Link } from "react-router-dom";
 
 import ContentLoader from "../ContentLoader";
 
 import * as Messages from "../../../libs/Messages";
 
-import MarkdownView from "react-showdown";
-import { JournalX as IconJournalX } from "react-bootstrap-icons";
+// import MarkdownView from "react-showdown";
 import ErrorMessage from "./ErrorMessage";
 
 //
@@ -204,17 +202,3 @@ export class CalendarEntry extends Component {
 		);
 	}
 }
-
-const CalendarCard = (props) => {
-	const { cardName } = useParams();
-
-	return (
-		<React.Fragment>
-			<CalendarEntry fetchByName={cardName} />
-			<Card name={`${props.attr.path}${Path.DELIMITER}${cardName}`} />
-			<Link className="link" to={props.matchUrl}>
-				&lt;&lt;&lt;
-			</Link>
-		</React.Fragment>
-	);
-};
