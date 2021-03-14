@@ -179,13 +179,11 @@ class TreeLayouts extends Component {
 	}
 
 	handleDeleteElementConfirm(item) {
-		const { _id, contentType, childs, parrent, ...attr } = item;
+		const { contentType } = item;
 		let message = contentType.toUpperCase();
 
 		const ES = treeItems[contentType];
-		if (ES?.title) message = ES.title(item);
-
-		console.log(message);
+		if (ES?.title) message = message + " " + ES.title(item);
 
 		WindowsStore.addWindow(
 			"delete-element",
@@ -251,8 +249,6 @@ class TreeLayouts extends Component {
 
 export default observer(TreeLayouts);
 
-const SIZE_PROP = "1.5em";
-
 const ElementsList = observer(
 	({
 		id,
@@ -295,7 +291,7 @@ const ElementsList = observer(
 
 			const ES = treeItems[element.contentType];
 			if (ES) {
-				if (ES.icon) icon = <ES.icon className="icon-overlay" />;
+				if (ES.icon) icon = <ES.Icon className="icon-overlay" />;
 				if (ES.title) title = ES.title(element);
 			}
 
