@@ -34,7 +34,7 @@ class PropsOfRouterContent extends Component {
 	}
 
 	updatePath(path) {
-		path = path.replace(/(\/)\1/, "/").replace(/[^0-9a-zA-Z-_/]+/g, "-");
+		path = path.replace(/(\/)\1/, "/").replace(/[^0-9a-zA-Z-_:/]+/g, "-");
 		this.setState({ path });
 	}
 
