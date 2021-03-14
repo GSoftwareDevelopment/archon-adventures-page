@@ -30,6 +30,7 @@ export const ContentTypes = {
 	MENUROUTER: "menu-router",
 	ROUTERCONTENT: "router-content",
 	ROW: "row",
+	COLUMN: "column",
 	FOOTER: "footer",
 
 	// content blocks types
@@ -65,6 +66,7 @@ class LayoutsStore {
 			//
 			resetMessage: action,
 			insertElement: action,
+			deleteElement: action,
 			updateElementAttr: action,
 			setCurrentLang: action,
 			getElementById: action,
@@ -189,6 +191,70 @@ class LayoutsStore {
 								}
 							});
 					}
+				});
+		} catch (error) {
+			toast.error(error.message);
+			console.error(error);
+			this.status = Status.WARN;
+			this.message = error.message;
+			return undefined;
+		}
+	}
+
+	deleteElement(elementId, updateParentNode = true) {
+		this.status = Status.SILENT;
+		const element = toJS(this.getElementById(elementId));
+		console.log(elementId, element);
+
+		if (element.childs?.length > 0)
+			element.childs.forEach((childrenId) => {
+				this.deleteElement(childrenId.toString(), false);
+			});
+
+		try {
+			// delete element from DB
+			db.collection(Collections.LAYOUT)
+				.deleteOne({ _id: { $oid: element._id } })
+				.then((result) => {
+					console.log("Delete result:", result);
+
+					if (updateParentNode) {
+						//
+						const parentElement = this.getElementById(element.parrent);
+						const childs = [...parentElement.childs];
+						const index = childs.findIndex(
+							(id) => id.toString() === element._id
+						);
+						if (index > -1) {
+							childs.splice(index, 1);
+
+							// update childs in parent element in DB
+							db.collection(Collections.LAYOUT)
+								.updateOne(
+									{ _id: { $oid: parentElement._id } },
+									{ $set: { childs } }
+								)
+								.then((result) => {
+									console.log("Child update result:", result);
+
+									runInAction(() => {
+										// update child in parent element local
+										parentElement.childs.splice(index, 1);
+									});
+								});
+						} else {
+							// can't find element ID in childs!!
+							runInAction(() => {
+								this.status = Status.WARN;
+								console.error(
+									`Children element ID#${element._id} is not found in parent element #${element.parrent}`
+								);
+							});
+						}
+					}
+					runInAction(() => {
+						this.status = Status.DONE;
+					});
 				});
 		} catch (error) {
 			toast.error(error.message);
