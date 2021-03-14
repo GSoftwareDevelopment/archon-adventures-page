@@ -10,6 +10,7 @@ import SidebarMenu from "../general/SidebarMenu";
 
 import Dashboard from "./Dashboard";
 import Profile from "./Profile/";
+import PolicyManagement from "./PolicyManagement/";
 import UsersManagement from "./UsersManagement/";
 // import RestrictedArea from "./RestrictedArea";
 
@@ -34,6 +35,7 @@ class Admin extends Component {
 				<Switch>
 					<Route path="/admin/profile" component={Profile} />
 					<Route path="/admin/dashboard" component={Dashboard} />
+					<Route path="/admin/policy" component={PolicyManagement} />
 					<Route path="/admin/users" component={UsersManagement} />
 				</Switch>
 				<Sidebar
