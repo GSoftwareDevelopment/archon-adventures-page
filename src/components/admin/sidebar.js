@@ -2,6 +2,7 @@ import { ICON_SIZE } from "../general/SidebarMenu";
 import {
 	ClipboardData as IconDashboard,
 	PersonBadge as IconAccount,
+	ShieldShaded as IconPolicy,
 	PeopleFill as IconUsers,
 	Back as IconBackToPage,
 } from "react-bootstrap-icons";
@@ -22,9 +23,16 @@ export const menu = [
 		redirectTo: "/admin/dashboard",
 	},
 	{
+		id: "policy",
+		icon: <IconPolicy size={ICON_SIZE} />,
+		name: "Policy Management",
+		redirectTo: "/admin/policy",
+	},
+
+	{
 		id: "users",
 		icon: <IconUsers size={ICON_SIZE} />,
-		name: "Users management",
+		name: "Users Management",
 		redirectTo: "/admin/users",
 	},
 	{
