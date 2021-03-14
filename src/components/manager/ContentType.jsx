@@ -21,37 +21,37 @@ import PropsOfRouterContent from "./windows/PropsOfRouterContent";
 
 export const treeItems = {
 	layout: {
-		icon: IconLayout,
+		Icon: IconLayout,
 		title: ({ name, ...attr }) => name + (attr.default ? " (default)" : ""),
 		elementProps: PropsOfLayout,
 	},
 	"menu-link": {
-		icon: IconMenuLink,
+		Icon: IconMenuLink,
 		title: ({ destRoute, id }) => destRoute || id,
 		elementProps: PropsOfMenuLink,
 	},
 	"lang-selector": {
-		icon: IconLangSelector,
+		Icon: IconLangSelector,
 	},
 	"router-content": {
-		icon: IconRouterContent,
-		title: ({ path }) => path,
+		Icon: IconRouterContent,
+		title: ({ exact, path }) => (exact ? "=" : "") + path,
 		elementProps: PropsOfRouterContent,
 	},
 	card: {
-		icon: IconCard,
+		Icon: IconCard,
 		title: ({ name }) => Path.DELIMITER + unifyPath(name),
 		elementProps: PropsOfCard,
 	},
 	calendar: {
-		icon: IconCalendar,
+		Icon: IconCalendar,
 		title: ({ path }) => (path ? Path.DELIMITER + unifyPath(path) : "Calendar"),
 		elementProps: PropsOfCalendar,
 	},
 	galery: {
-		icon: IconGallery,
+		Icon: IconGallery,
 	},
 	comments: {
-		icon: IconComment,
+		Icon: IconComment,
 	},
 };
