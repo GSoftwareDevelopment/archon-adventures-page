@@ -8,15 +8,10 @@ function BasicFields({ fields, onChange }) {
 	return (
 		<fieldset className="basic-fieldset">
 			<legend>{Messages.getText("admin.account.profile.basicInfo")}</legend>
-			<div
-				className="user-photo"
-				style={{ backgroundImage: `url(${fields.imageURL})` }}
-			/>
-			<div className="fields">
+			<div>
 				<Input
 					style={{
-						display: "flex",
-						justifyContent: "space-between",
+						textAlign: "center",
 						marginBottom: "10px",
 					}}
 					inputStyle={{ textAlign: "center" }}
@@ -27,7 +22,14 @@ function BasicFields({ fields, onChange }) {
 					noWrapLabel
 					value={UsersStore.userRole || ""}
 					readOnly
+					disabled
 				/>
+				<div
+					className="user-photo"
+					style={{ backgroundImage: `url(${fields.imageURL})` }}
+				/>
+			</div>
+			<div className="fields">
 				{basicFieldsDef.map((field) => (
 					<Input
 						style={{ marginBottom: "10px" }}
