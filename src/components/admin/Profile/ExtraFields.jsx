@@ -3,7 +3,6 @@ import { extraFieldsDef } from "../../../libs/profileFields";
 import * as Messages from "../../../libs/Messages.js";
 import { toast } from "react-toastify";
 
-import { Redirect } from "react-router-dom";
 import NewExtraField from "./NewExtraField";
 import ListExtraFields from "./ListExtraFields";
 
@@ -17,7 +16,6 @@ function ExtraFields({
 	onDelete,
 }) {
 	const [newField, setNewField] = useState(false);
-	const [redirect, setRedirect] = useState(false);
 
 	const excludeList = extraFieldsDef.map((field) =>
 		fields[field.name] ? field.name : null
@@ -75,23 +73,6 @@ function ExtraFields({
 				onDelete={onDelete}
 				onToggleVisibility={onToggleVisibility}
 			/>
-
-			<div className="footer-info">
-				{Messages.getTextAsMarkdown(
-					"admin.account.profile.extraFields.footerInfo"
-				)}
-				<button
-					onClick={(e) => {
-						e.preventDefault();
-						setRedirect(true);
-					}}
-				>
-					{Messages.getText(
-						"admin.account.profile.extraFields.button.privacyPolicy"
-					)}
-				</button>
-				{redirect && <Redirect to="/admin/policy/#privacy" />}
-			</div>
 		</fieldset>
 	);
 }
