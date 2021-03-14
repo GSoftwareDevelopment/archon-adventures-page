@@ -1,3 +1,9 @@
+@import "../../scss/var";
+
+:root {
+	--sidebar-width: #{$sidebar-width};
+}
+
 h1,
 h2,
 h3,
