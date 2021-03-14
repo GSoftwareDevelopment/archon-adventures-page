@@ -36,6 +36,11 @@ const layoutElements = {
 			{parseElements("row", elements)}
 		</BlockElement.Row>
 	),
+	column: (index, attr, elements) => (
+		<BlockElement.Column key={index} attr={attr} elements={elements}>
+			{parseElements("column", elements)}
+		</BlockElement.Column>
+	),
 
 	// menu context
 
@@ -48,13 +53,9 @@ const layoutElements = {
 
 	// page context
 
-	card: (index, attr) => (
-		<ContentElement.Card
-			key={index + new Date().toString()}
-			name={attr.name}
-			attr={attr}
-		/>
-	),
+	card: (index, attr) => {
+		return <ContentElement.Card key={index} name={attr.name} attr={attr} />;
+	},
 
 	calendar: (index, attr) => (
 		<ContentElement.Calendar key={index + attr.path} attr={attr} />
