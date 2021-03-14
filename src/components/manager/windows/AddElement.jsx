@@ -209,7 +209,7 @@ const contentElements = [
 	{
 		group: msg_content,
 		name: ContentTypes.MENULINK,
-		title: "Menu item",
+		title: "Menu link",
 		icon: <Icon.Link size="64px" />,
 		defaultNew: {
 			id: "",
