@@ -9,6 +9,7 @@ import { ClipboardData as IconDashboard } from "react-bootstrap-icons";
 import BasicFields from "./BasciFields";
 import ExtraFields from "./ExtraFields";
 import Security from "./Security";
+import ContentLoader from "../../layout/ContentLoader";
 
 export default class Profile extends Component {
 	state = {
@@ -112,6 +113,7 @@ export default class Profile extends Component {
 				) : (
 					<h2 className="content">
 						{Messages.getText("admin.account.profile.pendingData")}
+						<ContentLoader busy={true} />
 					</h2>
 				)}
 			</React.Fragment>
