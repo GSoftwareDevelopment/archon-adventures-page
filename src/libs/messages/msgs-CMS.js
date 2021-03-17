@@ -47,6 +47,17 @@ create("manager.cards.options.editCard.tip", { en: "Edit card" });
 create("manager.cards.options.deleteCard", { en: "" });
 create("manager.cards.options.deleteCard.tip", { en: "Delete card" });
 
+//
+
+create("manager.calendars.options.newEntry", { en: "New..." });
+create("manager.calendars.options.newEntry.tip", { en: "Create new Entry" });
+
+create("manager.calendars.options.editEntry", { en: "Edit" });
+create("manager.calendars.options.editEntry.tip", { en: "Edit Entry" });
+
+create("manager.calendars.options.deleteEntry", { en: "" });
+create("manager.calendars.options.deleteEntry.tip", { en: "Delete Entry" });
+
 // Delete confirm dialog
 
 create("filesystem.deleteConfirm.window.title", {
