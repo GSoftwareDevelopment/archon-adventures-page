@@ -318,9 +318,9 @@ const ElementsList = observer(
 					onDoubleClick={() => {
 						if (onDoubleClick) onDoubleClick(element);
 					}}
-					dropBefore={element.contentType !== "layout" && index === 0}
+					dropBefore={element.contentType !== "layout"}
 					dropAfter={
-						element.contentType !== "layout" && index <= list.length - 1
+						element.contentType !== "layout" && index === list.length - 1
 					}
 					onItemDropped={(src, place) => {
 						if (place === "after") index++;

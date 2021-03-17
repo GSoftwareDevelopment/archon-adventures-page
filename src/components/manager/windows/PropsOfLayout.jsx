@@ -8,6 +8,7 @@ import WindowsStore from "../../../store/windows";
 import { Input, ButtonsGroup, SelectList } from "../../general/Window";
 import * as Icon from "react-bootstrap-icons";
 import { Save as IconSave } from "react-bootstrap-icons";
+import Flag from "react-flags";
 
 import * as Messages from "../../../libs/Messages";
 
@@ -194,6 +195,13 @@ export class ManageLangs extends Component {
 			isChoiced,
 			item: (
 				<React.Fragment>
+					<Flag
+						name={symbol === "en" ? "GB" : symbol}
+						format="svg"
+						alt={name}
+						basePath="/imgs/flags"
+						width={24}
+					/>
 					<span style={{ width: "40px", textAlign: "center" }}>{symbol}</span>
 					<span>
 						{name}

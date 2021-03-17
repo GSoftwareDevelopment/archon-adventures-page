@@ -50,7 +50,7 @@ class TreeCards extends Component {
 			"delete-" + filepath,
 			DeleteConfirmation,
 			{
-				item: filepath,
+				item: `Card file ${filepath}`,
 				actions: [
 					// TODO:	Niepodoba mi się ta forma definicji akcji :/
 					() => this.doDelete(item),
@@ -116,7 +116,7 @@ class TreeCards extends Component {
 			},
 		];
 		this.props.setOptions(options);
-		return true;
+		// return true;
 	};
 
 	render() {

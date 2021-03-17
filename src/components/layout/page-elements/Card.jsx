@@ -39,7 +39,6 @@ class Card extends Component {
 			status: Status.FETCHING,
 			pathname: "",
 		};
-		console.log(props);
 
 		this.fetchCardData = this.fetchCardData.bind(this);
 	}
@@ -194,7 +193,7 @@ class Card extends Component {
 			this.props.attr.options.forEach((option) => {
 				if (typeof option === "string") {
 					Messages.toConsole(
-						"debud.card.render.optionsModfied.flagSet",
+						"debug.card.render.optionsModfied.flagSet",
 						option
 					);
 					switch (option) {

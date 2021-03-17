@@ -30,7 +30,7 @@ class FSStore {
 				.find(
 					{},
 					{
-						projection: { _id: 1, name: 1, path: 1, userId:1, createdAt: 1 },
+						projection: { _id: 1, name: 1, path: 1, userId: 1, createdAt: 1 },
 						sort: { path: 1, name: 1 },
 					}
 				)
@@ -40,7 +40,7 @@ class FSStore {
 				this.files = this.files.filter((f) => f.collection !== collectionName);
 
 				files.forEach((file) => {
-					file._id=file._id.toString();
+					file._id = file._id.toString();
 					file.collection = collectionName;
 					this.files.push(file);
 				});
@@ -59,7 +59,7 @@ class FSStore {
 
 	add({ _id, name, path, userId, createdAt }, collectionName) {
 		const newEntry = {
-			_id:_id.toString(),
+			_id: _id.toString(),
 			name,
 			path,
 			createdAt,
@@ -74,7 +74,7 @@ class FSStore {
 		const index = this.files.findIndex(
 			(f) => f.collection === collectionName && f._id === _id
 		);
-		if (index !== -1) this.files.splice(index,1);
+		if (index !== -1) this.files.splice(index, 1);
 	}
 }
 

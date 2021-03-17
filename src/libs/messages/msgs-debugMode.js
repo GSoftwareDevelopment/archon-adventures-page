@@ -55,7 +55,7 @@ create("debug.card.render.optionsModified.open", {
 	},
 });
 
-create("debud.card.render.optionsModfied.flagSet", {
+create("debug.card.render.optionsModfied.flagSet", {
 	console: {
 		type: "log",
 		content: "Flag %s is set",
