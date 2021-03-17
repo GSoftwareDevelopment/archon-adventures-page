@@ -16,13 +16,16 @@ function DialogManager({ className, style, windowsStore, group = null }) {
 			{winList.map((wnd, index) => {
 				// const dialog = toJS(wnd);
 				const DialogClass = wnd.Win[0];
+
 				const sets = action((dialogSets) => {
-					wnd.sets = dialogSets;
+					wnd.sets = { ...wnd.sets, ...dialogSets };
 					wnd.sets.className = "window " + wnd.sets?.className;
 				});
+
 				const handleClose = () => {
 					WindowsStore.removeWindowById(wnd.id);
 				};
+
 				return (
 					<Window
 						key={wnd.id}
