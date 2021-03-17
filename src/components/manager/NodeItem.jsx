@@ -59,13 +59,12 @@ export default class NodeItem extends Component {
 			<div className="node-collection">
 				{this.props.onItemDropped && this.props.dropBefore && (
 					<DropTarget
+						className="dropArea"
 						onItemDropped={(src) => {
 							this.handleDropItem(src, "before");
 						}}
 						dropEffect="copy"
-					>
-						<div className="dropArea"></div>
-					</DropTarget>
+					></DropTarget>
 				)}
 
 				<ConditionalWrapper
@@ -123,17 +122,17 @@ export default class NodeItem extends Component {
 					</ConditionalWrapper>
 				</ConditionalWrapper>
 
+				{!isCollapsed && this.props.children}
+
 				{this.props.onItemDropped && this.props.dropAfter && (
 					<DropTarget
+						className="dropArea after"
 						onItemDropped={(src) => {
 							this.handleDropItem(src, "after");
 						}}
 						dropEffect="copy"
-					>
-						<div className="dropArea"></div>
-					</DropTarget>
+					></DropTarget>
 				)}
-				{!isCollapsed && this.props.children}
 			</div>
 		);
 	}
