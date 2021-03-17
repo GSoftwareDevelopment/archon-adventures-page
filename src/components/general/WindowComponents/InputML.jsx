@@ -4,13 +4,15 @@ import LayoutsStore from "../../../store/layouts";
 
 import { ExclamationDiamondFill as IconLangError } from "react-bootstrap-icons";
 import ButtonsGroup from "./ButtonsGroup";
+import Flag from "react-flags";
 
 class InputML extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			currentLang: props.currentLang || "en",
+			currentLang:
+				props.currentLang || LayoutsStore.default.defaultLang || "en",
 			contentLang: props.langContent,
 		};
 
@@ -18,6 +20,9 @@ class InputML extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
+		if (this.props.currentLang !== prevProps.currentLang) {
+			this.setState({ currentLang: this.props.currentLang });
+		}
 		if (this.props.langContent !== prevProps.langContent) {
 			// this.setState({
 			// 	contentLang: this.props.langContent || {},
@@ -39,9 +44,10 @@ class InputML extends Component {
 	}
 
 	getContent = (lang) => {
-		let ctn = this.state.contentLang[lang] || "";
-
-		return ctn;
+		if (this.state.contentLang) {
+			let ctn = this.state.contentLang[lang] || "";
+			return ctn;
+		} else return "";
 	};
 
 	setContent = (e, lang) => {
@@ -66,14 +72,28 @@ class InputML extends Component {
 			let icon,
 				title = "";
 			if (name) {
-				icon = symbol;
+				icon = (
+					<Flag
+						name={symbol === "en" ? "GB" : symbol}
+						format="svg"
+						alt={name}
+						basePath="/imgs/flags"
+						width={24}
+					/>
+				);
 				title = name;
 			} else {
 				title =
-					"This language will not be displayed because it is not defined in the Layout.";
+					"This language will not be displayed, because it is not defined in the Layout.";
 				icon = (
 					<React.Fragment>
-						{symbol}
+						<Flag
+							name={symbol === "en" ? "GB" : symbol}
+							format="svg"
+							alt={name}
+							basePath="/imgs/flags"
+							width={24}
+						/>
 						<IconLangError color="#f00" style={{ marginLeft: "5px" }} />
 					</React.Fragment>
 				);
@@ -83,7 +103,7 @@ class InputML extends Component {
 				icon,
 				title,
 				className: symbol === currentLang ? "active" : "",
-				style: { fontWeight: isUsed ? "bold" : "normal" },
+				style: !isUsed ? { filter: "grayscale(50%)", opacity: ".5" } : {},
 				onClick: (e) => {
 					this.setState({ currentLang: symbol });
 					this.handleLangChange(symbol);
@@ -132,12 +152,22 @@ class InputML extends Component {
 						>
 							<label htmlFor={name}>{label}</label>
 							{LayoutsStore.current.langs.map(({ symbol, name }) => (
-								<div key={symbol} className="hover d-flex flex-row">
+								<div
+									key={symbol}
+									className="hover d-flex flex-row align-items-center"
+								>
 									<label
 										htmlFor={`${name}-${symbol}`}
-										style={{ width: "20px", textAlign: "right" }}
+										style={{ width: "24px", textAlign: "right" }}
+										title={name}
 									>
-										{symbol}
+										<Flag
+											name={symbol === "en" ? "GB" : symbol}
+											format="svg"
+											alt={name}
+											basePath="/imgs/flags"
+											width="24px"
+										/>
 									</label>
 									{ChildrenWithProps(symbol)}
 								</div>
@@ -146,19 +176,18 @@ class InputML extends Component {
 					</React.Fragment>
 				) : (
 					<React.Fragment>
-						<div style={this.props.style}>
-							<div
-								className="d-flex flex-row justify-content-between align-items-center full-width"
-								style={{ margin: "0 5px" }}
-							>
-								<label htmlFor={name}>{label}</label>
+						<div className="d-flex flex-row justify-content-between align-items-center ">
+							<label htmlFor={name}>{label}</label>
+							{!Boolean(this.props.hideLangButtons) && (
 								<ButtonsGroup
 									className="group-button"
 									style={{ marginLeft: "auto" }}
 									onlyIcons={true}
 									buttons={this.langButtons(currentLang)}
 								/>
-							</div>
+							)}
+						</div>
+						<div style={this.props.style}>
 							{ChildrenWithProps(this.state.currentLang)}
 						</div>
 					</React.Fragment>
