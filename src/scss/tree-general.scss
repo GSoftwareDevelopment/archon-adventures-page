@@ -12,22 +12,38 @@
 
 	&.expanded {
 		height: 100%;
+		border-bottom: #fff2 solid 1px;
+		padding-bottom: 10px;
 		margin-bottom: 10px;
 	}
 
 	.node-collection {
 		display: block;
+		position: relative;
 
 		margin-left: 1em;
 		padding-left: 7px;
 		line-height: 20px;
-		border-left: 1px solid $tree-line-color;
+		// border-left: 1px solid $tree-line-color;
 
 		.dropArea {
+			--dropSize: 5px;
+
 			position: relative;
+			top: 0px;
+
+			&.after {
+				top: calc(100% - var(--dropSize));
+			}
+
 			width: 100%;
-			height: 5px;
-			z-index: 5;
+			height: var(--dropSize);
+			z-index: 0;
+
+			&.hover {
+				position: relative;
+				background: #fff4;
+			}
 		}
 
 		.node-item {
@@ -44,13 +60,13 @@
 				border-left: #ffff solid 2px;
 
 				position: relative;
-				left: -2px;
+				padding-left: 2px;
 			}
 
 			svg {
 				margin-right: 5px;
-				width: 2em;
-				height: 2em;
+				width: 1.5em;
+				height: 1.5em;
 			}
 
 			span {
@@ -68,24 +84,24 @@
 			}
 		}
 
-		.node-item:before {
-			position: relative;
-			top: -0.6em;
-			height: 1em;
-			width: 4px;
-			color: white;
-			border-bottom: 1px solid $tree-line-color;
-			content: "";
-			display: inline-block;
-			left: -8px;
-		}
+		// .node-item:before {
+		// 	position: relative;
+		// 	top: -0.6em;
+		// 	height: 1em;
+		// 	width: 4px;
+		// 	color: white;
+		// 	border-bottom: 1px solid $tree-line-color;
+		// 	content: "";
+		// 	display: inline-block;
+		// 	left: -8px;
+		// }
 
-		&:last-child {
-			border-left: 1px solid rgba(0, 0, 0, 0);
+		// .node-item:last-child {
+		// 	border-left: 1px solid rgba(0, 0, 0, 0);
 
-			.node-item:before {
-				border-left: 1px solid $tree-line-color;
-			}
-		}
+		// 	.node-item:before {
+		// 		border-left: 1px solid $tree-line-color;
+		// 	}
+		// }
 	}
 }
