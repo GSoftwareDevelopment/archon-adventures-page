@@ -20,6 +20,7 @@ Te elementy budują strukturę szablonu i na jej podstawie budowany jest widok s
 - [x] **router-content**
 - [x] **footer**
 - [x] **row**
+- [x] **column**
 
 Teoretycznie można je układać w różnych konfiguracjach, jednak nie ręczę za skutki i poprawne działanie tak skonstruowanego schematu strony.
 
@@ -58,7 +59,7 @@ Blok przechowujący elementy strony dla podanej trasy _path_.
 **Atrybuty**:
 
 - [x] _exact_
-- [x] _path_ - ścieżka trasa
+- [x] _path_ - punkt końcowy trasa, może zawierać paramety, które będą dostępne w elementach potomnnych
 - [x] _id_ - identyfiator trasy - jest kojarzony z elementem kontekstowym **menu-item**
 - [ ] _options_ - ustawienia
 
@@ -72,9 +73,9 @@ Definiuje blok odpowiedzialny za stopkę strony.
 
 **Atrybuty**: Ten element nie posiada definiowanych atrybutów.
 
-### `row`
+### `row` i `column`
 
-Pozwala ułożyć podrzędne mu elementy w wierszu.
+Pozwala ułożyć podrzędne mu elementy w wierszu (`row`) lub w kolumnie (`column`).
 
 **Atrybuty**: Ten element nie posiada definiowanych atrybutów.
 
@@ -102,16 +103,16 @@ Wyświetla treść karty podanej jako argument _name_.
 
 **Atrybuty**:
 
-- [x] _pathname_
+- [x] _name_ - pełna ścieżka (wewnętrzna) wraz z nazwą, dotycząca karty. Nazwa może być parametrem (rozpoczynającym się od znaku dwukropka `:`) który jest przekazywany przez element `router-content`
 - [x] _options_ - ustawienia
 
   - [x] _noLangWarnings_ - flaga, odpowiedzialna za nie wyświetlanie ostrzeżenia związanego ze zmianą preferowanego języka w treści karty.
 
     Domyślnie: ustawiona
 
-  - [ ] _useMarkdown_ - flaga, pozwala używać do formatowania treści karty język znaczników Markdown.
+  - ~~[ ] _useMarkdown_ - flaga, pozwala używać do formatowania treści karty język znaczników Markdown.~~
 
-    Domyślnie: ustawiona
+    ~~Domyślnie: ustawiona~~
 
   - [ ] _allowUserComments_ - flaga, dopuszczająca możliwość komentowania przez zarejestrowanych użytkowników
   - [ ] _allowAnonimousComments_ flaga, podobnie jak _allowUserComments_ tylko dla użytkowników anonimowych
@@ -122,7 +123,9 @@ Wyświetla wpisy kalendarza.
 
 **Atrybuty**:
 
-- [x] _path_ - wewnętrzna ścieżka zawierająca wpisy kalendarza
+- [x] _path_ - ścieżka (wewnętrzna) zawierająca wpisy kalendarza
+- [ ] _active_ - określa, czy wpisy będą linkowane do treści [tutaj, v2.4](./db.md#v24))
+- [ ] _redirectTo_ - trasa przekierowania dla linkowanego wpisu [tutaj, v2.4](./db.md#v24))
 - [ ] _options_ - ustawienia
 
   - [ ] _view_ - tablica flag, definiująca wyświetlane elementy wpisu kalendarza

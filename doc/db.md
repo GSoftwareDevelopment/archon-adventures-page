@@ -17,6 +17,18 @@
 - Usunięto właściwość `lang`
 - Dodano właściwość `userId` wsazującą na właściciela wpisu.
 
+## v2.4
+
+- Dodano właściwości:
+
+  - `active`
+
+    Powoduje, że wpisy są linkowane do treści.
+
+  - `redirectTo`
+
+    Określa punkt końcowy przekierowania dla linkowanyh wpisów.
+
 ## v2.3
 
 ### Zmiana w elemencie kolekcji Layout
