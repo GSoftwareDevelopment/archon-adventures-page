@@ -15,6 +15,8 @@ const msg_base = "props.calendar";
 class PropsOfCalendar extends Component {
 	state = {
 		sourcePath: this.props.attr.path || "",
+		activeEntry: this.props.attr.active || true,
+		redirectTo: this.props.attr.redirectTo || "",
 		view: [...this.props.attr.options.view],
 		pagination: this.props.attr.options.pagination || false,
 		limit: this.props.attr.options.limit || 0,
@@ -40,6 +42,10 @@ class PropsOfCalendar extends Component {
 		this.setState({ sourcePath: correctPathChar(newPath) });
 	};
 
+	updateRedirectTo = (newRoute) => {
+		this.setState({ redirectTo: newRoute });
+	};
+
 	dropSourcePath = (source) => {
 		try {
 			const itemData = JSON.parse(source);
@@ -58,6 +64,8 @@ class PropsOfCalendar extends Component {
 		e.preventDefault();
 		LayoutsStore.updateElementAttr(this.props.attr._id, {
 			path: this.state.sourcePath,
+			active: this.state.activeEntry,
+			redirectTo: this.state.redirectTo,
 			options: {
 				pagination: this.state.pagination,
 				limit: this.state.limit,
@@ -85,6 +93,30 @@ class PropsOfCalendar extends Component {
 							}}
 						/>
 					</DropTarget>
+				</div>
+				<Checkbox
+					className="justify-between hover"
+					name="active-entry"
+					label={Messages.getText(`${msg_base}.activeEntry`)}
+					checked={this.state.activeEntry}
+					onChange={(e) => {
+						const state = e.currentTarget.checked;
+						this.setState({ activeEntry: state });
+					}}
+				/>
+				<div className="hover" style={{ margin: "0 5px" }}>
+					<label htmlFor="redirectTo">
+						{Messages.getText(`${msg_base}.redirectTo`)}
+					</label>
+					<input
+						type="text"
+						name="redirectTo"
+						value={this.state.redirectTo}
+						onChange={(e) => {
+							this.updateRedirectTo(e.currentTarget.value);
+						}}
+						disabled={!this.state.activeEntry}
+					/>
 				</div>
 				<fieldset>
 					<legend>
