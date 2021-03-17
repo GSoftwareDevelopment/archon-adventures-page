@@ -1,5 +1,22 @@
 # Organizacja bazy danych
 
+## v3.0 Brak kompatybilności wstecznej - zapoznaj się ze zmianami!
+
+### Zmiana w elemencie kolekcji Calendar
+
+- Z obiektu `body` wyodrębnione zostały właściwości `title` oraz `description`, a sam objekt został usunięty - **brak kompatybilności wstecznej!**.
+
+  Budowa tych właściwości, jest "wielojęzyczna" (langObject)
+
+- Usunięta została właściwość `cardRefTo`.
+
+  Z punktu widzenia systemu plików, okazało się, że była ona zbędna.
+
+  W pewnym sensie, wpisy kalendarza (kolekcja `Calendar`) oraz kart (kolekcja `Card`) są ze sobą powiązane i można wykorzystać właściwości `path` oraz `name` do skojarzenia tych dwóch kolekcji.
+
+- Usunięto właściwość `lang`
+- Dodano właściwość `userId` wsazującą na właściciela wpisu.
+
 ## v2.3
 
 ### Zmiana w elemencie kolekcji Layout
