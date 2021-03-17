@@ -30,48 +30,47 @@ class CardEdit extends Component {
 		lang: [],
 		body: {},
 		_path: "",
-		_file: "",
-		currentLang: "en",
+		_name: "",
+		currentLang: null,
 		userInfo: { displayName: "..." },
 	};
 
 	constructor(props) {
 		super(props);
 
-		const { dialog } = props;
-		const { name } = props.attr;
+		if (props.dialog) {
+			const { name } = props.attr;
+			props.dialog({
+				className: "full-screen",
+				size: "maximized",
+				sizeCycle: ["maximized", "minimized"],
+				title: name ? "Edit card: " + name : "New card",
+			});
+		}
+	}
 
-		dialog({
-			className: "full-screen",
-			size: "maximized",
-			sizeCycle: ["maximized", "minimized"],
-			title: name ? "Edit card: " + name : "New card",
-		});
+	componentDidUpdate(prevProps) {
+		if (this.props?.currentLang !== prevProps?.currentLang) {
+			this.setCurrentLang(this.props.currentLang);
+		}
+		if (this.props.attr.name !== prevProps.attr.name) {
+			this.setState({ _name: this.props.attr.name });
+		}
 	}
 
 	async componentDidMount() {
 		// this.setState({ status: status.READING });
 		const { _id, path, name } = this.props.attr;
+		let data = {};
 
 		if (_id) {
 			// get card data from DB
 			try {
-				const cardData = await db
+				data = await db
 					.collection(Collections.CARDS)
 					.find({ path, name })
 					.first();
-
-				this.cardData = cardData;
-
-				this.setState({
-					lang: cardData.lang,
-					body: cardData.body,
-					_path: path,
-					_name: name,
-					status: status.DONE,
-					createdAt: cardData.createdAt,
-					userInfo: await UsersStore.getOtherUserInfo(cardData.userId),
-				});
+				console.log(path, name, data);
 			} catch (error) {
 				console.error(error);
 				toast.error(error.message);
@@ -79,7 +78,7 @@ class CardEdit extends Component {
 			}
 		} else {
 			// create card
-			const newCardData = {
+			data = {
 				path,
 				name,
 				body: {},
@@ -87,18 +86,17 @@ class CardEdit extends Component {
 				createdAt: new Date(),
 				userId: UsersStore.getCurrentUser().id,
 			};
-			this.cardData = newCardData;
-
-			this.setState({
-				lang: newCardData.lang,
-				body: newCardData.body,
-				_path: path,
-				_name: name,
-				status: status.DONE,
-				createdAt: newCardData.createdAt,
-				userInfo: await UsersStore.getOtherUserInfo(newCardData.userId),
-			});
 		}
+		this.cardData = data;
+		this.setState({
+			lang: data.lang,
+			body: data.body,
+			_path: path,
+			_name: name,
+			status: status.DONE,
+			createdAt: data.createdAt,
+			userInfo: await UsersStore.getOtherUserInfo(data.userId),
+		});
 	}
 
 	updateBody = (body) => {
@@ -107,6 +105,7 @@ class CardEdit extends Component {
 
 	setCurrentLang = (lang) => {
 		this.setState({ currentLang: lang });
+		// if (this.props.onLangChange) this.props.onLangChange(lang);
 	};
 
 	cancelSaveCard = () => {
@@ -118,7 +117,7 @@ class CardEdit extends Component {
 			// save current card
 			this.save();
 		} else {
-			// show filepath
+			// show save prompt
 			this.setState({ status: status.SAVEPROMPT });
 		}
 	};
@@ -128,12 +127,17 @@ class CardEdit extends Component {
 			const path = this.state._path;
 			const name = this.state._name.trim();
 
-			if (name === "") throw new Error(`Card name can't be empty!`);
+			if (name === "") {
+				toast.error(`Name filed cant be empty!`);
+				return;
+			}
 
 			this.cardData.body = this.state.body;
 			this.cardData.lang = this.state.lang;
 			this.cardData.path = path;
 			this.cardData.name = name;
+
+			// if (this.props.onSave) this.props.onSave({ path, name });
 
 			let result;
 			if (this.cardData._id) {
@@ -156,6 +160,10 @@ class CardEdit extends Component {
 					status: status.DONE,
 					message: "Card correctly saved",
 				});
+				if (this.props.dialog)
+					this.props.dialog({
+						title: name ? "Edit card: " + name : "New card",
+					});
 
 				// // update fslog
 				// const logData={
@@ -172,6 +180,10 @@ class CardEdit extends Component {
 				this.setState({
 					status: status.DONE,
 				});
+				if (this.props.dialog)
+					this.props.dialog({
+						title: name ? "Edit card: " + name : "New card",
+					});
 			} else {
 				toast.error("Something went wrong");
 				this.setState({
@@ -207,13 +219,14 @@ class CardEdit extends Component {
 							style={{
 								minHeight: "200px",
 								height: "100%",
-								paddingBottom: "35px",
+								// paddingBottom: "35px",
 							}}
+							hideLangButtons={this.props.hideLangButtons}
 							name="card-body"
 							label="Content body"
+							disabled={!isEnabled}
 							currentLang={this.state.currentLang}
 							langContent={this.state.body}
-							disabled={!isEnabled}
 							onUpdate={this.updateBody}
 							onLangChange={this.setCurrentLang}
 						>
@@ -221,6 +234,7 @@ class CardEdit extends Component {
 						</InputML>
 					</ContentLoader>
 				</div>
+
 				<ButtonsGroup
 					className="group-button"
 					style={{ gap: "5px" }}
@@ -286,8 +300,6 @@ class CardEdit extends Component {
 }
 
 export default observer(CardEdit);
-
-//
 
 //
 
