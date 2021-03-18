@@ -35,5 +35,5 @@ create(`${base}.attributes.allowUserComments`, {
 	en: `Allow users to comment`,
 });
 create(`${base}.attributes.allowAnonimousComments`, {
-	en: `Allow anonimous to comment`,
+	en: `Allow anonymous to comment`,
 });
