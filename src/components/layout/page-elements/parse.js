@@ -1,22 +1,23 @@
 import * as BlockElement from "./block";
 import * as ContentElement from "./content";
 import layoutsStore from "../../../store/layouts";
+import { observer } from "mobx-react";
 
-const layoutElements = {
+export const layoutElements = {
 	header: (index, attr, elements) => (
 		<BlockElement.Header key={index} attr={attr} elements={elements}>
-			{parseElements("header", elements)}
+			<ParseElements name="header" node={elements} />
 		</BlockElement.Header>
 	),
 
 	"router-content": (index, attr, elements) => (
 		<BlockElement.RouterContent key={index} attr={attr} elements={elements}>
-			{parseElements("router-content", elements)}
+			<ParseElements name="router-content" node={elements} />
 		</BlockElement.RouterContent>
 	),
 	footer: (index, attr, elements) => (
 		<BlockElement.Footer key={index} attr={attr} elements={elements}>
-			{parseElements("footer", elements)}
+			<ParseElements name="footer" node={elements} />
 		</BlockElement.Footer>
 	),
 
@@ -26,19 +27,19 @@ const layoutElements = {
 
 		return (
 			<BlockElement.MenuRouter key={index} attr={attr} elements={elements}>
-				{parseElements("router-menu", elements)}
+				<ParseElements name="router-menu" node={elements} />
 			</BlockElement.MenuRouter>
 		);
 	},
 
 	row: (index, attr, elements) => (
 		<BlockElement.Row key={index} attr={attr} elements={elements}>
-			{parseElements("row", elements)}
+			<ParseElements name="row" node={elements} />
 		</BlockElement.Row>
 	),
 	column: (index, attr, elements) => (
 		<BlockElement.Column key={index} attr={attr} elements={elements}>
-			{parseElements("column", elements)}
+			<ParseElements name="column" node={elements} />
 		</BlockElement.Column>
 	),
 
@@ -54,7 +55,14 @@ const layoutElements = {
 	// page context
 
 	card: (index, attr) => {
-		return <ContentElement.Card key={index} name={attr.name} attr={attr} />;
+		return (
+			<ContentElement.Card
+				key={index}
+				name={attr.name}
+				attr={attr}
+				lang={layoutsStore.currentLang}
+			/>
+		);
 	},
 
 	calendar: (index, attr) => (
@@ -67,16 +75,15 @@ const layoutElements = {
 
 let currentLevel = -1;
 
-export function parseElements(parent, childen) {
-	if (!childen || childen.length === 0) {
-		console.log(`No child in node '${parent}'`);
+const ParseElements = ({ name, node }) => {
+	if (!node || node.length === 0) {
+		console.log(`No child in node '${name}'`);
 		return null;
 	}
 
 	currentLevel++;
-	console.groupCollapsed(`${currentLevel} > Node element: ${parent}`);
 
-	const childrenResult = childen.map((_childId, index) => {
+	const childrenResult = node.map((_childId, index) => {
 		const childId = _childId.toString();
 		const element = layoutsStore.getElementById(childId);
 		if (!element) {
@@ -88,7 +95,7 @@ export function parseElements(parent, childen) {
 
 		const { contentType, childs, ...attr } = element;
 		if (layoutElements[contentType]) {
-			attr._parentContentType = parent;
+			attr._parentContentType = name;
 			return layoutElements[contentType](childId, attr, childs, currentLevel);
 		} else {
 			console.log(`content type '${contentType} element not recognized.`);
@@ -96,10 +103,9 @@ export function parseElements(parent, childen) {
 		}
 	});
 
-	console.groupEnd();
 	currentLevel--;
 
 	return childrenResult;
-}
+};
 
-export default layoutElements;
+export default observer(ParseElements);
