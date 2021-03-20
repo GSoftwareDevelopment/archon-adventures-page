@@ -3,7 +3,7 @@ import "./scss/card.scss";
 import React, { Component } from "react";
 import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
-import { observer } from "mobx-react";
+// import { observer } from "mobx-react";
 import LayoutsStore from "../../../store/layouts";
 import {
 	languageCheck,
@@ -43,13 +43,52 @@ class Card extends Component {
 		this.fetchCardData = this.fetchCardData.bind(this);
 	}
 
-	componentDidUpdate(prevProps) {
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.lang !== this.props.lang) return true;
+		if (nextState.card === this.state.card) return false;
 		if (
-			prevProps.id !== this.props.id ||
-			prevProps.name !== this.props.name ||
-			prevProps.match.params !== this.props.match.params
+			nextState.status !== this.state.stauts ||
+			nextProps.attr._id !== this.props.attr._id ||
+			nextProps.name !== this.props.name ||
+			nextProps.match.params !== this.props.match.params
 		) {
-			this.prepareComponent();
+			// console.log(nextProps, nextState);
+			return true;
+		}
+		return false;
+	}
+
+	// componentDidUpdate(prevProps) {
+	// 	console.log(prevProps, this.props);
+	// 	if (
+	// 		prevProps.attr._id !== this.props.attr._id ||
+	// 		prevProps.name !== this.props.name ||
+	// 		prevProps.match.params !== this.props.match.params
+	// 	) {
+	// 		this.prepareComponent();
+	// 		return;
+	// 	}
+	// 	return false;
+	// }
+
+	async componentDidMount() {
+		await this.prepareComponent();
+	}
+
+	async prepareComponent() {
+		try {
+			let findCondition = this.prepareFindCondition(this.props);
+			if (!findCondition) throw new Error("Find condition not exits!");
+
+			this.setState({ status: Status.FETCHING });
+			await this.fetchCardData(findCondition);
+		} catch (error) {
+			Messages.toConsole("fetchingError", error);
+			this.setState({
+				card: null,
+				status: Status.ERROR,
+				errorMsg: "fetchingError",
+			});
 		}
 	}
 
@@ -87,27 +126,6 @@ class Card extends Component {
 		}
 	}
 
-	async componentDidMount() {
-		await this.prepareComponent();
-	}
-
-	async prepareComponent() {
-		try {
-			let findCondition = this.prepareFindCondition(this.props);
-			if (!findCondition) throw new Error("Find condition not exits!");
-
-			this.setState({ status: Status.FETCHING });
-			await this.fetchCardData(findCondition);
-		} catch (error) {
-			Messages.toConsole("fetchingError", error);
-			this.setState({
-				card: null,
-				status: Status.ERROR,
-				errorMsg: "fetchingError",
-			});
-		}
-	}
-
 	async fetchCardData(find) {
 		// query the remote DB and update the component state
 		const card = await db
@@ -138,6 +156,7 @@ class Card extends Component {
 
 	changeLang = (lang) => {
 		Messages.toConsole("debug.card.userLangChoice", lang);
+		// TODO: Do zrobienia!
 	};
 
 	render() {
@@ -237,4 +256,4 @@ class Card extends Component {
 	}
 }
 
-export default withRouter(observer(Card));
+export default withRouter(Card);
