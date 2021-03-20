@@ -109,6 +109,7 @@ export default class TreeCalendars extends Component {
 				<div style={{ flexGrow: "2" }}>
 					<FileSystemList
 						collection={Collections.CALENDAR}
+						sortBy={{ path: 1, createdAt: -1, name: 1 }}
 						allowDrag={true}
 						allowDragDir={true}
 						allowDragFile={false}
