@@ -20,7 +20,7 @@ class FSStore {
 		return this.status[collectionName] === status.DONE;
 	}
 
-	async updateCollectionFS(collectionName) {
+	async updateCollectionFS(collectionName, sort = { path: 1, name: 1 }) {
 		console.log("> Reading FileSystem in '" + collectionName + "'...");
 		this.status[collectionName] = status.PENDING;
 
@@ -31,7 +31,7 @@ class FSStore {
 					{},
 					{
 						projection: { _id: 1, name: 1, path: 1, userId: 1, createdAt: 1 },
-						sort: { path: 1, name: 1 },
+						sort,
 					}
 				)
 				.asArray();
@@ -75,6 +75,43 @@ class FSStore {
 			(f) => f.collection === collectionName && f._id === _id
 		);
 		if (index !== -1) this.files.splice(index, 1);
+	}
+
+	async read(find, collectionName) {
+		const fileData = await db.collection(collectionName).find(find).first();
+		return fileData;
+	}
+
+	async store(entry, collectionName) {
+		let result;
+
+		if (entry._id) {
+			// Update
+			result = await db
+				.collection(collectionName)
+				.updateOne({ _id: entry._id }, entry);
+		} else {
+			// Create
+			result = await db.collection(collectionName).insertOne(entry);
+		}
+
+		if (result.modifiedCount === 1) {
+			this.updateCollectionFS(collectionName);
+
+			// // update fslog
+			// const logData={
+			// 	type:"modify",
+			// 	fsId: this.cardData._id,
+			// 	userId: this.cardData.userId,
+			// 	timestamp: new Date()
+			// };
+
+			// await db.collection(Collections.FSLOG).insertOne(logData);
+		} else if (result.insertedId) {
+			this.add(entry, collectionName);
+		}
+
+		return result;
 	}
 }
 
