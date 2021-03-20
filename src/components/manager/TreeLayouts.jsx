@@ -6,7 +6,7 @@ import { ICON_SIZE } from "../general/SidebarMenu";
 
 import NodeTree from "../general/NodeTree";
 import NodeItem from "./NodeItem";
-import { treeItems } from "./ContentType";
+import { contentTypeItems } from "./ContentType";
 
 import Spinner from "react-spinners/DotLoader";
 
@@ -32,10 +32,6 @@ class TreeLayouts extends Component {
 	state = {
 		selected: null,
 	};
-
-	async componentDidMount() {
-		// await this.getLayoutData();
-	}
 
 	componentDidUpdate(prevProps) {
 		if (!prevProps.visible && this.props.visible) {
@@ -73,7 +69,7 @@ class TreeLayouts extends Component {
 		console.log(`Property of '${item.contentType}' on ID#${item.id}...`);
 		console.log(item);
 		// const { parrent, childs, ...itemAttr } = item;
-		const wnd = treeItems[item.contentType]?.elementProps;
+		const wnd = contentTypeItems[item.contentType]?.elementProps;
 		if (wnd) WindowsStore.addWindow(item._id.toString(), wnd, item);
 		else {
 			console.error(
@@ -115,7 +111,7 @@ class TreeLayouts extends Component {
 				title: Messages.getText(`${msg_base}.propertiesElement`),
 				tip: Messages.getText(`${msg_base}.propertiesElement.tip`),
 				onClick: () => this.openElementProps(item),
-				enabled: Boolean(treeItems[item.contentType]?.elementProps),
+				enabled: Boolean(contentTypeItems[item.contentType]?.elementProps),
 			},
 			{
 				icon: <IconMoveBefore size={ICON_SIZE} />,
@@ -182,7 +178,7 @@ class TreeLayouts extends Component {
 		const { contentType } = item;
 		let message = contentType.toUpperCase();
 
-		const ES = treeItems[contentType];
+		const ES = contentTypeItems[contentType];
 		if (ES?.title) message = message + " " + ES.title(item);
 
 		WindowsStore.addWindow(
@@ -289,7 +285,7 @@ const ElementsList = observer(
 			let icon = null;
 			let title = element.contentType;
 
-			const ES = treeItems[element.contentType];
+			const ES = contentTypeItems[element.contentType];
 			if (ES) {
 				if (ES.Icon) icon = <ES.Icon className="icon-overlay" />;
 				if (ES.title) title = ES.title(element);
