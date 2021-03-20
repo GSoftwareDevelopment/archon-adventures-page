@@ -69,19 +69,19 @@ export default class AddElement extends Component {
 						onlyIcons={true}
 						buttons={[
 							{
-								icon: <Icon.BoxArrowUp size="1.5em" />,
+								Icon: Icon.BoxArrowUp size="1.5em" />,
 								tip: "Add item before node",
 							},
 							{
-								icon: <Icon.BoxArrowDown size="1.5em" />,
+								Icon: Icon.BoxArrowDown size="1.5em" />,
 								tip: "Add item after node",
 							},
 							{
-								icon: <Icon.BoxArrowInDown size="1.5em" />,
+								Icon: Icon.BoxArrowInDown size="1.5em" />,
 								tip: "Insert item inside node as first",
 							},
 							{
-								icon: <Icon.BoxArrowInUp size="1.5em" />,
+								Icon: Icon.BoxArrowInUp size="1.5em" />,
 								tip: "Insert item inside node as last",
 							},
 						]}
@@ -98,7 +98,7 @@ function ElementsList({ title, items, choiced = "", onChoice }) {
 
 	let prevGroup = "";
 
-	const handleRenderItem = ({ group, name, icon, title, defaultNew }, attr) => {
+	const handleRenderItem = ({ group, name, Icon, title, defaultNew }, attr) => {
 		let groupComponent = null;
 		if (group !== prevGroup) {
 			groupComponent = <legend>{group}</legend>;
@@ -116,7 +116,7 @@ function ElementsList({ title, items, choiced = "", onChoice }) {
 					})}
 					dropEffect="copy"
 				>
-					{icon}
+					<Icon size="64px" />
 					<span className="name">{title}</span>
 				</Drag>
 			),
@@ -147,7 +147,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.HEADER,
 		title: "Header",
-		icon: <Icon.Window size="64px" />,
+		Icon: Icon.Window,
 		defaultNew: {
 			childs: [],
 		},
@@ -156,7 +156,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.FOOTER,
 		title: "Footer",
-		icon: <Icon.WindowDock size="64px" />,
+		Icon: Icon.WindowDock,
 		defaultNew: {
 			childs: [],
 		},
@@ -165,7 +165,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.MENUROUTER,
 		title: "Menu router",
-		icon: <Icon.MenuApp size="64px" />,
+		Icon: Icon.MenuApp,
 		defaultNew: {
 			childs: [],
 		},
@@ -174,7 +174,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.ROUTERCONTENT,
 		title: "Route content",
-		icon: <Icon.Link45deg size="64px" />,
+		Icon: Icon.Geo,
 		defaultNew: {
 			exact: true,
 			path: "",
@@ -189,7 +189,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.ROW,
 		title: "Row",
-		icon: <Icon.DistributeVertical size="64px" />,
+		Icon: Icon.DistributeVertical,
 		defaultNew: {
 			childs: [],
 		},
@@ -198,7 +198,7 @@ const blockElements = [
 		group: msg_block,
 		name: ContentTypes.COLUMN,
 		title: "Column",
-		icon: <Icon.DistributeHorizontal size="64px" />,
+		Icon: Icon.DistributeHorizontal,
 		defaultNew: {
 			childs: [],
 		},
@@ -210,7 +210,7 @@ const contentElements = [
 		group: msg_content,
 		name: ContentTypes.MENULINK,
 		title: "Menu link",
-		icon: <Icon.Link size="64px" />,
+		Icon: Icon.Link,
 		defaultNew: {
 			id: "",
 			title: {},
@@ -220,13 +220,13 @@ const contentElements = [
 		group: msg_content,
 		name: ContentTypes.LANGSELECTOR,
 		title: "Menu Language selector",
-		icon: <Icon.List size="64px" />,
+		Icon: Icon.List,
 	},
 	{
 		group: msg_content,
 		name: ContentTypes.CARD,
 		title: "Card",
-		icon: <Icon.JournalRichtext size="64px" />,
+		Icon: Icon.JournalRichtext,
 		defaultNew: {
 			name: "",
 			options: ["noLangWarnings", "useMarkdown"],
@@ -236,14 +236,14 @@ const contentElements = [
 		group: msg_content,
 		name: ContentTypes.GALERY,
 		title: "Gallery",
-		icon: <Icon.JournalAlbum size="64px" />,
+		Icon: Icon.JournalAlbum,
 		defaultNew: {},
 	},
 	{
 		group: msg_content,
 		name: ContentTypes.CALENDAR,
 		title: "Calendar (Blog)",
-		icon: <Icon.Calendar3 size="64px" />,
+		Icon: Icon.Calendar3,
 		defaultNew: {
 			path: "",
 			options: {
@@ -257,6 +257,6 @@ const contentElements = [
 		group: msg_content,
 		name: ContentTypes.COMMENTS,
 		title: "Comments",
-		icon: <Icon.ChatRight size="64px" />,
+		Icon: Icon.ChatRight,
 	},
 ];
