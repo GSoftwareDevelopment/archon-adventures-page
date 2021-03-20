@@ -1,6 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
 import FSStore from "../../../store/fs";
@@ -66,11 +65,7 @@ class CardEdit extends Component {
 		if (_id) {
 			// get card data from DB
 			try {
-				data = await db
-					.collection(Collections.CARDS)
-					.find({ path, name })
-					.first();
-				console.log(path, name, data);
+				data = await FSStore.read({ path, name }, Collections.CARDS);
 			} catch (error) {
 				console.error(error);
 				toast.error(error.message);
@@ -132,68 +127,30 @@ class CardEdit extends Component {
 				return;
 			}
 
-			this.cardData.body = this.state.body;
-			this.cardData.lang = this.state.lang;
-			this.cardData.path = path;
-			this.cardData.name = name;
+			this.cardData = { ...this.cardData, path, name, body: this.state.body };
 
-			// if (this.props.onSave) this.props.onSave({ path, name });
-
-			let result;
-			if (this.cardData._id) {
-				// Update card
-
-				result = await db
-					.collection(Collections.CARDS)
-					.updateOne({ _id: this.cardData._id }, this.cardData);
-			} else {
-				// Create new card
-				result = await db
-					.collection(Collections.CARDS)
-					.insertOne(this.cardData);
-			}
+			const result = await FSStore.store(this.cardData, Collections.CARDS);
 
 			if (result.modifiedCount === 1) {
-				FSStore.updateCollectionFS(Collections.CARDS);
 				toast.success("Card correctly saved.");
-				this.setState({
-					status: status.DONE,
-					message: "Card correctly saved",
-				});
+				this.setState({ status: status.DONE });
 				if (this.props.dialog)
 					this.props.dialog({
 						title: name ? "Edit card: " + name : "New card",
 					});
-
-				// // update fslog
-				// const logData={
-				// 	type:"modify",
-				// 	fsId: this.cardData._id,
-				// 	userId: this.cardData.userId,
-				// 	timestamp: new Date()
-				// };
-
-				// await db.collection(Collections.FSLOG).insertOne(logData);
 			} else if (result.insertedId) {
-				FSStore.add(this.cardData, Collections.CARDS);
 				toast.success("Card was created.");
-				this.setState({
-					status: status.DONE,
-				});
+				this.setState({ status: status.DONE });
 				if (this.props.dialog)
 					this.props.dialog({
 						title: name ? "Edit card: " + name : "New card",
 					});
 			} else {
 				toast.error("Something went wrong");
-				this.setState({
-					status: status.ERROR,
-				});
 			}
 		} catch (error) {
 			toast.error(error.message);
 			console.error(error);
-			this.setState({ status: status.ERROR });
 		}
 	}
 
