@@ -11,7 +11,7 @@ import NodeItem from "./NodeItem";
 
 class FileSystemList extends Component {
 	async componentDidMount() {
-		await FSStore.updateCollectionFS(this.props.collection);
+		await FSStore.updateCollectionFS(this.props.collection, this.props.sortBy);
 	}
 
 	render() {
@@ -24,7 +24,7 @@ class FileSystemList extends Component {
 		}
 
 		const filesList = FSStore.fileList(this.props.collection);
-		
+
 		return (
 			<PathTree
 				{...this.props}
@@ -118,7 +118,7 @@ class PathTree extends Component {
 				name: this.props.selected.name,
 			};
 		}
-		
+
 		return (
 			<React.Fragment>
 				{this.subPaths(this.props.path)}
