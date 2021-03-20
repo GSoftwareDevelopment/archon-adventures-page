@@ -1,9 +1,9 @@
 import React, { Component, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { db } from "../../../libs/db";
+// import { db } from "../../../libs/db";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
-// import FSStore from "../../../store/fs";
+import FSStore from "../../../store/fs";
 
 import ContentLoader from "../../layout/ContentLoader";
 import { InputPathName, InputML, ButtonsGroup } from "../../general/Window";
@@ -55,38 +55,42 @@ class CalendarEntryEdit extends Component {
 		if (_id) {
 			// get card data from DB
 			try {
-				this.entryData = await db
-					.collection(Collections.CALENDAR)
-					.find({ path, name })
-					.first();
-
-				const cardData = await db
-					.collection(Collections.CARDS)
-					.find({ path, name })
-					.first();
-
-				this.entryData.body = cardData.body;
+				this.entryData = await FSStore.read(
+					{ path, name },
+					Collections.CALENDAR
+				);
+				this.cardData = await FSStore.read({ path, name }, Collections.CARDS);
 			} catch (error) {
 				console.error(error);
 				toast.error(error.message);
 				this.setState({ status: status.ERROR });
 			}
 		} else {
+			const createdAt = new Date();
+			const userId = UsersStore.getCurrentUser().id;
 			// create card
 			this.entryData = {
+				id: null,
 				path,
 				name,
 				title: {},
 				description: {},
-				body: {},
-				createdAt: new Date(),
-				userId: UsersStore.getCurrentUser().id,
+				createdAt,
+				userId,
+			};
+			this.cardData = {
+				id: null,
+				path,
+				name,
+				body: [],
+				createdAt,
+				userId,
 			};
 		}
 		this.setState({
 			title: this.entryData.title,
 			description: this.entryData.description,
-			body: this.entryData.body,
+			body: this.cardData.body,
 			_path: path,
 			_name: name,
 			createdAt: this.entryData.createdAt,
@@ -130,37 +134,64 @@ class CalendarEntryEdit extends Component {
 			const path = this.state._path;
 			const name = this.state._name.trim();
 
-			if (name === "") {
-				toast.error(`Name filed can't be empty!`);
-				return;
-			}
+			// validation
+			if (name.length === 0) throw new Error(`Name field can't be empty!`);
 
-			// Make a card from entry data
-			const cardData = {
-				path,
-				name,
-				body: this.state.body,
-				userId: this.entryData.userId,
-				createdAt: this.entryData.createdAt,
+			const hasValue = (obj) => {
+				// let len = 0;
+				// Object.values(obj).forEach((text) => {
+				// 	len += text.trim().length;
+				// });
+				// return len > 0;
+				return (
+					Object.values(obj)
+						.map((text) => text.trim().length)
+						.reduce((total, len) => total + len) > 0
+				);
 			};
 
-			const entryData = {
+			if (!hasValue(this.state.title)) {
+				throw new Error(`Title must be defined for at least one language.`);
+			}
+			if (!hasValue(this.state.body)) {
+				throw new Error(`Content must be defined for at least one language.`);
+			}
+
+			//
+
+			this.cardData = { ...this.cardData, path, name, body: this.state.body };
+			this.entryData = {
+				...this.entryData,
 				path,
 				name,
 				title: this.state.title,
 				description: this.state.description,
-				userId: this.entryData.userId,
-				createdAt: this.entryData.createdAt,
 			};
 
-			console.log(cardData, entryData);
-			// Store calendar entry
+			const entryResult = await FSStore.store(
+				this.entryData,
+				Collections.CALENDAR
+			);
 
-			// Store card
+			if (entryResult.modifiedCount === 1 || entryResult.insertedId === 1) {
+				// if entry was correct created or modified,
+				// store a Content body in Cards collection
+				const cardResult = await FSStore.store(
+					this.cardData,
+					Collections.CARDS
+				);
+
+				if (cardResult.modifiedCount === 1) {
+					toast.success("Calendar entry correctly saved.");
+					this.setState({ status: status.DONE });
+				} else if (cardResult.insertedId) {
+					toast.success("Calendar entry was created.");
+					this.setState({ status: status.DONE });
+				}
+			}
 		} catch (error) {
 			toast.error(error.message);
 			console.error(error);
-			this.setState({ status: status.ERROR });
 		}
 	}
 
