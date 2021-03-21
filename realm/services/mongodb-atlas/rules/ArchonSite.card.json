@@ -19,14 +19,14 @@
         {
             "name": "authorized-writer",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
+                "%%root.userId": {
+                    "$eq": "%%user.id"
                 },
                 "%%user.custom_data.role": {
                     "$eq": "writer"
                 },
-                "%%root.userId": {
-                    "$eq": "%%user.id"
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "write": true,
@@ -38,11 +38,11 @@
         {
             "name": "authorized-super-user",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data.role": {
                     "$eq": "super-user"
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "write": true,

@@ -6,11 +6,11 @@
         {
             "name": "Super-User",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data.role": {
                     "$eq": "super-user"
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "write": true,

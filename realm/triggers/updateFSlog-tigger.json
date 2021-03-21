@@ -1,0 +1,23 @@
+{
+    "id": "602f91becfdb14c8522014e4",
+    "name": "updateFSlog-tigger",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT",
+            "UPDATE",
+            "DELETE",
+            "REPLACE"
+        ],
+        "database": "ArchonSite",
+        "collection": "card",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "project": {},
+        "full_document": true,
+        "full_document_before_change": false,
+        "unordered": false
+    },
+    "function_name": "updateFSlog",
+    "disabled": true
+}

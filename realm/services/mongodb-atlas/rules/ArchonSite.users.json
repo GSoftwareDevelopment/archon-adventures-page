@@ -31,16 +31,16 @@
         {
             "name": "authorized",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data": {
-                    "userId": {
-                        "$neq": "%%user.id"
-                    },
                     "role": {
                         "$neq": "super-user"
+                    },
+                    "userId": {
+                        "$neq": "%%user.id"
                     }
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "fields": {
@@ -61,11 +61,11 @@
         {
             "name": "authorize-owner",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data.userId": {
                     "$eq": "%%user.id"
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "fields": {
@@ -96,13 +96,13 @@
         {
             "name": "authorize-super-user",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data.role": {
                     "$in": [
                         "super-user"
                     ]
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "fields": {
@@ -156,7 +156,8 @@
                 "bsonType": "string",
                 "maxLength": 24,
                 "minLength": 24,
-                "pattern": "^[0-9a-f]*$"
+                "pattern": "^[0-9a-f]*$",
+                "uniqueItems": true
             }
         },
         "required": [

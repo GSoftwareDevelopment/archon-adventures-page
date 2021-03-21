@@ -19,11 +19,14 @@
         {
             "name": "authorized-writer",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
+                "%%root.userId": {
+                    "$eq": "%%user.id"
                 },
                 "%%user.custom_data.role": {
                     "$eq": "writer"
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "write": true,
@@ -35,11 +38,11 @@
         {
             "name": "authorized-super-user",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data.role": {
                     "$eq": "super-user"
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "write": true,
@@ -67,19 +70,34 @@
             "_id": {
                 "bsonType": "objectId"
             },
-            "cardRefTo": {
-                "bsonType": "string"
-            },
-            "date": {
+            "createdAt": {
                 "bsonType": "date"
             },
             "description": {
-                "bsonType": "string"
+                "bsonType": "object",
+                "propertyNames": {
+                    "pattern": "^[a-z]{2}$"
+                }
             },
             "title": {
-                "bsonType": "string"
+                "bsonType": "object",
+                "minProperties": 1,
+                "propertyNames": {
+                    "pattern": "^[a-z]{2}$"
+                }
+            },
+            "userId": {
+                "bsonType": "string",
+                "maxLength": 24,
+                "minLength": 24,
+                "pattern": "^[0-9a-f]*$"
             }
         },
+        "required": [
+            "title",
+            "userId",
+            "createdAt"
+        ],
         "title": "calendar"
     }
 }

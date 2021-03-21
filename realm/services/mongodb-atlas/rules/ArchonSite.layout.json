@@ -20,14 +20,14 @@
         {
             "name": "authorized-maker/super-user",
             "apply_when": {
-                "%%user.data.email": {
-                    "$exists": true
-                },
                 "%%user.custom_data.role": {
                     "$in": [
                         "super-user",
                         "maker"
                     ]
+                },
+                "%%user.data.email": {
+                    "$exists": true
                 }
             },
             "write": true,
@@ -50,5 +50,43 @@
             "additional_fields": {}
         }
     ],
-    "schema": {}
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId",
+                "uniqueItems": true
+            },
+            "childs": {
+                "bsonType": "array",
+                "items": {
+                    "bsonType": "string",
+                    "maxLength": 24,
+                    "minLength": 24,
+                    "pattern": "^[0-9a-f]*$"
+                },
+                "uniqueItems": true
+            },
+            "contentType": {
+                "bsonType": "string"
+            },
+            "parrent": {
+                "$or": [
+                    {
+                        "bsonType": "string",
+                        "maxLength": 24,
+                        "minLength": 24,
+                        "pattern": "^[0-9a-f]*$"
+                    },
+                    {
+                        "bsonType": "null"
+                    }
+                ]
+            }
+        },
+        "required": [
+            "contentType",
+            "parrent"
+        ],
+        "title": "layout"
+    }
 }
