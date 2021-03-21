@@ -216,8 +216,6 @@ class LayoutsStore {
 			db.collection(Collections.LAYOUT)
 				.deleteOne({ _id: { $oid: element._id } })
 				.then((result) => {
-					console.log("Delete result:", result);
-
 					if (updateParentNode) {
 						//
 						const parentElement = this.getElementById(element.parrent);
@@ -225,6 +223,7 @@ class LayoutsStore {
 						const index = childs.findIndex(
 							(id) => id.toString() === element._id
 						);
+
 						if (index > -1) {
 							childs.splice(index, 1);
 
@@ -235,8 +234,6 @@ class LayoutsStore {
 									{ $set: { childs } }
 								)
 								.then((result) => {
-									console.log("Child update result:", result);
-
 									runInAction(() => {
 										// update child in parent element local
 										parentElement.childs.splice(index, 1);
@@ -252,6 +249,7 @@ class LayoutsStore {
 							});
 						}
 					}
+
 					runInAction(() => {
 						this.status = Status.DONE;
 					});
@@ -261,7 +259,6 @@ class LayoutsStore {
 			console.error(error);
 			this.status = Status.WARN;
 			this.message = error.message;
-			return undefined;
 		}
 	}
 
