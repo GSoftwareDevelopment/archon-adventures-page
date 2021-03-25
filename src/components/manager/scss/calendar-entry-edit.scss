@@ -1,0 +1,26 @@
+form[id|="form-calendar-entry"] {
+	.form-wrapper {
+		// flexGrow: "2",
+		display: flex;
+		flex-direction: column;
+
+		// width: "100%",
+		height: 100%;
+		margin: 0 5px;
+
+		.input-content-wrapper {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+
+			&.hover {
+				background-color: #fff4;
+			}
+
+			.input-component {
+				min-height: 200px;
+				height: 100%;
+			}
+		}
+	}
+}

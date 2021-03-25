@@ -20,20 +20,27 @@ class FSStore {
 		return this.status[collectionName] === status.DONE;
 	}
 
-	async updateCollectionFS(collectionName, sort = { path: 1, name: 1 }) {
+	async updateCollectionFS(
+		collectionName,
+		sort = { path: 1, name: 1 },
+		extraFields = {}
+	) {
 		console.log("> Reading FileSystem in '" + collectionName + "'...");
 		this.status[collectionName] = status.PENDING;
+
+		const projection = {
+			_id: 1,
+			name: 1,
+			path: 1,
+			userId: 1,
+			createdAt: 1,
+			...extraFields,
+		};
 
 		try {
 			const files = await db
 				.collection(collectionName)
-				.find(
-					{},
-					{
-						projection: { _id: 1, name: 1, path: 1, userId: 1, createdAt: 1 },
-						sort,
-					}
-				)
+				.find({}, { projection, sort })
 				.asArray();
 
 			runInAction(() => {
@@ -109,6 +116,17 @@ class FSStore {
 			// await db.collection(Collections.FSLOG).insertOne(logData);
 		} else if (result.insertedId) {
 			this.add(entry, collectionName);
+		}
+
+		return result;
+	}
+
+	async delete({ _id }, collectionName) {
+		const result = await db
+			.collection(collectionName)
+			.deleteOne({ _id: { $oid: _id } });
+		if (result.deletedCount === 1) {
+			this.remove({ _id }, collectionName);
 		}
 
 		return result;
