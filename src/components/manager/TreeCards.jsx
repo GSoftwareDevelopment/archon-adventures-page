@@ -3,7 +3,6 @@ import { observer } from "mobx-react";
 import FSStore from "../../store/fs";
 import WindowsStore from "../../store/windows";
 import { combinePathName } from "../../libs/utils";
-import { db } from "../../libs/db";
 import { Collections, Path } from "../../setup";
 import { toast } from "react-toastify";
 import { ICON_SIZE } from "../general/SidebarMenu";
@@ -63,11 +62,8 @@ class TreeCards extends Component {
 	async doDelete({ _id }) {
 		console.log(`Delete entry #${_id}...`);
 		try {
-			const result = await db
-				.collection(Collections.CARDS)
-				.deleteOne({ _id: { $oid: _id } });
+			const result = await FSStore.delete({ _id }, Collections.CARDS);
 			if (result.deletedCount === 1) {
-				FSStore.remove({ _id }, Collections.CARDS);
 				this.updateOptions({ path: Path.DELIMITER, name: null });
 				toast.success("Entry was deleted.");
 			} else {

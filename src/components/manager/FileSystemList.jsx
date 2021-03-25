@@ -6,12 +6,16 @@ import FSStore from "../../store/fs.js";
 import { Path } from "../../setup";
 import { unifyPath } from "../../libs/utils";
 
-import Spinner from "react-spinners/DotLoader";
+import Spinner from "react-spinners/BarLoader";
 import NodeItem from "./NodeItem";
 
 class FileSystemList extends Component {
 	async componentDidMount() {
-		await FSStore.updateCollectionFS(this.props.collection, this.props.sortBy);
+		await FSStore.updateCollectionFS(
+			this.props.collection,
+			this.props.sortBy,
+			this.props.collectExtraFields
+		);
 	}
 
 	render() {

@@ -1,3 +1,5 @@
+import "../scss/calendar-entry-edit.scss";
+
 import React, { Component, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 // import { db } from "../../../libs/db";
@@ -7,6 +9,8 @@ import FSStore from "../../../store/fs";
 
 import ContentLoader from "../../layout/ContentLoader";
 import { InputPathName, InputML, ButtonsGroup } from "../../general/Window";
+import DropTarget from "../../general/DropTarget";
+
 import {
 	PersonFill as IconUser,
 	CalendarEventFill as IconTime,
@@ -138,16 +142,13 @@ class CalendarEntryEdit extends Component {
 			if (name.length === 0) throw new Error(`Name field can't be empty!`);
 
 			const hasValue = (obj) => {
-				// let len = 0;
-				// Object.values(obj).forEach((text) => {
-				// 	len += text.trim().length;
-				// });
-				// return len > 0;
-				return (
-					Object.values(obj)
-						.map((text) => text.trim().length)
-						.reduce((total, len) => total + len) > 0
-				);
+				if (Object.values(obj).length > 0)
+					return (
+						Object.values(obj)
+							.map((text) => text.trim().length)
+							.reduce((total, len) => total + len) > 0
+					);
+				else return 0;
 			};
 
 			if (!hasValue(this.state.title)) {
@@ -195,23 +196,35 @@ class CalendarEntryEdit extends Component {
 		}
 	}
 
+	// TODO: Trzeba nad tym pomyślec!
+	// async handleDropItem(source) {
+	// 	try {
+	// 		const itemData = JSON.parse(source);
+	// 		if (
+	// 			typeof itemData === "object" &&
+	// 			itemData.src === "filesystem" &&
+	// 			itemData.collection === Collections.CARDS
+	// 		) {
+	// 			const path = itemData.path;
+	// 			const name = itemData.name;
+	// 			this.cardData = await FSStore.read({ path, name }, Collections.CARDS);
+	// 			this.setState({
+	// 				body: this.cardData.body,
+	// 			});
+	// 		}
+	// 		//				this.updateSourcePath(combinePathName(itemData.path, itemData.name));
+	// 	} catch (error) {
+	// 		console.log("Dropped data is not in JSON format");
+	// 	}
+	// }
+
 	render() {
 		const isEnabled = this.state.status === status.DONE;
 		const displayName = this.state.userInfo?.displayName;
 
 		return (
 			<React.Fragment>
-				<div
-					style={{
-						// flexGrow: "2",
-						display: "flex",
-						flexDirection: "column",
-
-						// width: "100%",
-						height: "100%",
-						margin: "0 5px",
-					}}
-				>
+				<div className="form-wrapper">
 					<ContentLoader busy={this.state.status === status.INIT}>
 						<InputML
 							name="entry-title"
@@ -239,21 +252,26 @@ class CalendarEntryEdit extends Component {
 						>
 							<textarea />
 						</InputML>
-						<InputML
-							style={{
-								minHeight: "200px",
-								height: "100%",
+						<DropTarget
+							className="input-content-wrapper"
+							onItemDropped={(src) => {
+								// this.handleDropItem(src);
 							}}
-							name="card-body"
-							label="Content body"
-							currentLang={this.state.currentLang}
-							langContent={this.state.body}
-							disabled={!isEnabled}
-							onUpdate={this.updateBody}
-							onLangChange={this.setCurrentLang}
+							dropEffect="link"
 						>
-							<textarea />
-						</InputML>
+							<InputML
+								className="input-component"
+								name="card-body"
+								label="Content body"
+								currentLang={this.state.currentLang}
+								langContent={this.state.body}
+								disabled={!isEnabled}
+								onUpdate={this.updateBody}
+								onLangChange={this.setCurrentLang}
+							>
+								<textarea />
+							</InputML>
+						</DropTarget>
 					</ContentLoader>
 				</div>
 

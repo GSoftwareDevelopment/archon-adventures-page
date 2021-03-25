@@ -15,7 +15,7 @@ import {
 	PlusCircle as IconCreateLayout,
 	ArrowRepeat as IconRefresh,
 	Sliders as IconLayoutProps,
-	NodePlus as IconAddElement,
+	PlusCircleDotted as IconAddElement,
 	ArrowBarUp as IconMoveBefore,
 	ArrowBarDown as IconMoveAfter,
 	Trash as IconTrash,

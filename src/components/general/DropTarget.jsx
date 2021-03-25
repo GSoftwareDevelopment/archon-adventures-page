@@ -38,6 +38,7 @@ const DropTarget = (props) => {
 			className={
 				(props.className ? props.className : "") + (isOver ? " hover" : "")
 			}
+			style={props.style}
 		>
 			{props.children}
 		</div>

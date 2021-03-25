@@ -38,7 +38,7 @@ export const menu = [
 	{
 		id: "backToSite",
 		icon: <IconBackToPage size={ICON_SIZE} />,
-		name: "Back to Site Manager",
+		name: "Switch to Site Manager",
 		style: { marginTop: "auto", marginBottom: "10px" },
 		redirectTo: "/",
 	},

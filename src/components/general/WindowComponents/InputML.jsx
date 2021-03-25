@@ -187,7 +187,7 @@ class InputML extends Component {
 								/>
 							)}
 						</div>
-						<div style={this.props.style}>
+						<div className={this.props.className} style={this.props.style}>
 							{ChildrenWithProps(this.state.currentLang)}
 						</div>
 					</React.Fragment>
