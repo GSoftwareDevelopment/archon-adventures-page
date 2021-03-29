@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import LayoutsStore from "../../store/layouts";
+// import LayoutsStore from "../../store/layouts";
 import FSStore from "../../store/fs";
 import WindowsStore from "../../store/windows";
 import { Path, Collections } from "../../setup";
@@ -17,7 +17,7 @@ import DeleteConfirmation from "./windows/DeleteConfirmation";
 import { toast } from "react-toastify";
 
 import * as Messages from "../../libs/Messages";
-import { languageCheck } from "../../libs/utils";
+// import { languageCheck } from "../../libs/utils";
 const msg_base = "manager.calendars.options";
 
 export default class TreeCalendars extends Component {
@@ -98,7 +98,6 @@ export default class TreeCalendars extends Component {
 				title: Messages.getText(`${msg_base}.newEntry`),
 				tip: Messages.getText(`${msg_base}.newEntry.tip`),
 				onClick: () => {
-					console.log(item);
 					this.openCalendarEntryNew(item);
 				},
 			},
@@ -128,62 +127,63 @@ export default class TreeCalendars extends Component {
 	};
 
 	calendarItem(item) {
-		const createAt = item.createdAt
-			.toLocaleDateString(undefined, {
-				year: "numeric",
-				month: "long",
-				day: "numeric",
-			})
-			.split(" ")
-			.reverse()
-			.join(" ");
+		const createAt = item.createdAt.toLocaleDateString(undefined, {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		});
 
-		const titleLangs = [];
-		for (const lang in item.title) titleLangs.push(lang);
-		const currentLayout = LayoutsStore.current;
-		const defaultLang = currentLayout.defaultLang;
-		const currentLang = LayoutsStore.getCurrentLang;
+		// const titleLangs = [];
+		// for (const lang in item.title) titleLangs.push(lang);
+		// const currentLayout = LayoutsStore.current;
+		// const defaultLang = currentLayout.defaultLang;
+		// const currentLang = LayoutsStore.getCurrentLang;
 
-		const usedLangTitle = languageCheck(
-			currentLang,
-			defaultLang,
-			titleLangs,
-			(lang) => {
-				return item.title[lang];
-			}
-		);
+		// const usedLangTitle = languageCheck(
+		// 	currentLang,
+		// 	defaultLang,
+		// 	titleLangs,
+		// 	(lang) => {
+		// 		return item.title[lang];
+		// 	}
+		// );
 
 		return (
-			<React.Fragment>
-				<span style={{ fontWeight: "bold" }}>{createAt}</span>
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "row",
+					justifyContent: "space-between",
+				}}
+				title={item.name}
+			>
 				<div
 					style={{
-						fontStyle: "italic",
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+						whiteSpace: "nowrap",
 					}}
 				>
-					{item.title[usedLangTitle]}
+					{item.name /* item.title[usedLangTitle] */}
 				</div>
-			</React.Fragment>
+				<div style={{ fontSize: ".8em", whiteSpace: "nowrap" }}>{createAt}</div>
+			</div>
 		);
 	}
 
 	render() {
 		return (
 			<NodeTree id="calendars-tree" visible={this.props.visible}>
-				<div style={{ flexGrow: "2" }}>
-					<FileSystemList
-						collection={Collections.CALENDAR}
-						collectExtraFields={{ title: 1 }}
-						sortBy={{ path: 1, createdAt: -1, name: 1 }}
-						allowDrag={true}
-						allowDragDir={true}
-						allowDragFile={false}
-						renderItem={this.calendarItem}
-						selected={this.state.selected}
-						onClick={this.updateOptions}
-						onDoubleClick={this.openCalendarEntryEdit}
-					/>
-				</div>
+				<FileSystemList
+					collection={Collections.CALENDAR}
+					allowDrag={true}
+					allowDragDir={true}
+					allowDragFile={false}
+					renderItem={this.calendarItem}
+					selected={this.state.selected}
+					onClick={this.updateOptions}
+					onDoubleClick={this.openCalendarEntryEdit}
+				/>
 			</NodeTree>
 		);
 	}

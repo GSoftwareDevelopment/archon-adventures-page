@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { db } from "../libs/db";
 
 const status = {
@@ -20,37 +20,79 @@ class FSStore {
 		return this.status[collectionName] === status.DONE;
 	}
 
-	async updateCollectionFS(
-		collectionName,
-		sort = { path: 1, name: 1 },
-		extraFields = {}
-	) {
+	async updateCollectionFS(collectionName) {
 		console.log("> Reading FileSystem in '" + collectionName + "'...");
 		this.status[collectionName] = status.PENDING;
-
-		const projection = {
-			_id: 1,
-			name: 1,
-			path: 1,
-			userId: 1,
-			createdAt: 1,
-			...extraFields,
-		};
 
 		try {
 			const files = await db
 				.collection(collectionName)
-				.find({}, { projection, sort })
+				.find(
+					{},
+					{
+						projection: {
+							_id: 1,
+							name: 1,
+							path: 1,
+							userId: 1,
+							createdAt: 1,
+						},
+						sort: { path: 1, name: 1 },
+					}
+				)
 				.asArray();
 
 			runInAction(() => {
-				this.files = this.files.filter((f) => f.collection !== collectionName);
+				// debugger;
+				// mark all existing entry for collectionName by adding update flag sets on false
+				const entrys = this.files
+					.map((file, index) => {
+						if (file.collection === collectionName) {
+							return { index, _update: false };
+						} else {
+							return null;
+						}
+					})
+					.filter((entry) => entry !== null);
 
+				// for each entry getted from db:
 				files.forEach((file) => {
+					// prepare file for entry
 					file._id = file._id.toString();
 					file.collection = collectionName;
-					this.files.push(file);
+					// 		check, if exist in collection:
+					const entry = entrys.find((entry) => {
+						const fileEntry = this.files[entry.index];
+						return fileEntry._id === file._id.toString();
+					});
+					if (entry) {
+						// 	if exist, update entry data
+						this.files[entry.index] = file;
+						// 	set update flag to true for entry.
+						entry._update = true;
+					} else {
+						// 	if not exist, add entry to collection
+						this.files.push(file);
+					}
 				});
+
+				// for each entry in collectionName:
+				entrys.reverse().forEach((entry) => {
+					// 		check update flag:
+					if (!entry._update) {
+						// 			if not set, remove entry
+						delete this.files[entry.index];
+					}
+				});
+
+				// old
+				// this.files = this.files.filter((f) => f.collection !== collectionName);
+
+				// files.forEach((file) => {
+				// 	file._id = file._id.toString();
+				// 	file.collection = collectionName;
+				// 	this.files.push(file);
+				// });
 
 				this.status[collectionName] = status.DONE;
 			});
@@ -61,7 +103,7 @@ class FSStore {
 	}
 
 	fileList(collectionName) {
-		return this.files.filter((f) => f.collection === collectionName);
+		return toJS(this.files.filter((f) => f.collection === collectionName));
 	}
 
 	add({ _id, name, path, userId, createdAt }, collectionName) {
@@ -84,6 +126,8 @@ class FSStore {
 		if (index !== -1) this.files.splice(index, 1);
 	}
 
+	//
+
 	async read(find, collectionName) {
 		const fileData = await db.collection(collectionName).find(find).first();
 		return fileData;
@@ -105,7 +149,7 @@ class FSStore {
 		if (result.modifiedCount === 1) {
 			this.updateCollectionFS(collectionName);
 
-			// // update fslog
+			// TODO: update fslog
 			// const logData={
 			// 	type:"modify",
 			// 	fsId: this.cardData._id,
@@ -115,7 +159,7 @@ class FSStore {
 
 			// await db.collection(Collections.FSLOG).insertOne(logData);
 		} else if (result.insertedId) {
-			this.add(entry, collectionName);
+			this.add({ ...entry, _id: result.insertedId }, collectionName);
 		}
 
 		return result;

@@ -12,9 +12,9 @@
 
 	&.expanded {
 		height: 100%;
-		border-bottom: #fff2 solid 1px;
-		padding-bottom: 10px;
-		margin-bottom: 10px;
+		// border-bottom: #fff2 solid 1px;
+		// padding-bottom: 10px;
+		// margin-bottom: 10px;
 	}
 
 	.node-collection {
@@ -24,84 +24,76 @@
 		margin-left: 1em;
 		padding-left: 7px;
 		line-height: 20px;
-		// border-left: 1px solid $tree-line-color;
 
-		.dropArea {
-			--dropSize: 5px;
+		&:nth-child(odd) {
+			background: #0002;
+		}
+		&:nth-child(even) {
+			background: #0001;
+		}
+	}
+
+	.dropArea {
+		--dropSize: 5px;
+
+		position: relative;
+		top: 0px;
+
+		&.after {
+			top: calc(100% - var(--dropSize));
+		}
+
+		width: 100%;
+		height: var(--dropSize);
+		transition: 0.25s;
+		z-index: 0;
+
+		&.hover {
+			position: relative;
+			background: #fff4;
+			height: 1em;
+		}
+	}
+
+	.node-item {
+		padding: 0;
+
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 0 5px;
+
+		color: #fff;
+
+		&.selected {
+			background: $tree-choiced-item;
+			border-left: #ffff solid 2px;
 
 			position: relative;
-			top: 0px;
+			// padding-left: 2px;
+		}
 
-			&.after {
-				top: calc(100% - var(--dropSize));
-			}
+		svg {
+			margin-right: 5px;
+			width: 1.5em;
+			height: 1.5em;
+		}
 
+		span {
+			// white-space: nowrap;
+			padding: 3px 0;
 			width: 100%;
-			height: var(--dropSize);
-			z-index: 0;
-
-			&.hover {
-				position: relative;
-				background: #fff4;
-			}
 		}
 
-		.node-item {
-			padding: 0;
-
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-
-			color: #fff;
-
-			&.selected {
-				background: $tree-choiced-item;
-				border-left: #ffff solid 2px;
-
-				position: relative;
-				padding-left: 2px;
-			}
-
-			svg {
-				margin-right: 5px;
-				width: 1.5em;
-				height: 1.5em;
-			}
-
-			span {
-				// white-space: nowrap;
-				padding: 3px 0;
-			}
-
-			.icon-overlay {
-				width: 1.5em;
-				height: 1.5em;
-			}
-
-			&:hover {
-				background-color: $tree-hover-item;
-			}
+		.icon-overlay {
+			width: 1.5em;
+			height: 1.5em;
 		}
 
-		// .node-item:before {
-		// 	position: relative;
-		// 	top: -0.6em;
-		// 	height: 1em;
-		// 	width: 4px;
-		// 	color: white;
-		// 	border-bottom: 1px solid $tree-line-color;
-		// 	content: "";
-		// 	display: inline-block;
-		// 	left: -8px;
-		// }
+		&:hover {
+			background-color: $tree-hover-item;
+		}
 
-		// .node-item:last-child {
-		// 	border-left: 1px solid rgba(0, 0, 0, 0);
-
-		// 	.node-item:before {
-		// 		border-left: 1px solid $tree-line-color;
-		// 	}
-		// }
+		// border-bottom: #fff1 dotted 1px;
 	}
 }

@@ -29,7 +29,7 @@ class TreeCards extends Component {
 	}
 
 	openCardEdit = (item) => {
-		WindowsStore.addWindow(item._id.toString(), CardEdit, item);
+		WindowsStore.addWindow(`card-${item._id.toString()}`, CardEdit, item);
 		// this.props.onOpenWindow();
 	};
 
@@ -37,9 +37,9 @@ class TreeCards extends Component {
 		const newCard = {
 			_id: undefined,
 			path,
-			name: undefined,
+			name: "",
 		};
-		WindowsStore.addWindow("", CardEdit, newCard);
+		WindowsStore.addWindow("card-new", CardEdit, newCard);
 		// this.props.onOpenWindow();
 	};
 
@@ -115,20 +115,49 @@ class TreeCards extends Component {
 		// return true;
 	};
 
+	cardItem(item) {
+		const createAt = item.createdAt.toLocaleDateString(undefined, {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		});
+
+		return (
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "row",
+					justifyContent: "space-between",
+				}}
+				title={item.name}
+			>
+				<div
+					style={{
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+						whiteSpace: "nowrap",
+					}}
+				>
+					{item.name}
+				</div>
+				<div style={{ fontSize: ".8em", whiteSpace: "nowrap" }}>{createAt}</div>
+			</div>
+		);
+	}
+
 	render() {
 		return (
 			<NodeTree id="cards-tree" visible={this.props.visible}>
-				<div style={{ flexGrow: "2" }}>
-					<FileSystemList
-						collection={Collections.CARDS}
-						allowDrag={true}
-						allowDragDir={false}
-						allowDragFile={true}
-						selected={this.state.selected}
-						onClick={this.updateOptions}
-						onDoubleClick={this.openCardEdit}
-					/>
-				</div>
+				<FileSystemList
+					collection={Collections.CARDS}
+					allowDrag={true}
+					allowDragDir={false}
+					allowDragFile={true}
+					renderItem={this.cardItem}
+					selected={this.state.selected}
+					onClick={this.updateOptions}
+					onDoubleClick={this.openCardEdit}
+				/>
 			</NodeTree>
 		);
 	}

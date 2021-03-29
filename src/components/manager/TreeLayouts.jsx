@@ -304,6 +304,7 @@ const ElementsList = observer(
 			return (
 				<NodeItem
 					key={id}
+					className="node-collection"
 					icon={icon}
 					title={title}
 					extra={_error}

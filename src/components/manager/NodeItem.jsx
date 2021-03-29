@@ -56,7 +56,12 @@ export default class NodeItem extends Component {
 		}
 
 		return (
-			<div className="node-collection">
+			<div
+				className={
+					this.props.className +
+					(this.props.selected ? " selected" : "") /* "node-collection" */
+				}
+			>
 				{this.props.onItemDropped && this.props.dropBefore && (
 					<DropTarget
 						className="dropArea"
@@ -122,8 +127,9 @@ export default class NodeItem extends Component {
 					</ConditionalWrapper>
 				</ConditionalWrapper>
 
-				{!isCollapsed && this.props.children}
-
+				<div className={"tree-container" + (!isCollapsed ? " expanded" : "")}>
+					{this.props.children}
+				</div>
 				{this.props.onItemDropped && this.props.dropAfter && (
 					<DropTarget
 						className="dropArea after"

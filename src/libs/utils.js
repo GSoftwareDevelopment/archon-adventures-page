@@ -87,6 +87,17 @@ function correctPathChar(value) {
 	return value.replace(/(\\)\1/, "\\").replace(/[^0-9a-zA-Z-:_\\]+/g, "-");
 }
 
+function sortFileByCreatedAtAsc(a, b) {
+	if (a.createdAt < b.createdAt) return -1;
+	else if (a.createdAt > b.createdAt) return 1;
+	else return 0;
+}
+function sortFileByCreatedAtDesc(a, b) {
+	if (a.createdAt < b.createdAt) return 1;
+	else if (a.createdAt > b.createdAt) return -1;
+	else return 0;
+}
+
 export {
 	unifyPath,
 	pathDestructure,
@@ -96,4 +107,6 @@ export {
 	languageCheck,
 	correctNameChar,
 	correctPathChar,
+	sortFileByCreatedAtAsc,
+	sortFileByCreatedAtDesc,
 };

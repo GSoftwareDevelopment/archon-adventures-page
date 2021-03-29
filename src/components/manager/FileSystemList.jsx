@@ -4,38 +4,33 @@ import FSStore from "../../store/fs.js";
 // import UsersStore from "../../store/users.js";
 
 import { Path } from "../../setup";
-import { unifyPath } from "../../libs/utils";
+import {
+	unifyPath,
+	sortFileByCreatedAtDesc,
+	// sortFileByCreatedAtAsc,
+} from "../../libs/utils";
 
 import Spinner from "react-spinners/BarLoader";
 import NodeItem from "./NodeItem";
 
 class FileSystemList extends Component {
 	async componentDidMount() {
-		await FSStore.updateCollectionFS(
-			this.props.collection,
-			this.props.sortBy,
-			this.props.collectExtraFields
-		);
+		await FSStore.updateCollectionFS(this.props.collection);
 	}
 
 	render() {
-		if (!FSStore.isDone(this.props.collection)) {
-			return (
-				<div style={{ display: "flex", justifyContent: "center" }}>
-					<Spinner size="24px" color={"#36D7B7"} loading={true} />
-				</div>
-			);
-		}
-
-		const filesList = FSStore.fileList(this.props.collection);
-
+		let filesList = FSStore.fileList(this.props.collection).sort(
+			sortFileByCreatedAtDesc
+		);
 		return (
-			<PathTree
-				{...this.props}
-				key={filesList.length}
-				list={filesList}
-				path={Path.DELIMITER}
-			/>
+			<React.Fragment>
+				{!FSStore.isDone(this.props.collection) && (
+					<div style={{ display: "flex", justifyContent: "center" }}>
+						<Spinner size="24px" color={"#36D7B7"} loading={true} />
+					</div>
+				)}
+				<PathTree {...this.props} list={filesList} path={Path.DELIMITER} />
+			</React.Fragment>
 		);
 	}
 }
@@ -55,6 +50,21 @@ class PathTree extends Component {
 				.sort()
 				.filter((item) => item.slice(0, props.path.length) === props.path),
 		};
+	}
+
+	shouldComponentUpdate(nextProps) {
+		return nextProps.list !== this.props.list;
+	}
+
+	componentDidUpdate() {
+		const props = this.props;
+		this.setState({
+			paths: props.list
+				.map((item) => item.path)
+				.filter((v, i, s) => s.indexOf(v) === i) // filter unique entrys
+				.sort()
+				.filter((item) => item.slice(0, props.path.length) === props.path),
+		});
 	}
 
 	subPaths(path) {
@@ -86,6 +96,7 @@ class PathTree extends Component {
 			return (
 				<NodeItem
 					key={index}
+					className="node-collection"
 					title={dir}
 					selected={selected.path === subPath && !selected.name}
 					allowDrag={this.props.allowDrag && this.props.allowDragDir}
@@ -137,6 +148,7 @@ class PathTree extends Component {
 						return (
 							<NodeItem
 								key={index}
+								className="node-collection"
 								title={title}
 								allowDrag={this.props.allowDrag && this.props.allowDragFile}
 								dragData={JSON.stringify({
