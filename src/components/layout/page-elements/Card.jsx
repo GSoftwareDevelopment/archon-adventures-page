@@ -44,9 +44,9 @@ class Card extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.lang !== this.props.lang) return true;
-		if (nextState.card === this.state.card) return false;
 		if (
+			nextProps.lang !== this.props.lang ||
+			nextState.card !== this.state.card ||
 			nextState.status !== this.state.stauts ||
 			nextProps.attr._id !== this.props.attr._id ||
 			nextProps.name !== this.props.name ||
