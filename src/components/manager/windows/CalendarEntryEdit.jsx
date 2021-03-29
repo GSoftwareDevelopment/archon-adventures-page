@@ -6,9 +6,10 @@ import { observer } from "mobx-react";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
 import FSStore from "../../../store/fs";
+import WindowsStore from "../../../store/windows";
 
 import ContentLoader from "../../layout/ContentLoader";
-import { InputPathName, InputML, ButtonsGroup } from "../../general/Window";
+import { InputML, ButtonsGroup } from "../../general/Window";
 import DropTarget from "../../general/DropTarget";
 
 import {
@@ -16,23 +17,21 @@ import {
 	CalendarEventFill as IconTime,
 	Speedometer2 as IconStats,
 	Save as IconSave,
-	X as IconCancelSave,
 } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
-// import CardEdit from "./CardEdit";
-// import { correctNameChar } from "../../../libs/utils";
+import SaveDialog from "./SaveDialog";
 
-const status = {
+const Status = {
 	INIT: "init",
 	READING: "reading",
 	DONE: "done",
-	SAVEPROMPT: "saveprompt",
+	WRITING: "writing",
 	ERROR: "error",
 };
 
 class CalendarEntryEdit extends Component {
 	state = {
-		status: status.INIT,
+		status: Status.INIT,
 		_path: "",
 		_name: "",
 		currentLang: null,
@@ -67,31 +66,35 @@ class CalendarEntryEdit extends Component {
 			} catch (error) {
 				console.error(error);
 				toast.error(error.message);
-				this.setState({ status: status.ERROR });
+				this.setState({ status: Status.ERROR });
 			}
 		} else {
 			const createdAt = new Date();
 			const userId = UsersStore.getCurrentUser().id;
-			// create card
+			// prepare clean calendar entry & card
 			this.entryData = {
-				id: null,
+				_id: null,
 				path,
 				name,
+				isPublished: null,
+				publicationDate: createdAt,
 				title: {},
 				description: {},
 				createdAt,
 				userId,
 			};
 			this.cardData = {
-				id: null,
+				_id: null,
 				path,
 				name,
-				body: [],
+				body: {},
 				createdAt,
 				userId,
 			};
 		}
 		this.setState({
+			isPublished: this.entryData.isPublished,
+			publicationDate: this.entryData.publicationDate,
 			title: this.entryData.title,
 			description: this.entryData.description,
 			body: this.cardData.body,
@@ -99,7 +102,7 @@ class CalendarEntryEdit extends Component {
 			_name: name,
 			createdAt: this.entryData.createdAt,
 			userInfo: await UsersStore.getOtherUserInfo(this.entryData.userId),
-			status: status.DONE,
+			status: Status.DONE,
 		});
 	}
 
@@ -119,62 +122,47 @@ class CalendarEntryEdit extends Component {
 		this.setState({ body });
 	};
 
-	cancelSaveCard = () => {
-		this.setState({ status: status.DONE });
-	};
+	validateForm() {
+		const hasValue = (obj) => {
+			if (Object.values(obj).length > 0)
+				return (
+					Object.values(obj)
+						.map((text) => text.trim().length)
+						.reduce((total, len) => total + len) > 0
+				);
+			else return 0;
+		};
 
-	switchToSavePropmt = () => {
-		if (this.state.status === status.SAVEPROMPT) {
-			// save current card
-			this.save();
-		} else {
-			// show save prompt
-			this.setState({ status: status.SAVEPROMPT });
+		if (!hasValue(this.state.title)) {
+			return `Title must be defined for at least one language.`;
 		}
-	};
+		if (!hasValue(this.state.body)) {
+			return `Content must be defined for at least one language.`;
+		}
 
-	async save() {
+		return true;
+	}
+
+	async save({ path, name }) {
 		try {
-			const path = this.state._path;
-			const name = this.state._name.trim();
+			let errmsg;
+			if ((errmsg = this.validateForm()) !== true) throw new Error(errmsg);
 
-			// validation
-			if (name.length === 0) throw new Error(`Name field can't be empty!`);
-
-			const hasValue = (obj) => {
-				if (Object.values(obj).length > 0)
-					return (
-						Object.values(obj)
-							.map((text) => text.trim().length)
-							.reduce((total, len) => total + len) > 0
-					);
-				else return 0;
-			};
-
-			if (!hasValue(this.state.title)) {
-				throw new Error(`Title must be defined for at least one language.`);
-			}
-			if (!hasValue(this.state.body)) {
-				throw new Error(`Content must be defined for at least one language.`);
-			}
+			this.setState({ status: Status.WRITING });
 
 			//
-
-			this.cardData = { ...this.cardData, path, name, body: this.state.body };
-			this.entryData = {
-				...this.entryData,
-				path,
-				name,
-				title: this.state.title,
-				description: this.state.description,
-			};
+			const body = this.state.body;
+			const title = this.state.title;
+			const description = this.state.description;
+			this.cardData = { ...this.cardData, path, name, body };
+			this.entryData = { ...this.entryData, path, name, title, description };
 
 			const entryResult = await FSStore.store(
 				this.entryData,
 				Collections.CALENDAR
 			);
 
-			if (entryResult.modifiedCount === 1 || entryResult.insertedId === 1) {
+			if (entryResult.modifiedCount === 1 || entryResult.insertedId) {
 				// if entry was correct created or modified,
 				// store a Content body in Cards collection
 				const cardResult = await FSStore.store(
@@ -182,12 +170,16 @@ class CalendarEntryEdit extends Component {
 					Collections.CARDS
 				);
 
-				if (cardResult.modifiedCount === 1) {
-					toast.success("Calendar entry correctly saved.");
-					this.setState({ status: status.DONE });
-				} else if (cardResult.insertedId) {
-					toast.success("Calendar entry was created.");
-					this.setState({ status: status.DONE });
+				if (cardResult.modifiedCount === 1 || cardResult.insertedId) {
+					if (cardResult.modifiedCount === 1) {
+						toast.success("Calendar entry correctly saved.");
+					} else if (cardResult.insertedId) {
+						toast.success("Calendar entry was created.");
+					}
+
+					const isPublished =
+						this.state.isPublished === null ? false : this.state.isPublished;
+					this.setState({ isPublished, status: Status.DONE });
 				}
 			}
 		} catch (error) {
@@ -218,14 +210,49 @@ class CalendarEntryEdit extends Component {
 	// 	}
 	// }
 
+	openSaveDialog = (e) => {
+		if (e) e.preventDefault();
+
+		let dialogGroup = undefined;
+		const _id = this.props.attr._id;
+		// determine dialog group
+		if (!_id) {
+			dialogGroup = "calendar-entry-new";
+		} else {
+			dialogGroup = `calendar-entry-${_id}`;
+		}
+
+		WindowsStore.addWindow(
+			"calendar-entry-save-dialog",
+			SaveDialog,
+			{
+				title: "Save",
+				path: this.state._path,
+				name: this.state._name,
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					(pathname) => {
+						this.save(pathname);
+					},
+				],
+			},
+			dialogGroup
+		);
+	};
+
+	setEntryAsPublished = () => {
+		this.setState({ isPublished: true });
+	};
+
 	render() {
-		const isEnabled = this.state.status === status.DONE;
+		const _status = this.state.status;
+		const isEnabled = _status === Status.DONE;
 		const displayName = this.state.userInfo?.displayName;
 
 		return (
 			<React.Fragment>
 				<div className="form-wrapper">
-					<ContentLoader busy={this.state.status === status.INIT}>
+					<ContentLoader busy={_status === Status.INIT}>
 						<InputML
 							name="entry-title"
 							label="Title"
@@ -284,7 +311,7 @@ class CalendarEntryEdit extends Component {
 							component: (
 								<UserInfo name={displayName} time={this.state.createdAt} />
 							),
-							visible: this.state.status !== status.INIT,
+							visible: _status !== Status.INIT,
 						},
 						{
 							component: (
@@ -293,7 +320,7 @@ class CalendarEntryEdit extends Component {
 									currentLang={this.state.currentLang}
 								/>
 							),
-							visible: this.state.status !== status.INIT,
+							visible: _status !== Status.INIT,
 						},
 					]}
 				/>
@@ -304,33 +331,28 @@ class CalendarEntryEdit extends Component {
 					onlyIcons={false}
 					buttons={[
 						{
-							component: (
-								<div
-									className="d-flex align-items-center"
-									style={{ gap: "5px" }}
-								>
-									<InputPathName
-										path={this.state._path}
-										name={this.state._name}
-										onChange={({ path, name }) => {
-											this.setState({ _path: path, _name: name });
-										}}
-									/>
-								</div>
-							),
-							className: "full-width",
-							visible: this.state.status === status.SAVEPROMPT,
+							title: "Publish",
+							onClick: this.setEntryAsPublished,
+							visible:
+								_status !== Status.INIT &&
+								_status !== Status.WRITING &&
+								typeof this.state.isPublished === "boolean" &&
+								!Boolean(this.state.isPublished),
+						},
+						{
+							title: "Unpublish",
+							onClick: undefined,
+							visible:
+								_status !== Status.INIT &&
+								_status !== Status.WRITING &&
+								typeof this.state.isPublished === "boolean" &&
+								Boolean(this.state.isPublished),
 						},
 						{
 							icon: <IconSave size="1.5em" />,
 							title: "Save",
-							onClick: this.switchToSavePropmt,
-							enabled: isEnabled || this.state.status === status.SAVEPROMPT,
-						},
-						{
-							icon: <IconCancelSave size="1.5em" />,
-							onClick: this.cancelSaveCard,
-							visible: this.state.status === status.SAVEPROMPT,
+							onClick: this.openSaveDialog,
+							enabled: isEnabled,
 						},
 					]}
 				/>

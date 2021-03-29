@@ -3,17 +3,18 @@ import { observer } from "mobx-react";
 import { Collections } from "../../../setup";
 import UsersStore from "../../../store/users";
 import FSStore from "../../../store/fs";
+import WindowsStore from "../../../store/windows";
 
 import ContentLoader from "../../layout/ContentLoader";
-import { InputPathName, InputML, ButtonsGroup } from "../../general/Window";
+import { InputML, ButtonsGroup } from "../../general/Window";
 import {
 	PersonFill as IconUser,
 	CalendarEventFill as IconTime,
 	Speedometer2 as IconStats,
 	Save as IconSave,
-	X as IconCancelSave,
 } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
+import SaveDialog from "./SaveDialog";
 
 const status = {
 	INIT: "init",
@@ -103,29 +104,9 @@ class CardEdit extends Component {
 		// if (this.props.onLangChange) this.props.onLangChange(lang);
 	};
 
-	cancelSaveCard = () => {
-		this.setState({ status: status.DONE });
-	};
-
-	switchToSavePropmt = () => {
-		if (this.state.status === status.SAVEPROMPT) {
-			// save current card
-			this.save();
-		} else {
-			// show save prompt
-			this.setState({ status: status.SAVEPROMPT });
-		}
-	};
-
-	async save() {
+	async save({ path, name }) {
 		try {
-			const path = this.state._path;
-			const name = this.state._name.trim();
-
-			if (name === "") {
-				toast.error(`Name filed cant be empty!`);
-				return;
-			}
+			this.setState({ status: status.SAVEPROMPT });
 
 			this.cardData = { ...this.cardData, path, name, body: this.state.body };
 
@@ -153,6 +134,36 @@ class CardEdit extends Component {
 			console.error(error);
 		}
 	}
+
+	openSaveDialog = (e) => {
+		if (e) e.preventDefault();
+
+		let dialogGroup = undefined;
+		const _id = this.props.attr._id;
+		// determine dialog group
+		if (!_id) {
+			dialogGroup = "card-new";
+		} else {
+			dialogGroup = `card-${_id}`;
+		}
+
+		WindowsStore.addWindow(
+			"card-save-dialog",
+			SaveDialog,
+			{
+				title: "Save card",
+				path: this.state._path,
+				name: this.state._name,
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					(pathname) => {
+						this.save(pathname);
+					},
+				],
+			},
+			dialogGroup
+		);
+	};
 
 	render() {
 		const isEnabled = this.state.status === status.DONE;
@@ -221,33 +232,10 @@ class CardEdit extends Component {
 					onlyIcons={false}
 					buttons={[
 						{
-							component: (
-								<div
-									className="d-flex align-items-center"
-									style={{ gap: "5px" }}
-								>
-									<InputPathName
-										path={this.state._path}
-										name={this.state._name}
-										onChange={({ path, name }) => {
-											this.setState({ _path: path, _name: name });
-										}}
-									/>
-								</div>
-							),
-							className: "full-width",
-							visible: this.state.status === status.SAVEPROMPT,
-						},
-						{
 							icon: <IconSave size="1.5em" />,
 							title: "Save",
-							onClick: this.switchToSavePropmt,
-							enabled: isEnabled || this.state.status === status.SAVEPROMPT,
-						},
-						{
-							icon: <IconCancelSave size="1.5em" />,
-							onClick: this.cancelSaveCard,
-							visible: this.state.status === status.SAVEPROMPT,
+							onClick: this.openSaveDialog,
+							enabled: isEnabled,
 						},
 					]}
 				/>
