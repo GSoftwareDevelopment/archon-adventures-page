@@ -166,6 +166,7 @@ class PathTree extends Component {
 										});
 								}}
 								selected={
+									// TODO: Zmień sposób sprawdzania wybrnego elementu!! po ID
 									selected.path === item.path && selected.name === item.name
 								}
 								onDoubleClick={() => {
