@@ -1,3 +1,5 @@
+import "../../../scss/component-inputPathName.scss";
+
 import React, { useState } from "react";
 import { correctNameChar, correctPathChar } from "../../../libs/utils";
 import { Input } from "../Window";
@@ -17,7 +19,7 @@ export default function InputPathName({ path, name, onChange, ...props }) {
 	};
 
 	return (
-		<React.Fragment>
+		<div className="component-inputPathName">
 			<Input
 				className={"hover" + (prompt === "path" ? " full-width" : "")}
 				label="Path:"
@@ -49,6 +51,6 @@ export default function InputPathName({ path, name, onChange, ...props }) {
 				}}
 				onFocus={switch2NamePrompt}
 			/>
-		</React.Fragment>
+		</div>
 	);
 }
