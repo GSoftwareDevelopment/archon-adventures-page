@@ -1,0 +1,11 @@
+.component-inputPathName {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+
+	padding: 0 5px;
+
+	@media screen and (max-width: 768px) {
+		flex-direction: column;
+	}
+}
