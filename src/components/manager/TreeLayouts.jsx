@@ -155,7 +155,7 @@ class TreeLayouts extends Component {
 		return false;
 	};
 
-	handleOnDrop = async (src, index, id) => {
+	handleOnDrop = (src, index, id) => {
 		const parent = LayoutsStore.getElementById(id);
 		const parentId = index !== null ? parent.parrent.toString() : id;
 		const Src = JSON.parse(src);
@@ -163,11 +163,13 @@ class TreeLayouts extends Component {
 		newElement.parrent = parentId;
 
 		if (Src.src === "add-element") {
-			await LayoutsStore.insertElement(newElement, parentId, index);
+			this.doInsertNewElement(newElement, parentId, index);
 		}
 	};
 
-	doInsertNewElement(newElement, destElementId, destChildIndex) {}
+	doInsertNewElement(newElement, destElementId, destChildIndex) {
+		LayoutsStore.insertElement(newElement, destElementId, destChildIndex);
+	}
 
 	doDeleteElement(item) {
 		LayoutsStore.deleteElement(item._id.toString());

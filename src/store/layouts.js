@@ -152,7 +152,7 @@ class LayoutsStore {
 		destChilds.splice(destChildsIndex, 0, element._id);
 	}
 
-	insertElement(element, destElementId, destChildsIndex) {
+	insertElement(insertedElement, destElementId, destChildIndex) {
 		this.status = Status.SILENT;
 		const destElement = this.getElementById(destElementId);
 
@@ -160,12 +160,12 @@ class LayoutsStore {
 			// create new element in DB
 
 			db.collection(Collections.LAYOUT)
-				.insertOne(element)
+				.insertOne(insertedElement)
 				.then((result) => {
 					if (result?.insertedId) {
-						const newId = result.insertedId;
+						const insertedId = result.insertedId.toString();
 						const childs = toJS(destElement).childs;
-						childs.splice(destChildsIndex, 0, newId);
+						childs.splice(destChildIndex, 0, insertedId);
 
 						// update childs list in parent element in DB
 						db.collection(Collections.LAYOUT)
@@ -176,12 +176,12 @@ class LayoutsStore {
 										const parentElement = this.getElementById(destElementId);
 
 										// add new element & update childs list in parent element - local
-										element._id = newId.toString();
-										this.elements.push(element);
+										insertedElement._id = insertedId;
+										this.elements.push(insertedElement);
 										parentElement.childs.splice(
-											destChildsIndex,
+											destChildIndex,
 											0,
-											element._id
+											insertedElement._id
 										);
 									});
 									this.status = Status.DONE;
@@ -197,7 +197,6 @@ class LayoutsStore {
 			console.error(error);
 			this.status = Status.WARN;
 			this.message = error.message;
-			return undefined;
 		}
 	}
 

@@ -111,7 +111,7 @@ export default class NodeItem extends Component {
 							title={this.props.tip}
 						>
 							{haveChildrens && (
-								<button className="flat noPadding" onClick={this.toggleNode}>
+								<button className="flat no-padding" onClick={this.toggleNode}>
 									{isCollapsed ? (
 										<IconClose size={ICON_SIZE} />
 									) : (
