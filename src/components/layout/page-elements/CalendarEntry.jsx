@@ -5,6 +5,9 @@ import { db } from "../../../libs/db";
 import LayoutsStore from "../../../store/layouts";
 import { languageCheck } from "../../../libs/utils";
 
+import MarkdownView from "react-showdown";
+import { showdown_ext, showdown_options } from "./Card-markdown-ext.js";
+
 //
 
 const Status = {
@@ -42,9 +45,16 @@ class CalendarEntry extends Component {
 	}
 
 	render() {
+		if (this.state.status !== Status.FETCHING) return null;
+		if (this.state.status === Status.ERROR) {
+			return null;
+		}
 		const entry = this.state.entry;
-		if (!entry || !entry.createdAt) return null;
-		const entryDate = entry.createdAt
+		// if (!entry || !entry.publicationDate) return null;
+		const _date = entry?.publicationDate
+			? entry.publicationDate
+			: entry.createdAt;
+		const entryDate = _date
 			.toLocaleDateString(undefined, {
 				year: "numeric",
 				month: "long",
@@ -108,7 +118,12 @@ class CalendarEntry extends Component {
 					<div className="entry-content">
 						{showTitle && <div className="entry-title">{title}</div>}
 						{showDescription && (
-							<div className="entry-description">{description}</div>
+							<MarkdownView
+								className="entry-description markdown"
+								markdown={description}
+								options={showdown_options}
+								components={showdown_ext}
+							/>
 						)}
 					</div>
 				</div>

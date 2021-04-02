@@ -63,7 +63,11 @@ class Calendar extends Component {
 
 			this.setState({ status: Status.FETCHING });
 			await this.fetchCalendarData(
-				findCondition,
+				{
+					...findCondition,
+					isPublished: { $eq: true },
+					publicationDate: { $lte: new Date() },
+				},
 				this.props.attr.options.limit
 			);
 		} catch (error) {
@@ -79,14 +83,19 @@ class Calendar extends Component {
 			.collection(Collections.CALENDAR)
 			.find(
 				find, // { path: this.props.attr.path },
-				{ limit, sort: { createdAt: -1 } }
+				{ limit, sort: { publicationDate: -1 } }
 			)
 			.asArray();
 
 		console.log(
 			`Calendar at ${this.props.attr.path}. Found: ${calendar.length} elements`
 		);
-		this.setState({ calendar, status: Status.DONE });
+
+		if (calendar.length === 0) {
+			this.setState({ status: Status.ERROR });
+		} else {
+			this.setState({ calendar, status: Status.DONE });
+		}
 	}
 
 	setCard = (card) => {
