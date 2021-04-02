@@ -1,3 +1,5 @@
+@import "../../../../scss/markdown";
+
 .calendar-link {
 	display: block;
 	padding: 5px;
@@ -69,6 +71,8 @@ div.calendar {
 					margin-top: 10px;
 					padding: 10px;
 					border-left: #888 solid 2px;
+
+					// @include general-markdown;
 				}
 			}
 		}
