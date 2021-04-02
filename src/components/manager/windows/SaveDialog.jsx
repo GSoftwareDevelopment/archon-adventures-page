@@ -39,15 +39,13 @@ class SaveDialog extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<div className="d-flex align-items-center" style={{ gap: "5px" }}>
-					<InputPathName
-						path={this.state.path}
-						name={this.state.name}
-						onChange={({ path, name }) => {
-							this.setState({ path, name });
-						}}
-					/>
-				</div>
+				<InputPathName
+					path={this.state.path}
+					name={this.state.name}
+					onChange={({ path, name }) => {
+						this.setState({ path, name });
+					}}
+				/>
 				<ButtonsGroup
 					className="window-footer group-button justify-content-end"
 					buttons={[
