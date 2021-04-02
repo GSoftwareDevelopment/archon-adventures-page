@@ -15,10 +15,15 @@ import DropTarget from "../../general/DropTarget";
 import {
 	PersonFill as IconUser,
 	CalendarEventFill as IconTime,
+	CalendarCheckFill as IconPublicationDate,
+	CalendarXFill as IconNotPublished,
+	CalendarCheck as IconPublish,
+	CalendarX as IconUnpublish,
 	Speedometer2 as IconStats,
 	Save as IconSave,
 } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
+import CalendarEntryPublication from "./CalendarEntryPublication";
 import SaveDialog from "./SaveDialog";
 
 const Status = {
@@ -62,11 +67,18 @@ class CalendarEntryEdit extends Component {
 					{ path, name },
 					Collections.CALENDAR
 				);
+				if (!this.entryData.isPublished) {
+					this.entryData.isPublished = false;
+				}
 				this.cardData = await FSStore.read({ path, name }, Collections.CARDS);
+				if (!this.cardData) {
+					throw new Error("No associated calendar card file.");
+				}
 			} catch (error) {
 				console.error(error);
 				toast.error(error.message);
 				this.setState({ status: Status.ERROR });
+				return;
 			}
 		} else {
 			const createdAt = new Date();
@@ -122,7 +134,7 @@ class CalendarEntryEdit extends Component {
 		this.setState({ body });
 	};
 
-	validateForm() {
+	isValid() {
 		const hasValue = (obj) => {
 			if (Object.values(obj).length > 0)
 				return (
@@ -146,16 +158,28 @@ class CalendarEntryEdit extends Component {
 	async save({ path, name }) {
 		try {
 			let errmsg;
-			if ((errmsg = this.validateForm()) !== true) throw new Error(errmsg);
+			if ((errmsg = this.isValid()) !== true) throw new Error(errmsg);
 
 			this.setState({ status: Status.WRITING });
 
 			//
-			const body = this.state.body;
-			const title = this.state.title;
-			const description = this.state.description;
+			const {
+				body,
+				title,
+				description,
+				isPublished,
+				publicationDate,
+			} = this.state;
 			this.cardData = { ...this.cardData, path, name, body };
-			this.entryData = { ...this.entryData, path, name, title, description };
+			this.entryData = {
+				...this.entryData,
+				path,
+				name,
+				title,
+				description,
+				isPublished,
+				publicationDate,
+			};
 
 			const entryResult = await FSStore.store(
 				this.entryData,
@@ -210,17 +234,20 @@ class CalendarEntryEdit extends Component {
 	// 	}
 	// }
 
-	openSaveDialog = (e) => {
-		if (e) e.preventDefault();
-
-		let dialogGroup = undefined;
+	_determineDialogGroup() {
 		const _id = this.props.attr._id;
 		// determine dialog group
 		if (!_id) {
-			dialogGroup = "calendar-entry-new";
+			return "calendar-entry-new";
 		} else {
-			dialogGroup = `calendar-entry-${_id}`;
+			return `calendar-entry-${_id}`;
 		}
+	}
+
+	openSaveDialog = (e) => {
+		if (e) e.preventDefault();
+
+		const dialogGroup = this._determineDialogGroup();
 
 		WindowsStore.addWindow(
 			"calendar-entry-save-dialog",
@@ -232,6 +259,7 @@ class CalendarEntryEdit extends Component {
 				actions: [
 					// TODO:	Niepodoba mi się ta forma definicji akcji :/
 					(pathname) => {
+						this.setState({ _path: pathname.path, _name: pathname.name });
 						this.save(pathname);
 					},
 				],
@@ -240,8 +268,29 @@ class CalendarEntryEdit extends Component {
 		);
 	};
 
-	setEntryAsPublished = () => {
-		this.setState({ isPublished: true });
+	setEntryAsPublished = (e) => {
+		if (e) e.preventDefault();
+
+		const dialogGroup = this._determineDialogGroup();
+
+		WindowsStore.addWindow(
+			"calendar-entry-publication-dialog",
+			CalendarEntryPublication,
+			{
+				publicationDate: this.state.publicationDate,
+				actions: [
+					// TODO:	Niepodoba mi się ta forma definicji akcji :/
+					(publicationDate) => {
+						this.setState({ isPublished: true, publicationDate });
+					},
+				],
+			},
+			dialogGroup
+		);
+	};
+
+	setEntryAsUnpublished = () => {
+		this.setState({ isPublished: false });
 	};
 
 	render() {
@@ -303,8 +352,8 @@ class CalendarEntryEdit extends Component {
 				</div>
 
 				<ButtonsGroup
-					className="group-button"
-					style={{ gap: "5px" }}
+					className="align-items-center group-button flex-wrap"
+					style={{ gap: "10px", margin: "0 10px" }}
 					onlyIcons={false}
 					buttons={[
 						{
@@ -315,7 +364,19 @@ class CalendarEntryEdit extends Component {
 						},
 						{
 							component: (
-								<CartStats
+								<PubicationStats
+									isPublished={this.entryData?.isPublished}
+									publicationDate={
+										this.entryData?.publicationDate || this.entryData?.createdAt
+									}
+								/>
+							),
+							visible: _status !== Status.INIT,
+						},
+						{
+							style: { marginLeft: "auto" },
+							component: (
+								<CardStats
 									content={this.state.body}
 									currentLang={this.state.currentLang}
 								/>
@@ -331,6 +392,7 @@ class CalendarEntryEdit extends Component {
 					onlyIcons={false}
 					buttons={[
 						{
+							icon: <IconPublish size="1.5em" />,
 							title: "Publish",
 							onClick: this.setEntryAsPublished,
 							visible:
@@ -340,8 +402,9 @@ class CalendarEntryEdit extends Component {
 								!Boolean(this.state.isPublished),
 						},
 						{
+							icon: <IconUnpublish size="1.5em" />,
 							title: "Unpublish",
-							onClick: undefined,
+							onClick: this.setEntryAsUnpublished,
 							visible:
 								_status !== Status.INIT &&
 								_status !== Status.WRITING &&
@@ -367,10 +430,7 @@ export default observer(CalendarEntryEdit);
 
 function UserInfo({ name, time }) {
 	return (
-		<div
-			className="d-flex align-items-center small"
-			style={{ margin: "0 10px", gap: "5px" }}
-		>
+		<div className="d-flex align-items-center" style={{ gap: "5px" }}>
 			<IconUser />
 			<span>{name}</span>
 			<IconTime />
@@ -381,7 +441,27 @@ function UserInfo({ name, time }) {
 
 //
 
-function CartStats({ content, currentLang, ...props }) {
+function PubicationStats({ isPublished, publicationDate, ...props }) {
+	return (
+		<div className="d-flex align-items-center" style={{ gap: "5px" }}>
+			{isPublished ? (
+				<button className="no-border no-padding" tabIndex="-1">
+					<IconPublicationDate />
+					<span>{publicationDate.toLocaleString()}</span>
+				</button>
+			) : (
+				<React.Fragment>
+					<IconNotPublished />
+					<span>Not published</span>
+				</React.Fragment>
+			)}
+		</div>
+	);
+}
+
+//
+
+function CardStats({ content, currentLang, ...props }) {
 	const [contentWeight, setContentWeight] = useState(0);
 	const [contentWords, setContentWords] = useState(0);
 
@@ -398,7 +478,7 @@ function CartStats({ content, currentLang, ...props }) {
 	}, [content, currentLang, contentWeight, contentWords]);
 
 	return (
-		<div className="d-flex align-items-center small" style={{ gap: "5px" }}>
+		<div className="d-flex align-items-center" style={{ gap: "5px" }}>
 			<IconStats />
 			<div>{contentWeight} char(s),</div>
 			<div>{contentWords} word(s)</div>
