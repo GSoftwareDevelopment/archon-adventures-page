@@ -1,5 +1,9 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7f96c299-f07e-4785-b9c6-8c778097764d/deploy-status)](https://app.netlify.com/sites/archonadventures/deploys)
 
+Projekt można wesprzeć przez [PATREON](https://www.patreon.com/GSoftDev)
+
+Na dzień 17.05.2021 Projekt jest zawieszony :(
+
 # O projekcie
 
 Projekt jest adaptacją strony internetowej z implementacją następujących technologii:
